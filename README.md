@@ -8,8 +8,8 @@
 # what is different 
 - DNS over HTTPS
 - TLS Fragmentor
-- ADS for engaiging vpn providers to provide free config
-- Automatic report for refining config collection
+- ADS for engaiging vpn providers to provide free configs
+- Automatic report for refining config collection at central servers
 - Rotating Configs
-- Random subdomain
+- Random Subdomain
 
