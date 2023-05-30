@@ -1,4 +1,4 @@
-# MahsaNG
+# MahsaNG (in progress)
 - MahsaNG is a v2rayNG client aimed to provide free vpn for everyone<br>
 <img src="https://github.com/GFW-knocker/MahsaNG/blob/master/V2rayNG/app/src/main/ic_launcher-playstore.png?raw=true" width="200" ><br>
 
