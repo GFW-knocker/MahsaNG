@@ -280,7 +280,7 @@ object V2RayServiceManager {
 
         mBuilder = NotificationCompat.Builder(service, channelId)
                 .setSmallIcon(R.drawable.ic_stat_name)
-                .setContentTitle(currentConfig?.remarks)
+                .setContentTitle("فعلا فقط یوتیوب")
                 .setPriority(NotificationCompat.PRIORITY_MIN)
                 .setOngoing(true)
                 .setShowWhen(false)
