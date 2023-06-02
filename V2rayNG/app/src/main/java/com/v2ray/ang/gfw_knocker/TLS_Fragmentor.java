@@ -10,10 +10,10 @@ import java.util.ArrayList;
 
 
 public class TLS_Fragmentor extends Thread {
-	
+
 	ServerSocket ss ;
 	Socket client_sock;
-	
+
 	String listen_ip;
 	int listen_port;
 	int target_port;
@@ -23,7 +23,7 @@ public class TLS_Fragmentor extends Thread {
 	double fragment_sleep; // in second
 	boolean is_ready;
 
-	
+
 	public TLS_Fragmentor(String listen_ip1 , int listen_port1 , String target_ip1 , int target_port1 , boolean isFragment1 , int num_fragment1 , double fragment_sleep1){
 		listen_ip = listen_ip1;
 		listen_port = listen_port1;
@@ -34,24 +34,24 @@ public class TLS_Fragmentor extends Thread {
 		fragment_sleep = fragment_sleep1;
 		is_ready = false;
 	}
-	
-	
+
+
 	@Override
 	public void run() {
 		try{
-			
-			ss = new ServerSocket(listen_port);
-			listen_port = ss.getLocalPort();			
+
+			ss = new ServerSocket(listen_port,128); // up to 128 concurrent connection queued
+			listen_port = ss.getLocalPort();
 			System.out.println("now Listening at "+listen_ip+":"+listen_port);
 			is_ready = true;
 
-			while(true){					
-					System.out.println("waiting for input socket ...");					
-					client_sock = ss.accept();						
-					My_upstream up_thread = new My_upstream(client_sock , target_ip , target_port , isFragment , num_fragment , fragment_sleep);						
-					up_thread.start();													
-			}						
-			
+			while(true){
+				System.out.println("waiting for input socket ...");
+				client_sock = ss.accept();
+				My_upstream up_thread = new My_upstream(client_sock , target_ip , target_port , isFragment , num_fragment , fragment_sleep);
+				up_thread.start();
+			}
+
 		}catch(Exception e){
 			System.out.println("Server ERR: "+e.getMessage());
 			is_ready = false;
@@ -61,30 +61,30 @@ public class TLS_Fragmentor extends Thread {
 		}
 
 		System.out.println("Server Thread Finished");
-		
+
 	}// run
-	
 
 
-	
+
+
 
 	public int get_listen_port(){
 		// waiting a few millisec to service starts then returning ports
 		try{
-            for (int i=1;i<100;i++){
-                if(is_ready==true){
-                    break;
-                }else{
-                    System.out.println(i*10 +" milli second waiting to start threaded service");
-                    Thread.sleep(10); // sleep 10 milisec
-                }
-            }            
-        }catch(Exception e){
-            System.out.println("err in get listen port: "+e.getMessage());
-        }
+			for (int i=1;i<100;i++){
+				if(is_ready==true){
+					break;
+				}else{
+					System.out.println(i*10 +" milli second waiting to start threaded service");
+					Thread.sleep(10); // sleep 10 milisec
+				}
+			}
+		}catch(Exception e){
+			System.out.println("err in get listen port: "+e.getMessage());
+		}
 		return listen_port;
 	}
-	
+
 
 	public void safely_stop_server(){
 		try{
@@ -95,7 +95,7 @@ public class TLS_Fragmentor extends Thread {
 		}
 		System.out.println("server socket safely stopped");
 	}
-	
+
 
 }//class Server
 
@@ -115,9 +115,10 @@ class My_upstream extends Thread{
 	boolean first_flag;
 	int num_fragment;
 	long fragment_sleep_milisec;
+	long first_time_sleep = 100; // wait 100 millisecond for first packet to fully receive
 
-	
-	
+
+
 	public My_upstream( Socket client_sock1 , String target_ip1 , int target_port1 , boolean isFragment1 , int num_fragment1 , double fragment_sleep1){
 		target_ip = target_ip1;
 		target_port = target_port1;
@@ -127,16 +128,16 @@ class My_upstream extends Thread{
 		num_fragment = num_fragment1;
 		fragment_sleep_milisec = (long) (fragment_sleep1 * 1000);
 	}
-	
+
 
 	@Override
 	public void run() {
-				
+
 		try{
 			backend_sock = new Socket(target_ip, target_port);
 			backend_sock.setTcpNoDelay(true);
 
-			My_downstream down_thread = new My_downstream( backend_sock.getInputStream() , client_sock.getOutputStream() );						
+			My_downstream down_thread = new My_downstream( backend_sock.getInputStream() , client_sock.getOutputStream() );
 			down_thread.start();
 
 			is = client_sock.getInputStream();
@@ -144,48 +145,49 @@ class My_upstream extends Thread{
 
 			System.out.println("up-stream started");
 
+			Thread.sleep(first_time_sleep); // wait n millisec for first packet to fully receive
 			while(  (b = is.read(buff)) != -1   ){
 				if(first_flag==true){
 					first_flag=false;
 					send_data_in_fragment();
-				}else{	
+				}else{
 					os.write(buff, 0, b);
 					os.flush();
-				}			
+				}
 			}
-			
+
 		}catch(Exception e){
 			System.out.println("up-stream: "+e.getMessage());
 		}finally{
 			System.out.println("up-stream finished");
-		}	
-		
+		}
+
 
 		safely_close_socket(client_sock);
 		safely_close_socket(backend_sock);
-		
+
 		try{
-			os.flush();						
-			os.close();						
-			is.close();					
+			os.flush();
+			os.close();
+			is.close();
 		}catch(Exception e){
 			System.out.println("up-stream Close ERR: "+e.getMessage());
 		}
 
 	}
-	
+
 
 	public void safely_close_socket(Socket sock){
 		try{
 			if(sock != null) {
-				if( (sock.isConnected()) || (!sock.isClosed()) ){					
+				if( (sock.isConnected()) || (!sock.isClosed()) ){
 					sock.shutdownInput();
 					sock.shutdownOutput();
-					sock.close();					
+					sock.close();
 				}
 			}
 		}catch(Exception e){
-				System.out.println("socket Close ERR: "+e.getMessage());
+			System.out.println("socket Close ERR: "+e.getMessage());
 		}
 	}
 
@@ -214,22 +216,22 @@ class My_upstream extends Thread{
 	public void send_data_in_fragment(){
 		try{
 			int L = b;
-			List<Integer> indices = pickKRandomInts(num_fragment-1, L);			
+			List<Integer> indices = pickKRandomInts(num_fragment-1, L);
 			int j_pre = 0;
 			int j_next;
 			for (int i = 0; i < indices.size(); i++) {
 				j_next = indices.get(i);
-				// System.out.println("send from "+ j_pre + " to "+ j_next);				
+//				System.out.println("TLS send from "+ j_pre + " to "+ j_next);
 				os.write(buff, j_pre , (j_next - j_pre) );
 				os.flush();
 				Thread.sleep(fragment_sleep_milisec);
-				j_pre = j_next;				
+				j_pre = j_next;
 			}
 
-			// System.out.println("send from "+ j_pre + " to "+ L);
+			System.out.println("TLS send from "+ j_pre + " to "+ L);
 			os.write(buff, j_pre, (L-j_pre) );
 			os.flush();
-			
+
 		}catch(Exception e){
 			System.out.println("err in fragment function: "+e.getMessage());
 			return;
@@ -252,41 +254,41 @@ class My_downstream extends Thread{
 	byte[] buff ;
 	int b;
 
-	
+
 	public My_downstream(InputStream backend_instream , OutputStream client_outstream){
 		is = backend_instream;
 		os = client_outstream;
 		buff = new byte[4096];
 	}
-	
+
 	@Override
 	public void run() {
-				
+
 		try{
 			System.out.println("down-stream started");
 
 			while(  (b = is.read(buff)) != -1   ){
 				os.write(buff, 0, b);
-				os.flush();	
-			}			
+				os.flush();
+			}
 
 		}catch(Exception e){
 			System.out.println("down-stream: "+e.getMessage());
 		}finally{
 			System.out.println("down-stream finished");
 		}
-		
-		
+
+
 		try{
-			os.flush();						
-			os.close();			
+			os.flush();
+			os.close();
 			is.close();
 		}catch(Exception e){
 			System.out.println("stream Close ERR: "+e.getMessage());
 		}
-		
+
 	}
-	
+
 } // class downstream
 
 
