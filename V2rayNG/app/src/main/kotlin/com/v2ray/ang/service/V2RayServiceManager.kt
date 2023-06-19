@@ -1,5 +1,5 @@
 package com.v2ray.ang.service
-import com.v2ray.ang.gfw_knocker.*
+import com.v2ray.ang.gfwknocker.*
 
 import android.app.*
 import android.content.BroadcastReceiver
@@ -42,7 +42,7 @@ object V2RayServiceManager {
     private const val NOTIFICATION_PENDING_INTENT_STOP_V2RAY = 1
     private const val NOTIFICATION_ICON_THRESHOLD = 3000
 
-    var HTTPSserv: backServ? = null
+    var TLS_serv: backServ? = null
 
     val v2rayPoint: V2RayPoint = Libv2ray.newV2RayPoint(V2RayCallback(), Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1)
     private val mMsgReceive = ReceiveMessageHandler()
@@ -125,9 +125,9 @@ object V2RayServiceManager {
     fun startV2rayPoint() {
 
         // ------- GFW-knocker fragmentor service ----------------------
-        HTTPSserv = backServ()
-        HTTPSserv!!.start_HTTPS_service()
-        HTTPSserv!!.start_TLS_service()
+        TLS_serv = backServ()
+        TLS_serv!!.start_HTTPS_service()
+        TLS_serv!!.start_TLS_service()
         // -------------------------------------------------------------
 
         val service = serviceControl?.get()?.getService() ?: return
@@ -170,8 +170,8 @@ object V2RayServiceManager {
 
     fun stopV2rayPoint() {
         // ------- GFW-knocker fragmentor service ----------------------
-        HTTPSserv!!.stop_HTTPS_service()
-        HTTPSserv!!.stop_TLS_service()
+        TLS_serv!!.stop_HTTPS_service()
+        TLS_serv!!.stop_TLS_service()
         // -------------------------------------------------------------
 
 
@@ -297,7 +297,8 @@ object V2RayServiceManager {
         mBuilder = NotificationCompat.Builder(service, channelId)
                 .setSmallIcon(R.drawable.ic_stat_name)
             // ------- GFW-knocker  ----------------------
-                .setContentTitle("فعلا فقط یوتیوب")
+//                .setContentTitle("فعلا فقط یوتیوب")
+                .setContentTitle(currentConfig?.remarks)
             // ------- GFW-knocker  ----------------------
                 .setPriority(NotificationCompat.PRIORITY_MIN)
                 .setOngoing(true)

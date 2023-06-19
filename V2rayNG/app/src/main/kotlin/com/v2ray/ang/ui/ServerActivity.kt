@@ -404,7 +404,7 @@ class ServerActivity : BaseActivity() {
             sni = sniField
         }
         val allowInsecure = if (allowinsecures[allowInsecureField].isBlank()) {
-            settingsStorage?.decodeBool(PREF_ALLOW_INSECURE) ?: false
+            settingsStorage?.decodeBool(PREF_ALLOW_INSECURE) ?: true   // GFW-knocker: just disable root CA check by default that cause many configs to fail
         } else {
             allowinsecures[allowInsecureField].toBoolean()
         }

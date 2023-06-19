@@ -13,7 +13,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.v2ray.ang"
+        applicationId 'com.MahsaNG.EMS'
         minSdkVersion 21
         targetSdkVersion Integer.parseInt("$targetSdkVer")
         multiDexEnabled true
@@ -26,6 +26,7 @@ android {
             minifyEnabled false
             zipAlignEnabled false
             shrinkResources false
+            signingConfig signingConfigs.debug
             ndk.abiFilters 'x86', 'x86_64', 'armeabi-v7a', 'arm64-v8a'
         }
         debug {

@@ -12,6 +12,7 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import com.tencent.mmkv.MMKV
 import com.v2ray.ang.AppConfig
+import com.v2ray.ang.BuildConfig
 import com.v2ray.ang.R
 import com.v2ray.ang.dto.ERoutingMode
 import com.v2ray.ang.util.MmkvManager
@@ -125,6 +126,7 @@ class V2RayVpnService : VpnService(), ServiceControl {
             builder.addRoute("0.0.0.0", 0)
         }
 
+
         if (settingsStorage?.decodeBool(AppConfig.PREF_PREFER_IPV6) == true) {
             builder.addAddress(PRIVATE_VLAN6_CLIENT, 126)
             if (routingMode == ERoutingMode.BYPASS_LAN.value || routingMode == ERoutingMode.BYPASS_LAN_MAINLAND.value) {
@@ -147,10 +149,35 @@ class V2RayVpnService : VpnService(), ServiceControl {
 
         builder.setSession(V2RayServiceManager.currentConfig?.remarks.orEmpty())
 
+
+        // -------------- GFW knocker --------------------------------
+        if (settingsStorage?.decodeBool(AppConfig.PREF_PER_APP_PROXY) == true) {
+            val bypassApps = settingsStorage?.decodeBool(AppConfig.PREF_BYPASS_APPS) ?: false
+            if (bypassApps) {
+                println("Disallow mode")
+                builder.addDisallowedApplication(BuildConfig.APPLICATION_ID)
+            } else {
+                println("allow mode")
+                builder.addAllowedApplication(BuildConfig.APPLICATION_ID)
+            }
+        } else{
+            println("Disallow mode when per-app is off")
+            builder.addDisallowedApplication(BuildConfig.APPLICATION_ID)
+        }
+        println("bypass -->" + BuildConfig.APPLICATION_ID)
+
+        // -----------------------------------------------------------
+
+
+
         if (settingsStorage?.decodeBool(AppConfig.PREF_PER_APP_PROXY) == true) {
             val apps = settingsStorage?.decodeStringSet(AppConfig.PREF_PER_APP_PROXY_SET)
             val bypassApps = settingsStorage?.decodeBool(AppConfig.PREF_BYPASS_APPS) ?: false
+
             apps?.forEach {
+                // ---- GFW knocker --------------
+                println("bypass -->" + it)
+                // -------------------------------
                 try {
                     if (bypassApps)
                         builder.addDisallowedApplication(it)

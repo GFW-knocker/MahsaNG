@@ -24,7 +24,7 @@ object AppConfig {
     const val PREF_REMOTE_DNS = "pref_remote_dns"
     const val PREF_DOMESTIC_DNS = "pref_domestic_dns"
     const val PREF_LOCAL_DNS_PORT = "pref_local_dns_port"
-    const val PREF_ALLOW_INSECURE = "pref_allow_insecure"
+    const val PREF_ALLOW_INSECURE = "true" //"pref_allow_insecure"  // GFW-knocker: just disable root CA check by default that cause many configs to fail
     const val PREF_SOCKS_PORT = "pref_socks_port"
     const val PREF_HTTP_PORT = "pref_http_port"
     const val PREF_LOGLEVEL = "pref_core_loglevel"

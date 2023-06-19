@@ -170,7 +170,7 @@ object AngConfigManager {
                         vmessBean.path
                     )
                     val allowInsecure = if (vmessBean.allowInsecure.isBlank()) {
-                        settingsStorage?.decodeBool(AppConfig.PREF_ALLOW_INSECURE) ?: false
+                        settingsStorage?.decodeBool(AppConfig.PREF_ALLOW_INSECURE) ?: true // GFW-knocker: just disable root CA check by default that cause many configs to fail
                     } else {
                         vmessBean.allowInsecure.toBoolean()
                     }
@@ -221,7 +221,7 @@ object AngConfigManager {
             }
 
             var config: ServerConfig? = null
-            val allowInsecure = settingsStorage?.decodeBool(AppConfig.PREF_ALLOW_INSECURE) ?: false
+            val allowInsecure = settingsStorage?.decodeBool(AppConfig.PREF_ALLOW_INSECURE) ?: true // GFW-knocker: just disable root CA check by default that cause many configs to fail
             if (str.startsWith(EConfigType.VMESS.protocolScheme)) {
                 config = ServerConfig.create(EConfigType.VMESS)
                 val streamSetting = config.outboundBean?.streamSettings ?: return -1
