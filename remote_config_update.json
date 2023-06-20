@@ -1,0 +1,79 @@
+{
+    "fragment_setting":[
+      {
+        "ISP":"mci",
+        "num_fragment":87,
+        "fragment_sleep":0.005,
+        "socket_timeout":8
+      },
+      {
+        "ISP":"irancell",
+        "num_fragment":14,
+        "fragment_sleep":0.005,
+        "socket_timeout":8
+      },
+      {
+        "ISP":"tci",
+        "num_fragment":150,
+        "fragment_sleep":0.008,
+        "socket_timeout":8
+      },
+      {
+        "ISP":"any",
+        "num_fragment":50,
+        "fragment_sleep":0.010,
+        "socket_timeout":8
+      }
+   ],
+
+
+   "fake_host_setting":[
+        {
+        "ISP":"any",
+        "header":"hosthost",
+        "value":"www.google.com"
+        }
+    ],
+              
+  
+    "cloudflare_setting":[
+        {
+          "ISP":"any",
+          "IP_LIST":[
+            "203.28.8.71",
+            "203.34.28.133",
+            "203.13.32.183",
+            "203.23.106.136",
+            "194.152.44.247",
+            "104.234.158.11"
+          ]
+        }
+    ],
+
+
+    "DoH_setting":[
+        {
+            "ISP":"any",
+            "doh_url":"https://cloudflare-dns.com/dns-query?name=",
+            "use_cludflare_ip":true,            
+            "use_fragment":true          
+        }
+    ],
+
+
+
+    "update_setting":{
+        "url_update_list":[
+            ""
+        ]
+    },
+
+
+    "notif_setting":{
+        "notif_text":"",
+        "notif_link":""
+    }
+    
+    
+  }
+
