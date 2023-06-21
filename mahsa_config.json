@@ -39,6 +39,7 @@
     "cloudflare_setting":[
         {
           "ISP":"any",
+          "port":443,
           "IP_LIST":[
             "203.28.8.71",
             "203.34.28.133",
@@ -55,6 +56,7 @@
         {
             "ISP":"any",
             "doh_url":"https://cloudflare-dns.com/dns-query?name=",
+            "doh_ip":"sciencedirect.com",
             "use_cludflare_ip":true,            
             "use_fragment":true          
         }
@@ -211,7 +213,7 @@
 
 
     "notif_setting":{
-        "notif_text":"این نسخه اورژانسی است. هر هفته از منوی چپ آپدیت بزنید. تکنولوژی مهمی در راه داریم",
+        "notif_text":"این نسخه اورژانسی است. در هفته های آتی تکنولوژی مهمی در راه داریم",
         "notif_link":""
     },
 
