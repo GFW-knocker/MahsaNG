@@ -41,6 +41,10 @@
           "ISP":"any",
           "port":443,
           "IP_LIST":[
+              "sciencedirect.com",
+              "discord.com",
+              "medium.com",
+              "plos.org",
             "203.28.8.71",
             "203.34.28.133",
             "203.13.32.183",
