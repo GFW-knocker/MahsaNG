@@ -3,7 +3,7 @@
       {
         "ISP":"mci",
         "num_fragment":150,
-        "fragment_sleep":0.008,
+        "fragment_sleep":0.005,
         "socket_timeout":8
       },
       {
@@ -21,7 +21,7 @@
       {
         "ISP":"any",
         "num_fragment":100,
-        "fragment_sleep":0.010,
+        "fragment_sleep":0.008,
         "socket_timeout":8
       }
    ],
@@ -40,14 +40,13 @@
         {
           "ISP":"any",
           "port":443,
-          "IP_LIST":[            
+          "IP_LIST":[
             "discord.com",
             "digitalocean.com",
             "medium.com",
             "towardsdatascience.com",
             "mn.co",
             "musescore.com",
-            "plos.org",
             "203.28.8.71",
             "203.34.28.133",
             "203.13.32.183",
@@ -213,8 +212,17 @@
 
 
     "update_setting":{
-        "url_update_list":[
+        "url_remote_config":[
             "https://raw.githubusercontent.com/GFW-knocker/MahsaNG/master/remote_config_update.json"
+        ],
+        "url_tg_accounts":[
+          "https://raw.githubusercontent.com/yebekhe/TelegramV2rayCollector/main/json/configs.json"
+        ],
+        "url_mahsa_accounts":[
+          "https://raw.githubusercontent.com/GFW-knocker/MahsaNG/master/mahsa_accounts.txt"
+        ],
+        "url_ADS":[
+          "https://raw.githubusercontent.com/ircfspace/mahsaNGAd/main/test.html"
         ]
     },
 
