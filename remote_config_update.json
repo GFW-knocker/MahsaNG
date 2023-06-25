@@ -221,15 +221,19 @@
         "url_mahsa_accounts":[
           "https://raw.githubusercontent.com/GFW-knocker/MahsaNG/master/mahsa_accounts.txt"
         ],
-        "url_ADS":[
+        "url_ADS_html":[
           "https://raw.githubusercontent.com/ircfspace/mahsaNGAd/main/test.html"
+        ],
+        "url_ADS_txt":[
+          "https://raw.githubusercontent.com/ircfspace/mahsaNGAd/main/test.txt"
         ]
     },
 
 
-    "notif_setting":{
-        "notif_text":"این نسخه اورژانسی است. در هفته های آتی تکنولوژی مهمی در راه داریم",
-        "notif_link":"https://raw.githubusercontent.com/ircfspace/mahsaNGAd/main/test.html"
+    "announcement_setting":{
+        "announcement":"این نسخه اورژانسی است. در هفته های آتی تکنولوژی مهمی در راه داریم",
+        "url_announcement_txt":"https://raw.githubusercontent.com/GFW-knocker/MahsaNG/master/txt_announcement.txt",
+        "url_announcement_html":"https://raw.githubusercontent.com/GFW-knocker/MahsaNG/master/web_announcement.html"
     },
 
 
