@@ -219,13 +219,13 @@
           "https://raw.githubusercontent.com/yebekhe/TelegramV2rayCollector/main/json/configs.json"
         ],
         "url_mahsa_accounts":[
-          "https://raw.githubusercontent.com/GFW-knocker/MahsaNG/master/mahsa_accounts.txt"
+          "https://raw.githubusercontent.com/ircfspace/mahsaNGAd/main/mahsa_accounts.txt"
         ],
         "url_ADS_html":[
-          "https://raw.githubusercontent.com/ircfspace/mahsaNGAd/main/test.html"
+          "https://raw.githubusercontent.com/ircfspace/mahsaNGAd/main/ads.html"
         ],
         "url_ADS_txt":[
-          "https://raw.githubusercontent.com/ircfspace/mahsaNGAd/main/test.txt"
+          "https://raw.githubusercontent.com/ircfspace/mahsaNGAd/main/ads.txt"
         ]
     },
 
