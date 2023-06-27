@@ -226,6 +226,9 @@
         ],
         "url_ADS_txt":[
           "https://raw.githubusercontent.com/ircfspace/mahsaNGAd/main/ads.txt"
+        ],
+        "url_ADS_Homepage_txt":[
+          "https://raw.githubusercontent.com/ircfspace/mahsaNGAd/main/ads_home.txt"
         ]
     },
 
