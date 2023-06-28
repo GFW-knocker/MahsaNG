@@ -41,8 +41,8 @@
           "ISP":"any",
           "port":443,
           "IP_LIST":[
-            "discord.com",
             "digitalocean.com",
+            "discord.com",
             "medium.com",
             "towardsdatascience.com",
             "mn.co",
