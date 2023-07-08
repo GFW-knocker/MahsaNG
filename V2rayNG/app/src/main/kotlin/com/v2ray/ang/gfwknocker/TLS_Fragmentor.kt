@@ -17,8 +17,8 @@ class TLS_Fragmentor(
     var target_ip: String,
     var target_port: Int,
     var isFragment: Boolean,
-    var num_fragment: Int, // in second
-    var fragment_sleep: Double
+    var num_fragment: Int,
+    var fragment_sleep: Double // in second
 ) : Thread() {
     var ss: ServerSocket? = null
     var client_sock: Socket? = null
@@ -31,10 +31,11 @@ class TLS_Fragmentor(
             ss = ServerSocket(listen_port, 128) // up to 128 concurrent connection queued
             listen_port = ss!!.localPort
             println("TLS Listening at $listen_ip:$listen_port")
+            println("target $target_ip:$target_port\r\nnum_fragment:$num_fragment\r\nfragment_sleep:$fragment_sleep\r\nuse_fragment:$isFragment")
 
             is_ready = true
             while (true) {
-                println("TLS waiting for input socket ...")
+//                println("TLS waiting for input socket ...")
                 client_sock = ss!!.accept()
 
                 val up_thread = My_upstream(
@@ -48,28 +49,28 @@ class TLS_Fragmentor(
                 up_thread.start()
             }
         } catch (e: Exception) {
-            println("TLS Server ERR: " + e.message)
+//            println("TLS Server ERR: " + e.message)
             is_ready = false
         } finally {
-            println("TLS Server Stopped. Listening Finished.")
+//            println("TLS Server Stopped. Listening Finished.")
             is_ready = false
         }
-        println("TLS Server Thread Finished")
+//        println("TLS Server Thread Finished")
     } // run
 
     fun get_listen_port(): Int {
         // waiting a few millisec to service starts then returning ports
         try {
-            for (i in 1..99) {
+            for (i in 1..300) {
                 if (is_ready == true) {
                     break
                 } else {
-                    println((i * 10).toString() + " milli second waiting to start threaded service")
+//                    println((i * 10).toString() + " milli second waiting to start threaded service")
                     sleep(10) // sleep 10 milisec
                 }
             }
         } catch (e: Exception) {
-            println("err in get listen port: " + e.message)
+//            println("err in get listen port: " + e.message)
         }
         return listen_port
     }
@@ -78,10 +79,10 @@ class TLS_Fragmentor(
         try {
             ss!!.close()
         } catch (e: Exception) {
-            println("Safe Stop ERR: " + e.message)
+//            println("Safe Stop ERR: " + e.message)
             return
         }
-        println("TLS server socket safely stopped")
+//        println("TLS server socket safely stopped")
     }
 } //class Server
 
@@ -124,7 +125,7 @@ internal class My_upstream(
             val down_thread = My_downstream(backend_sock!!.getInputStream(), client_sock!!.getOutputStream())
             down_thread.start()
 
-            println("up-stream started")
+//            println("up-stream started")
             sleep(first_time_sleep) // wait n millisec for first packet to fully receive
             while (true) {
                 b = ips.read(buff)
@@ -140,9 +141,9 @@ internal class My_upstream(
                 }
             }
         } catch (e: Exception) {
-            println("up-stream: " + e.message)
+//            println("up-stream: " + e.message)
         } finally {
-            println("up-stream finished")
+//            println("up-stream finished")
         }
         safely_close_socket(client_sock)
         safely_close_socket(backend_sock)
@@ -151,7 +152,7 @@ internal class My_upstream(
             ops!!.close()
             ips!!.close()
         } catch (e: Exception) {
-            println("up-stream Close ERR: " + e.message)
+//            println("up-stream Close ERR: " + e.message)
         }
     }
 
@@ -165,7 +166,7 @@ internal class My_upstream(
                 }
             }
         } catch (e: Exception) {
-            println("socket Close ERR: " + e.message)
+//            println("socket Close ERR: " + e.message)
         }
     }
 
@@ -183,11 +184,11 @@ internal class My_upstream(
                 sleep(fragment_sleep_milisec)
                 j_pre = j_next
             }
-            println("TLS send from $j_pre to $L")
+//            println("TLS send from $j_pre to $L")
             ops!!.write(buff, j_pre, L - j_pre)
             ops!!.flush()
         } catch (e: Exception) {
-            println("err in fragment function: " + e.message)
+//            println("err in fragment function: " + e.message)
             return
         }
     }
@@ -227,7 +228,7 @@ internal class My_downstream(var ips: InputStream, var ops: OutputStream) : Thre
 
     override fun run() {
         try {
-            println("down-stream started")
+//            println("down-stream started")
             while (true) {
                 b = ips.read(buff)
                 if(b == -1){
@@ -237,16 +238,16 @@ internal class My_downstream(var ips: InputStream, var ops: OutputStream) : Thre
                 ops.flush()
             }
         } catch (e: Exception) {
-            println("down-stream: " + e.message)
+//            println("down-stream: " + e.message)
         } finally {
-            println("down-stream finished")
+//            println("down-stream finished")
         }
         try {
             ops.flush()
             ops.close()
             ips.close()
         } catch (e: Exception) {
-            println("stream Close ERR: " + e.message)
+//            println("stream Close ERR: " + e.message)
         }
     }
 } // class downstream

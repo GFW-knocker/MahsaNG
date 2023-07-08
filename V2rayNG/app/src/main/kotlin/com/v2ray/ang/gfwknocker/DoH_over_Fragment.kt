@@ -14,8 +14,10 @@ import java.net.URLEncoder
 class DoH_over_Fragment(
     doh_url1: String?,
     target_ip1: String?, target_port1: Int,
-    isFragment1: Boolean, num_fragment1: Int, fragment_sleep1: Double
+    isFragment1: Boolean, num_fragment1: Int, fragment_sleep1: Double ,
+    offline_DNS1 : MutableMap<String,Any>
 ) {
+    var DNS_cache = mutableMapOf<String,Any>()
     var fragment_proxy: Proxy
     var doh_url: String? = null
     var fragment_serv: HTTPS_Fragmentor
@@ -31,6 +33,10 @@ class DoH_over_Fragment(
             doh_url1
         }
 
+        if(offline_DNS1 != null){
+            DNS_cache = offline_DNS1
+        }
+
 
         // construct a Fragmentor service only for DoH
         fragment_serv = HTTPS_Fragmentor(
@@ -42,13 +48,18 @@ class DoH_over_Fragment(
         fragment_serv.start()
         val proxyIP = fragment_serv.get_listen_ip()
         val proxyPort = fragment_serv.get_listen_port()
-        fragment_proxy =
-            Proxy(Proxy.Type.HTTP, InetSocketAddress(proxyIP, proxyPort)) // Proxy.NO_PROXY;
+        fragment_proxy = Proxy(Proxy.Type.HTTP, InetSocketAddress(proxyIP, proxyPort)) // Proxy.NO_PROXY;
         println("Construct DoH with Fragment=$isFragment1 ($num_fragment1) ")
     }
 
     fun query(domain: String): String? {
         var IP: String? = null
+        if( DNS_cache[domain]!=null ){
+            IP = DNS_cache[domain] as String?
+//            println("offline DNS: $domain ---> $IP")
+            return IP
+        }
+
         try {
             // System.setProperty("https.protocols", "TLSv1.3");  // force to use tlsv1.3
             // System.setProperty("javax.net.debug", "ssl");
@@ -84,11 +95,13 @@ class DoH_over_Fragment(
                 val x = answer_list.getJSONObject(i)
                 if (x.getInt("type") == 1) {
                     IP = x.getString("data")
-                    println("online DNS: $domain ---> $IP")
+//                    println("online DNS: $domain ---> $IP")
+                    DNS_cache[domain] = IP
                     break
                 }
             }
         } catch (e: Exception) {
+//            println("cant resolve $domain")
             println("DoH ERR: " + e.message)
         }
         return IP
@@ -97,4 +110,8 @@ class DoH_over_Fragment(
     fun safely_stop_DoH() {
         fragment_serv.safely_stop_server()
     }
+
+
+
+
 }

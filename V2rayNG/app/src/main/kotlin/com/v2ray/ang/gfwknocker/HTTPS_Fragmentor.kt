@@ -27,7 +27,7 @@ class HTTPS_Fragmentor(
             println("HTTPS Listening at $listen_ip:$listen_port")
             is_ready = true
             while (true) {
-                println("HTTPS waiting for input socket ...")
+//                println("HTTPS waiting for input socket ...")
                 client_sock = ss!!.accept()
                 val up_thread = My_upstream_H(
                     client_sock,
@@ -41,10 +41,10 @@ class HTTPS_Fragmentor(
                 up_thread.start()
             }
         } catch (e: Exception) {
-            println("HTTPS Server ERR: " + e.message)
+//            println("HTTPS Server ERR: " + e.message)
             is_ready = false
         } finally {
-            println("HTTPS Server Stopped. Listening Finished.")
+//            println("HTTPS Server Stopped. Listening Finished.")
             is_ready = false
         }
         println("HTTPS Server Thread Finished")
@@ -57,11 +57,11 @@ class HTTPS_Fragmentor(
     fun get_listen_port(): Int {
         // waiting a few millisec to service starts then returning ports
         try {
-            for (i in 1..99) {
+            for (i in 1..300) {
                 if (is_ready == true) {
                     break
                 } else {
-                    println((i * 10).toString() + " milli second waiting to start threaded service")
+//                    println((i * 10).toString() + " milli second waiting to start threaded service")
                     sleep(10) // sleep 10 milisec
                 }
             }
@@ -120,7 +120,7 @@ internal class My_upstream_H(
             val down_thread =
                 My_downstream_H(backend_sock!!.getInputStream(), client_sock!!.getOutputStream())
             down_thread.start()
-            println("up-stream started")
+//            println("up-stream started")
             sleep(first_time_sleep) // wait n millisec for first packet to fully receive
             while (true) {
                 b = ips.read(buff)
@@ -136,9 +136,9 @@ internal class My_upstream_H(
                 }
             }
         } catch (e: Exception) {
-            println("up-stream: " + e.message)
+//            println("up-stream: " + e.message)
         } finally {
-            println("up-stream finished")
+//            println("up-stream finished")
         }
         safely_close_socket(client_sock)
         safely_close_socket(backend_sock)
@@ -147,7 +147,7 @@ internal class My_upstream_H(
             ops!!.close()
             ips.close()
         } catch (e: Exception) {
-            println("up-stream Close ERR: " + e.message)
+//            println("up-stream Close ERR: " + e.message)
         }
     }
 
@@ -181,7 +181,7 @@ internal class My_upstream_H(
                 }
             } else if (rMethod == "GET" || rMethod == "POST" || rMethod == "HEAD" || rMethod == "OPTIONS" || rMethod == "PUT" || rMethod == "DELETE" || rMethod == "PATCH" || rMethod == "TRACE") {
                 val q_url = rhost.replace("http://", "https://")
-                println("redirect to HTTPS (302) $q_url")
+//                println("redirect to HTTPS (302) $q_url")
                 response_data =
                     "HTTP/1.1 302 Found\r\nLocation: $q_url\r\nProxy-agent: MyProxy/1.0\r\n\r\n"
                 cosw.write(response_data)
@@ -189,7 +189,7 @@ internal class My_upstream_H(
                 cli_sock.close()
                 return null
             } else {
-                println("Unknown method ERR 400 : $rMethod")
+//                println("Unknown method ERR 400 : $rMethod")
                 response_data = "HTTP/1.1 400 Bad Request\r\nProxy-agent: MyProxy/1.0\r\n\r\n"
                 cosw.write(response_data)
                 cosw.flush()
@@ -198,11 +198,11 @@ internal class My_upstream_H(
             }
             if ( (target_ip=="") && (DoH_obj != null) ) {
                 if (!isValidIPAddress(remote_host)) {
-                    println("query DoH --> $remote_host")
+//                    println("query DoH --> $remote_host")
                     remote_host = DoH_obj!!.query(remote_host)
                 }
             }
-            println("$remote_host --> $remote_port")
+//            println("$remote_host --> $remote_port")
             backend_sock = Socket(remote_host, remote_port)
             backend_sock.soTimeout = myH_socket_timeout
             backend_sock.tcpNoDelay = true
@@ -212,7 +212,7 @@ internal class My_upstream_H(
             cosw.flush()
             backend_sock
         } catch (e: Exception) {
-            println("handle client Req ERR 502: " + e.message)
+//            println("handle client Req ERR 502: " + e.message)
             response_data =
                 "HTTP/1.1 502 Bad Gateway (is IP filtered?)\r\nProxy-agent: MyProxy/1.0\r\n\r\n"
             try {
@@ -220,7 +220,7 @@ internal class My_upstream_H(
                 cosw.flush()
                 cli_sock!!.close()
             } catch (e2: Exception) {
-                println("handle client write 502 ERR: " + e2.message)
+//                println("handle client write 502 ERR: " + e2.message)
             }
             null
         }
@@ -236,7 +236,7 @@ internal class My_upstream_H(
                 }
             }
         } catch (e: Exception) {
-            println("socket Close ERR: " + e.message)
+//            println("socket Close ERR: " + e.message)
         }
     }
 
@@ -254,11 +254,11 @@ internal class My_upstream_H(
                 sleep(fragment_sleep_milisec)
                 j_pre = j_next
             }
-            println("HTTPS send from $j_pre to $L")
+//            println("HTTPS send from $j_pre to $L")
             ops!!.write(buff, j_pre, L - j_pre)
             ops!!.flush()
         } catch (e: Exception) {
-            println("err in fragment function: " + e.message)
+//            println("err in fragment function: " + e.message)
             return
         }
     }
@@ -305,7 +305,7 @@ internal class My_downstream_H(var ips: InputStream, var ops: OutputStream) : Th
 
     override fun run() {
         try {
-            println("down-stream started")
+//            println("down-stream started")
             while (true) {
                 b = ips.read(buff)
                 if(b == -1){
@@ -315,16 +315,16 @@ internal class My_downstream_H(var ips: InputStream, var ops: OutputStream) : Th
                 ops.flush()
             }
         } catch (e: Exception) {
-            println("down-stream: " + e.message)
+//            println("down-stream: " + e.message)
         } finally {
-            println("down-stream finished")
+//            println("down-stream finished")
         }
         try {
             ops.flush()
             ops.close()
             ips.close()
         } catch (e: Exception) {
-            println("stream Close ERR: " + e.message)
+//            println("stream Close ERR: " + e.message)
         }
     }
 } // class downstream
