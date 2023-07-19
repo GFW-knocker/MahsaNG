@@ -10,11 +10,12 @@
 
 # Difference to v2rayNG
 - make everything free using ADS. (vpn providers can use ADS service to make income instead of direct sell)
+- everyone can share their unused vps bandwidth to help others
+- prevent free configs to be stolen and reselled
+- Automatic report for refining config collection at central servers
 - DNS over HTTPS
 - TLS Fragmentor
 - HTTP & WS fake Host
-- ADS for engaiging vpn providers to provide free configs
-- Automatic report for refining config collection at central servers
 - Rotating Configs
 - Random Subdomain
 - & much more ...
