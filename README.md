@@ -21,7 +21,7 @@
 - & much more ...
 
 # build from source
-- some parts of source that used for encrypting config is closed to prevent leakage & thus reselling of donatated configs
+- some parts of source used for encrypting config is closed to prevent leakage & thus reselling of donated configs
 - all other technology used to bypass filtering is willingly published including but not limited to Youtube Direct , TLS & HTTPS & DoH fragmentor & fake Host
 
 # build V2rayNG from source
