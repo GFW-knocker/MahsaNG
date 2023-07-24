@@ -21,8 +21,12 @@
 - & much more ...
 
 # build from source
+- some parts of source that used for encrypting config is closed to prevent leakage & thus reselling of donatated configs
+- all other technology used to bypass filtering is willingly published including but not limited to Youtube Direct , TLS & HTTPS & DoH fragmentor & fake Host
+
+# build V2rayNG from source
 - you need to place libv2ray.aar in v2rayng/apps/libs folder
-- you can compile it yourself from [AndroidLibXrayLite](https://github.com/2dust/AndroidLibXrayLite)
+- you can compile it yourself from [AndroidLibXrayLite](https://github.com/2dust/AndroidLibXrayLite) after installing Go & Go mobile
 - or you can download v1.5 from [here](https://github.com/2dust/v2rayNG/blob/09d854dc784365e5499e444aff065055adcc5105/V2rayNG/app/libs/libv2ray.aar)
-- or submit a issue and i provide libv2ray.aar v1.8.1
+- or submit a issue and i provide libv2ray.aar v1.8.3
 
