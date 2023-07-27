@@ -6,10 +6,12 @@
 
 # What is the idea
 - MahsaNG is client-side of project [Segaro_Dream](https://github.com/GFW-knocker/Segaro_Dream)
-- our goal is to make a superior vpn platform which is free,stable,scalable & filter-resistant
+- MahsaNG is a decentralized public platform in which everyone can share their configs to help others
+- Donated configs continuously monitored and redistributed to users based on clients feedback in each subnet-ip
+- Our goal is to make a superior vpn platform which is free,stable,scalable,distributed & filter-resistant
 
 # Difference to v2rayNG
-- make everything free using ADS. (vpn providers can use ADS service to make income instead of direct sell)
+- vpn providers can use ADS service to make income instead of direct sell
 - everyone can share their unused vps bandwidth to help others
 - prevent free configs to be stolen and reselled
 - Automatic report for refining config collection at central servers
