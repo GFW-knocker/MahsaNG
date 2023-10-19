@@ -1,4 +1,4 @@
-# MahsaNG (in progress)
+# MahsaNG
 - [MahsaNG دانلود آخرین نسخه](https://github.com/GFW-knocker/MahsaNG/releases/latest)
 - [mahsa_net telegram channel](https://t.me/mahsa_net)
 - MahsaNG is a v2rayNG client aimed to provide free vpn for everyone<br>
