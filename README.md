@@ -8,7 +8,7 @@
 
 # What is the idea
 - MahsaNG is client-side of project [Segaro_Dream](https://github.com/GFW-knocker/Segaro_Dream)
-- MahsaNG is a decentralized public platform in which everyone can share their configs to help others
+- MahsaNG is a decentralized non-profit vpn platform in which everyone can share their configs to help others
 - Donated configs continuously monitored and redistributed to users based on clients feedback in each subnet-ip
 - Our goal is to make a superior vpn platform which is free,stable,scalable,distributed & filter-resistant
 
