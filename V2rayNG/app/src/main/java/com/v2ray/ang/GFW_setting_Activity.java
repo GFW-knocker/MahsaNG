@@ -37,7 +37,7 @@ public class GFW_setting_Activity extends AppCompatActivity {
     CheckBox ip_checkbox;
     CheckBox cdn_checkbox;
     Button btn_save;
-    my_preference_storage mystrg;
+    my_preference_storage mystrg = new my_preference_storage();
 
     CheckBox config_checkbox;
 
@@ -51,6 +51,7 @@ public class GFW_setting_Activity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
+
         sw_remote = (Switch) findViewById(R.id.remote_update);
         sw_frag = (Switch) findViewById(R.id.use_fragment);
         isp_spinner = (Spinner) findViewById(R.id.spinner2);
@@ -63,8 +64,6 @@ public class GFW_setting_Activity extends AppCompatActivity {
         btn_save = (Button) findViewById(R.id.button_save);
         config_checkbox = (CheckBox) findViewById(R.id.config_ip_checkbox);
 
-
-        mystrg = new my_preference_storage(this);
 
         load_switch_state_from_storage();
         fix_switch_dependency();
@@ -155,7 +154,6 @@ public class GFW_setting_Activity extends AppCompatActivity {
                 mystrg.put_value("cdn_checkbox",String.valueOf(is_cdn_ip));
                 mystrg.put_value("config_ip_checkbox",String.valueOf(is_config_chbox));
                 mystrg.put_array("cfip_list",cdn_ip_list);
-                mystrg.commit();
 
                 Toast.makeText(GFW_setting_Activity.this, "settings saved", Toast.LENGTH_SHORT).show();
 
