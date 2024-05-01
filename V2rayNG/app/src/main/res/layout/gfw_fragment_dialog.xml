@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="15dp">
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" >
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/switch_fragment1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Fragment"
+                android:padding="10dp" />
+            <CheckBox
+                android:id="@+id/checkBox_auto_fragment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Auto"
+                android:padding="10dp"/>
+        </TableRow>
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" >
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/switch_warp8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="WARP"
+                android:padding="10dp" />
+            <Button
+                android:id="@+id/button_warp_setting8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:textColor="@color/color_btn_get_txt"
+                android:backgroundTint="@color/color_btn_get_config"
+                android:text="WARP setting" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" >
+        <CheckBox
+            android:id="@+id/checkBox_mux"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mux"
+            android:padding="15dp"/>
+        <EditText
+            android:id="@+id/mux_edittext"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:text=""
+            android:hint="8"
+            android:padding="15dp" />
+        </TableRow>
+
+
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" >
+            <CheckBox
+                android:id="@+id/checkBox_fakehost"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Fakehost"
+                android:padding="15dp"/>
+            <EditText
+                android:id="@+id/fakehost_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:text=""
+                android:hint="cloudflare.com"
+                android:padding="15dp" />
+        </TableRow>
+
+
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+            <TextView
+                android:id="@+id/textView547"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Packets : "
+                android:padding="15dp" />
+            <EditText
+                android:id="@+id/fragment_packet_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:text=""
+                android:hint="tlshello, 1-1"
+                android:padding="15dp" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+            <TextView
+                android:id="@+id/textView877"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Length (byte) : "
+                android:padding="15dp" />
+            <EditText
+                android:id="@+id/fragment_length_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:text=""
+                android:hint="10-20, 100-200"
+                android:padding="15dp" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+            <TextView
+                android:id="@+id/textView947"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Interval (ms) : "
+                android:padding="15dp" />
+            <EditText
+                android:id="@+id/fragment_interval_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:text=""
+                android:hint="10-20, 3-5"
+                android:padding="15dp" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+            <TextView
+                android:id="@+id/textView_1489"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="packet type:"
+                android:padding="15dp" />
+            <TextView
+                android:id="@+id/textView_packet_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:padding="15dp" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+            <TextView
+                android:id="@+id/textView_1487"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="num chunks:"
+                android:padding="15dp" />
+            <TextView
+                android:id="@+id/textView_num_chunk"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:padding="15dp" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+            <TextView
+                android:id="@+id/textView_1485"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="extra ping:"
+                android:padding="15dp" />
+            <TextView
+                android:id="@+id/textView_extra_ping"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:padding="15dp" />
+        </TableRow>
+
+
+    </TableLayout>
+
+    </LinearLayout>
+    </ScrollView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

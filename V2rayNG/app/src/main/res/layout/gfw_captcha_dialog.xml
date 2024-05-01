@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="15dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/imageView_captcha_content"
+                android:layout_width="110dp"
+                android:layout_height="48dp"
+                android:padding="1dp"
+                app:srcCompat="@drawable/sample_captcha" />
+
+
+            <Space
+                android:layout_width="24dp"
+                android:layout_height="48dp" />
+
+
+
+            <ImageButton
+                android:id="@+id/imageButton_captcha_refresh"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:padding="1dp"
+                app:srcCompat="@drawable/refresh_captcha" />
+
+
+
+
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/editText_captcha"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:padding="15dp"
+            android:inputType="text"
+            android:hint="@string/captcha_hint"
+            android:text="" />
+
+
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

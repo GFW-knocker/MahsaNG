@@ -37,6 +37,8 @@
             android:layout_height="wrap_content"
             android:padding="15dp"
             android:layout_gravity="center"
+            android:textColor="@color/color_btn_get_txt"
+            android:backgroundTint="@color/color_btn_get_config"
             android:text="Get Youtube Config" />
     </LinearLayout>
 

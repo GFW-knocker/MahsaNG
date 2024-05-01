@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".GFW_update_Activity">
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="5"
+                android:padding="15dp"
+                app:srcCompat="@drawable/mahsa4" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:orientation="horizontal"
+                android:layout_gravity="center"
+                android:layout_weight="1.3">
+
+
+
+                <TextView
+                    android:id="@+id/textView_isp7"
+                    android:layout_width="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:layout_height="match_parent"
+                    android:padding="15dp"
+                    android:autoLink="web"
+                    android:linksClickable="true"
+                    android:text="ISP:" />
+
+
+                <Spinner
+                    android:id="@+id/spinner_isp7"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="15dp"
+                    android:entries="@array/isp_list" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:orientation="horizontal"
+                android:layout_gravity="center"
+                android:layout_weight="1.5">
+
+                <Button
+                    android:id="@+id/button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:padding="15dp"
+                    android:textColor="@color/color_btn_get_txt"
+                    android:backgroundTint="@color/color_btn_get_config"
+                    android:text="Update" />
+
+                <TextView
+                    android:id="@+id/textView_version7"
+                    android:layout_width="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_height="match_parent"
+                    android:padding="15dp"
+                    android:autoLink="web"
+                    android:linksClickable="true"
+                    android:text="MahsaNG v6.0 1402-10-28" />
+
+
+            </LinearLayout>
+
+
+
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:padding="15dp"
+                android:layout_weight="4.5">
+
+            <TextView
+                android:id="@+id/textView_info7"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="15dp"
+                android:autoLink="web"
+                android:linksClickable="true"
+                android:text="@string/description1" />
+
+            </ScrollView>
+
+        </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
