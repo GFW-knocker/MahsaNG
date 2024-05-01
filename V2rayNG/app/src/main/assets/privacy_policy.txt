@@ -1,0 +1,86 @@
+Privacy Policy
+
+Mahsa Server does only facilitate providing and sharing free VPN servers and does not collect any personal information or sensitive data except the ones that are mentioned in Section 1.2.
+
+Users should know that their public IP address, DNS queries and SNI fields can be collected by Server Owners (same as your ISP) and it is out of our control. This even applies in the case of most secure TLS-based VPN configurations. Currently, we only encourage Server Owners not to collect these data; but we don’t act on behalf of them.
+
+Note 1: Please always make sure to use official apps and follow this guide (https://support.google.com/chrome/answer/95617?hl=en) to make sure the website you are visiting is legit and secure while you are using MahsaNG VPN.
+
+Note 2: We strongly advise against using MahsaNG for sensitive tasks, such as banking or any activities that may be deemed illegal in your country unless you are using a VPN config that you trust.
+1. Data Collection
+1.1 Data Not Collected
+
+We do not gather the following information:
+
+    Names (including subscriber names, usernames, and screen names)
+    Addresses (residential and business)
+    Telephone numbers
+    Payment details (credit card numbers, bank account info, billing records)
+
+We don’t store sensitive data and engineered systems avoid this.
+
+No logs are collected on online activities such as:
+
+    Browsing history
+    Traffic destination
+    Data content
+    DNS queries
+
+1.2 Data Collection
+
+Limited anonymous data is collected to provide the best possible VPN configs using the Mahsa Server.
+
+It includes the following:
+
+    IP Address of the Client (first 3 octets only)
+    Timezone of the client
+    Android Version
+    App Version
+    Connection Status (Connected/Not Connected/Ping value)
+
+1.3 App Permissions
+
+The app does not need any permissions to access your phone’s contacts, location, device id, storage, microphone, camera, etc.
+2. Data Usage
+
+Data is used for:
+
+    Maintaining a list of healthy and working donated VPN configs
+    Regional distribution algorithm to help the clients to get the best configs based on their region and ISP
+
+3. Data Sharing and Transfer
+
+We do not share any data with the any third parties.
+4. Security Measures
+
+Strong security measures implemented to protect data. Staff access limited.
+5. Data Retention
+
+Data retained for legitimate business needs. Deleted when not needed, securely stored otherwise.
+6. Right to Be Forgotten
+
+Data erased when:
+
+    No longer necessary
+    Consent withdrawn (via data removal form)
+
+7. Third Party Services
+
+Using third party services while on MahsaNG is subject to their policies.
+8. Advertising
+
+    We do not get paid for the VPN configs that we provide.
+    We do not collect any data for the advertisement purposes.
+
+9. Children’s Privacy
+
+Parents encouraged to teach children about online privacy.
+10. Data Deletion
+
+You can use the following link to request for deleting your data.
+
+Data Deletion Request
+https://www.mahsaserver.com/delete-request-form/
+
+https://www.mahsaserver.com/privacy/
+

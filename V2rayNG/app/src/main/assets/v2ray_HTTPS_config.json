@@ -1,0 +1,160 @@
+{
+  "log": {
+    "access": "",
+    "error": "",
+    "loglevel": "warning"
+  },
+
+  "dns": {
+    "hosts": {},
+    "servers": [
+      "https://cloudflare-dns.com/dns-query?name="
+    ]
+  },
+
+
+  "inbounds": [
+    {
+      "tag": "socks",
+      "port": 10808,
+      "listen": "127.0.0.1",
+      "protocol": "socks",
+      "sniffing": {
+        "enabled": true,
+        "destOverride": [
+          "http",
+          "tls"
+        ]
+      },
+      "settings": {
+        "auth": "noauth",
+        "udp": true,
+        "allowTransparent": false
+      }
+    },
+    {
+      "tag": "http",
+      "port": 10809,
+      "listen": "127.0.0.1",
+      "protocol": "http",
+      "sniffing": {
+        "enabled": true,
+        "destOverride": [
+          "http",
+          "tls"
+        ]
+      },
+      "settings": {
+        "auth": "noauth",
+        "udp": true,
+        "allowTransparent": false
+      }
+    }
+  ],
+
+
+
+
+  "outbounds": [
+    {
+      "tag": "pyprox",
+      "protocol": "http",
+      "settings": {
+        "servers": [
+          {
+            "address": "127.0.0.1",
+            "port": 4500            
+          }
+        ]
+      }      
+    },
+
+    {
+      "tag": "direct",
+      "protocol": "freedom",
+      "settings": {}
+    },    
+
+    {
+      "tag": "block",
+      "protocol": "blackhole",
+      "settings": {
+        "response": {
+          "type": "http"
+        }
+      }
+    }
+
+
+  ],
+
+
+
+  "routing": {
+
+    "domainStrategy": "IPIfNonMatch",
+    "rules": [
+      {
+        "type": "field",
+        "inboundTag": [
+          "api"
+        ],
+        "outboundTag": "api",
+        "enabled": true
+      },
+
+      {
+        "domain": [
+          "cloudflare-dns.com",
+          "dns.google"
+        ],
+        "outboundTag": "pyprox",
+        "type": "field",
+        "enabled": true
+      },
+
+
+      {
+        "ip": [
+          "8.8.8.8",
+          "8.8.4.4",
+          "1.1.1.1",
+          "geoip:ir"
+        ],
+        "outboundTag": "direct",
+        "type": "field",
+        "enabled": true
+      },
+
+      {
+        "domain": [
+          "geosite:category-ir"
+        ],
+        "outboundTag": "direct",
+        "type": "field"
+      },
+
+      {
+        "ip": [
+          "10.10.34.34",
+          "10.10.34.35",
+          "10.10.34.36"
+        ],
+        "outboundTag": "block",
+        "type": "field",
+        "enabled": true
+      },
+
+      {
+        "domain": [
+          "geosite:category-porn"
+        ],
+        "outboundTag": "block",
+        "type": "field"
+      }
+
+
+
+    ]
+  }
+}

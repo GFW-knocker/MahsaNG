@@ -1,0 +1,37 @@
+Terms of Service
+General
+
+    Our aim is to provide quality service to all of our users. Before accessing the site or the service, please carefully read these terms of service.
+
+    These Terms of Service (“the Terms”) govern your usage of MahsaNG and its associated website domains (“the Site”) and related services (“the Services”), owned and operated by the MahsaNG Team (“MahsaNG,” “our,” “we,” or “us”). The Terms establish a legally binding agreement (“the Agreement”) between you and the MahsaNet Team.
+
+MahsaNG Service
+
+You comprehend that we offer you a VPN client that provides you a curated list of healthy VPN configs. We do not manage any VPN server. It is your responsibility to make sure that the VPN config that you are connecting to is safe.
+Usage Policy
+
+BY USING THE MahsaNG SERVICE (the “Service”) YOU AGREE:
+
+    NOT to launch any attacks on other computers or networks while using our service.
+    NOT to utilize the service in ways that could harm our network or others.
+    It is the user’s responsibility to be aware of and understand relevant laws in their jurisdiction. MahsaNG is not liable for user actions, including criminal and civil liabilities.
+    The Software is under a limited license for the purpose stated by MahsaNG and as per these Terms. Unauthorized use of the Software is prohibited.
+
+Disclaimers
+
+    While we aim to prevent Site and Service interruptions, they are provided “as is” and “as available.” We do not warrant the accuracy of materials or information provided, or their suitability for any purpose.
+    Actual service coverage, speeds, and quality may vary. The Service may be unavailable for various factors beyond our control. It may be interrupted, limited, or curtailed.
+    We do not guarantee the Service will meet your requirements or be uninterrupted, timely, secure, or error-free. You access the Site and Service at your own risk.
+    We are not liable for data loss, delays, or misdirection due to Service interruptions or network issues. We may impose limits or block certain usage to protect users or the Service. Network speed is an estimate. Accuracy and timeliness of data are not guaranteed.
+    We do not log user activity but log access attempts for troubleshooting. We do not engage in censorship or share personal info with third parties.
+    MahsaNet does not have any responsibility for third-party VPNs that are usable through the app.
+    The user is obligated to observe basic security principles, including SSL indicator check, when using third-party VPNs.
+
+Changes to the Terms
+
+MahsaNG may update the Terms without notice. Changes will be posted on the Site and considered effective upon posting. Significant changes will be notified through the App or on the Website.
+
+
+https://www.mahsaserver.com/terms/
+
+
