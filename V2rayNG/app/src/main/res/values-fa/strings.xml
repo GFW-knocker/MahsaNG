@@ -113,7 +113,7 @@
     <string name="summary_pref_fake_dns_enabled">DNS محلی آدرس IP جعلی را برمی‌گرداند (سریع‌تر می‌باشد، اما ممکن است برای برخی از برنامه‌ها کار نکند)</string>
 
     <string name="title_pref_prefer_ipv6">ترجیح دادن IPv6</string>
-    <string name="summary_pref_prefer_ipv6">ترجیح دادن نشانی و مسیر های IPv6</string>
+    <string name="summary_pref_prefer_ipv6">ترجیح دادن نشانی و مسیرهای IPv6</string>
 
     <string name="title_pref_routing">مسیریابی</string>
     <string name="title_pref_routing_domain_strategy">استراتژی دامنه</string>
@@ -148,7 +148,7 @@
     <string name="summary_pref_confirm_remove">آیا برای حذف پرونده پیکربندی نیاز به تایید دوم توسط کاربر است</string>
 
     <string name="title_pref_start_scan_immediate">فورا اسکن را شروع کن</string>
-    <string name="summary_pref_start_scan_immediate">دوربین را برای اسکن بلافاصله در هنگام راه اندازی باز کنید، در غیر این صورت می توانید کد را اسکن کنید یا عکسی را در نوار ابزار انتخاب کنید.</string>
+    <string name="summary_pref_start_scan_immediate">دوربین را برای اسکن بلافاصله در هنگام راه اندازی باز کنید، در غیر این صورت می‌توانید کد را اسکن کنید یا عکسی را در نوار ابزار انتخاب کنید.</string>
 
     <string name="title_pref_feedback">بازخورد</string>
     <string name="summary_pref_feedback">بازخورد یا گزارش اشکالات در گیت‌هاب</string>
@@ -169,10 +169,10 @@
     <string name="logcat_clear">پاک کردن</string>
     <string name="title_service_restart">راه‌اندازی مجدد خدمات</string>
     <string name="title_del_all_config">حذف تمام پیکربندی</string>
-    <string name="title_del_duplicate_config">حذف کانفیگ های تکراری</string>
+    <string name="title_del_duplicate_config">حذف کانفیگ‌های تکراری</string>
     <string name="title_del_invalid_config">تنظیمات نامعتبر را حذف کنید (ابتدا آزمایش کنید)</string>
     <string name="title_export_all">خروجی گرفتن پیکربندی‌های غیرسفارشی در کلیپ‌بورد</string>
-    <string name="title_sub_setting">تنظیمات گروه‌ی اشتراک</string>
+    <string name="title_sub_setting">تنظیمات گروهی اشتراک</string>
     <string name="sub_setting_remarks">ملاحظات</string>
     <string name="sub_setting_url">نشانی اینترنتی اختیاری</string>
     <string name="sub_setting_enable">فعال کردن به‌روزرسانی</string>
@@ -181,7 +181,7 @@
     <string name="title_real_ping_all_server">تاخیر واقعی همه پیکربندی</string>
     <string name="title_user_asset_setting">پرونده‌های دارایی جغرافیا</string>
     <string name="title_sort_by_test_results">مرتب‌سازی بر اساس نتایج آزمایش</string>
-    <string name="title_filter_config">فیلتر پرونده پیکربندی ها</string>
+    <string name="title_filter_config">فیلتر پرونده پیکربندی‌ها</string>
     <string name="filter_config_all">همه گروه‌های اشتراک</string>
     <string name="title_del_duplicate_config_count">حذف %d کانفیگ تکراری</string>
 
