@@ -27,12 +27,12 @@
 # build from source
 - the code can NOT build standalone apk directly from source
 - some parts of source used for encrypting config is closed to prevent leakage & thus reselling of donated configs
-- classes responsible for authentication with mahsa server is also closed to prevent abusing of mahsa server
-- all other technology used to bypass filtering is willingly published including but not limited to Youtube Direct , TLS & HTTPS & DoH fragmentor & fake Host
+- classes responsible for authentication with [mahsa server](https://www.mahsaserver.com/) is also closed to prevent abusing of mahsa server
+- all other technology used to bypass filtering is willingly published in [Mahsa Xray-Core](https://github.com/GFW-knocker/Xray-core) including but not limited to Wireguard Noise, Youtube Direct , TLS & HTTPS & DoH fragmentor & fake Host
 
-# build V2rayNG from source
-- you need to place libv2ray.aar in v2rayng/apps/libs folder
-- you can compile it yourself from [AndroidLibXrayLite](https://github.com/2dust/AndroidLibXrayLite) after installing Go & Go mobile
-- or you can download v1.5 from [here](https://github.com/2dust/v2rayNG/blob/09d854dc784365e5499e444aff065055adcc5105/V2rayNG/app/libs/libv2ray.aar)
-- or find latest libv2ray.aar link in issues section
+# build NikaNG from source
+- [NikaNG](https://github.com/mahsanet/NikaNG) is a fork of v2rayNG with [Mahsa Xray-core](https://github.com/GFW-knocker/Xray-core)
+- its fully open souce and it can build by github action or locally
+- if you are interested in Mahsa-core as a developer , NikaNG is for you.
+- you need to place [libv2ray.aar](https://github.com/GFW-knocker/AndroidLibXrayLite) in v2rayng/apps/libs folder before compile
 
