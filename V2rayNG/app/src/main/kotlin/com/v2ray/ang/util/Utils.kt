@@ -10,20 +10,29 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration.UI_MODE_NIGHT_MASK
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.net.Uri
 import android.os.Build
 import android.os.LocaleList
+import android.provider.Settings
 import android.util.Log
 import android.util.Patterns
 import android.webkit.URLUtil
+import androidx.appcompat.app.AppCompatDelegate
 import com.tencent.mmkv.MMKV
 import com.v2ray.ang.AppConfig
 import com.v2ray.ang.AppConfig.ANG_PACKAGE
 import com.v2ray.ang.BuildConfig
 import com.v2ray.ang.R
+import com.v2ray.ang.dto.EConfigType
+import com.v2ray.ang.dto.ServerConfig
+import com.v2ray.ang.extension.idnHost
+import com.v2ray.ang.extension.removeWhiteSpace
 import com.v2ray.ang.extension.toast
 import java.net.*
 import com.v2ray.ang.service.V2RayServiceManager
+import org.json.JSONArray
+import org.json.JSONObject
 import java.io.IOException
 
 object Utils {
@@ -112,12 +121,12 @@ object Utils {
         try {
             return Base64.decode(text, Base64.NO_WRAP).toString(charset("UTF-8"))
         } catch (e: Exception) {
-            Log.i(ANG_PACKAGE, "Parse base64 standard failed $e")
+//            Log.i(ANG_PACKAGE, "Parse base64 standard failed $e")
         }
         try {
             return Base64.decode(text, Base64.NO_WRAP.or(Base64.URL_SAFE)).toString(charset("UTF-8"))
         } catch (e: Exception) {
-            Log.i(ANG_PACKAGE, "Parse base64 url safe failed $e")
+//            Log.i(ANG_PACKAGE, "Parse base64 url safe failed $e")
         }
         return null
     }
@@ -148,8 +157,8 @@ object Utils {
 
     fun getVpnDnsServers(): List<String> {
         val vpnDns = settingsStorage?.decodeString(AppConfig.PREF_VPN_DNS)
-                ?: settingsStorage?.decodeString(AppConfig.PREF_REMOTE_DNS)
-                ?: AppConfig.DNS_AGENT
+            ?: settingsStorage?.decodeString(AppConfig.PREF_REMOTE_DNS)
+            ?: AppConfig.DNS_AGENT
         return vpnDns.split(",").filter { isPureIpAddress(it) }
         // allow empty, in that case dns will use system default
     }
@@ -178,7 +187,7 @@ object Utils {
             //CIDR
             if (addr.indexOf("/") > 0) {
                 val arr = addr.split("/")
-                if (arr.count() == 2 && Integer.parseInt(arr[1]) > 0) {
+                if (arr.count() == 2 && Integer.parseInt(arr[1]) > -1) {
                     addr = arr[0]
                 }
             }
@@ -209,7 +218,7 @@ object Utils {
     }
 
     fun isPureIpAddress(value: String): Boolean {
-        return (isIpv4Address(value) || isIpv6Address(value))
+        return isIpv4Address(value) || isIpv6Address(value)
     }
 
     fun isIpv4Address(value: String): Boolean {
@@ -259,7 +268,7 @@ object Utils {
      * stopVService
      */
     fun stopVService(context: Context) {
-        context.toast(R.string.toast_services_stop)
+//        context.toast(R.string.toast_services_stop)
         MessageUtil.sendMsg2Service(context, AppConfig.MSG_STATE_STOP, "")
     }
 
@@ -282,7 +291,7 @@ object Utils {
 
     fun urlDecode(url: String): String {
         return try {
-            URLDecoder.decode(URLDecoder.decode(url), "utf-8")
+            URLDecoder.decode(url, "UTF-8")
         } catch (e: Exception) {
             e.printStackTrace()
             url
@@ -313,8 +322,13 @@ object Utils {
         if (context == null)
             return ""
         val extDir = context.getExternalFilesDir(AppConfig.DIR_ASSETS)
-                ?: return context.getDir(AppConfig.DIR_ASSETS, 0).absolutePath
+            ?: return context.getDir(AppConfig.DIR_ASSETS, 0).absolutePath
         return extDir.absolutePath
+    }
+
+    fun getDeviceIdForXUDPBaseKey(): String {
+        val androidId = Settings.Secure.ANDROID_ID.toByteArray(charset("UTF-8"))
+        return Base64.encodeToString(androidId.copyOf(32), Base64.NO_PADDING.or(Base64.URL_SAFE))
     }
 
     fun getUrlContext(url: String, timeout: Int): String {
@@ -354,13 +368,22 @@ object Utils {
         }
     }
 
+
     fun getDarkModeStatus(context: Context): Boolean {
         val mode = context.resources.configuration.uiMode and UI_MODE_NIGHT_MASK
-        return mode == UI_MODE_NIGHT_YES
+        return mode != UI_MODE_NIGHT_NO
+    }
+
+    fun setNightMode(context: Context) {
+        when (settingsStorage?.decodeString(AppConfig.PREF_UI_MODE_NIGHT, "0")) {
+            "0" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+            "1" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            "2" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        }
     }
 
     fun getIpv6Address(address: String): String {
-        return if (isIpv6Address(address)) {
+        return if (isIpv6Address(address) && !address.contains('[') && !address.contains(']')) {
             String.format("[%s]", address)
         } else {
             address
@@ -404,5 +427,166 @@ object Utils {
     fun isTv(context: Context): Boolean =
         context.packageManager.hasSystemFeature(PackageManager.FEATURE_LEANBACK)
 
-}
 
+
+    // -------------GFW knocker ------------------
+    fun getDelayTestUrl(second: Boolean = false): String {
+        return if (second) {
+            AppConfig.DelayTestUrl2
+        } else {
+            AppConfig.DelayTestUrl
+        }
+    }
+
+    fun GFW_correct_url_protocol(myurl: String): String{
+        var new_url = ""
+        if(  myurl.startsWith("https://") || myurl.startsWith("http://")  ){
+            new_url = myurl;
+        }else{
+            if(myurl.startsWith("@")){
+                new_url = "https://t.me/"+myurl.substring(1)
+            }else {
+                new_url = "https://" + myurl
+            }
+        }
+        if(isValidUrl(new_url)){
+            return new_url
+        }else {
+            return "https://t.me/mahsa_net"
+        }
+    }
+
+
+
+    fun GFW_parse_wireguard_info(str:String): List<String>? {
+        val stringList: List<String>?
+        try {
+            if (!str.startsWith(EConfigType.WIREGUARD.protocolScheme)) {
+                return null
+            }
+
+            val uri = URI(Utils.fixIllegalUrl(str))
+
+            if (uri.rawQuery != null) {
+                val queryParam = uri.rawQuery.split("&")
+                    .associate { it.split("=").let { (k, v) -> k to Utils.urlDecode(v) } }
+
+                val wip = Utils.getIpv6Address(uri.idnHost)
+                val wport = (uri.port).toString()
+                val wpublic_key = queryParam["publickey"] ?: ""
+                val wsecret_key = uri.userInfo ?: ""
+                val wmtu = queryParam["mtu"] ?: "1280"
+                val wreserved = queryParam["reserved"] ?: "0,0,0"
+                val wkeepalive = queryParam["keepalive"] ?: "5"
+                val wnoise = queryParam["wnoise"] ?: "quic"
+                val wnoisecount = queryParam["wnoisecount"] ?: "15"
+                val wnoisedelay = queryParam["wnoisedelay"] ?: "1"
+                val wpayloadsize = queryParam["wpayloadsize"] ?: "5-10"
+                val wremarks = Utils.urlDecode(uri.fragment ?: "")
+
+                stringList = listOf(wip, wport, wpublic_key, wsecret_key, wmtu, wreserved, wkeepalive, wnoise, wnoisecount, wnoisedelay, wpayloadsize, wremarks)
+
+            } else {
+                return null
+            }
+            return stringList
+
+        } catch (e:Exception){
+            // e.printStackTrace()
+            return null
+        }
+    }
+
+
+    fun check_hex_pattern(input: String):Boolean {
+        val normalizedInput = input.lowercase()
+
+        // Check if all characters are either digits (0-9) or letters (A-F)
+        return normalizedInput.all { char ->
+            (char.isDigit()) || (char.isLetter() && char in 'a'..'f')
+        }
+    }
+
+
+    fun check_integer_or_range(input: String , low: Int , high: Int):Boolean {
+        try {
+            val x = input.split("-")
+            if (x.size == 1) {
+                val z = Integer.parseInt(x[0])
+                if( (z<low) || (z>high) ){
+                    return false
+                }
+                return true
+            } else if (x.size == 2) {
+                val z1 = Integer.parseInt(x[0])
+                val z2 = Integer.parseInt(x[1])
+                if( (z1<low) || (z1>high) ){
+                    return false
+                }
+                if( (z2<low) || (z2>high) ){
+                    return false
+                }
+                return true
+            } else {
+                return false
+            }
+        }catch (e:Exception){
+            return false
+        }
+    }
+
+
+
+    private fun removeKeepAliveByRegex(mystr: String): String {
+        val keepAliveRegex = "\"keepAlive\"\\s*:\\s*\\d+\\s*,?".toRegex(RegexOption.IGNORE_CASE)
+        return keepAliveRegex.replace(mystr, "")
+    }
+
+
+
+    fun removeKeepAlive(myconfig: String): String {
+
+        if (myconfig.contains("keepAlive" , ignoreCase = true)) {
+            try {
+
+                val jt2 = JSONObject(myconfig)
+
+                var protocol = "wireguard"
+                try{
+                    protocol = jt2.getJSONArray("outbounds")
+                        .getJSONObject(0)
+                        .getString("protocol")
+
+//                    println("config protocol:" + protocol)
+                }catch (e794: org.json.JSONException){
+//                    println("json wireguard ERR: " + e794.message)
+                }
+
+                if(protocol.lowercase() == "wireguard") {
+
+                    jt2.getJSONArray("outbounds")
+                        .getJSONObject(0)
+                        .getJSONObject("settings")
+                        .getJSONArray("peers")
+                        .getJSONObject(0)
+                        .remove("keepAlive")
+
+
+//                    println("keepAlive removed successfully")
+                    val result = jt2.toString(2).replace("\\/", "/")
+                    return result
+                }
+
+            }catch (e: Exception) {
+                println("keepAlive remove Json err" + e.message)
+                return removeKeepAliveByRegex(myconfig)
+            }
+
+        }
+
+        return myconfig
+    }
+    //--------------------------------------------
+
+
+}
