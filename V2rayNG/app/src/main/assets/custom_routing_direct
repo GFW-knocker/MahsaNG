@@ -1,5 +1,5 @@
 domain:ir,
-geosite:category-ir,
+ext:geosite_c4u.dat:ir,
 geosite:private,
-geoip:ir,
+ext:geoip_c4u.dat:ir,
 geoip:private,
