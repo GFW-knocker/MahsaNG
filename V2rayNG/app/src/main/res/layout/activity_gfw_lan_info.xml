@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".GFW_lan_info_Activity"
+    android:fitsSystemWindows="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="6"
+            android:background="@color/color_bg_light10">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/lan_ip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:padding="15dp"
+                    android:textColor="@color/color_btn_get_txt"
+                    android:backgroundTint="@color/color_btn_sort_config"
+                    android:text="LAN ip" />
+
+                <Button
+                    android:id="@+id/direct_ip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:padding="15dp"
+                    android:textColor="@color/color_btn_get_txt"
+                    android:backgroundTint="@color/color_btn_sort_config"
+                    android:text="Direct ip" />
+
+                <Button
+                    android:id="@+id/vpn_ip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:padding="15dp"
+                    android:textColor="@color/color_btn_get_txt"
+                    android:backgroundTint="@color/color_btn_sort_config"
+                    android:text="VPN ip" />
+
+                </RelativeLayout>
+
+            </TableRow>
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                android:focusableInTouchMode="true">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/tv_netw_ip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="15dp"
+                    android:text="IP/Domain" />
+                <EditText
+                    android:id="@+id/edt_netw_ip"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="text"
+                    android:padding="15dp"
+                    android:hint="1.1.1.1" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/tv_netw_port"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="15dp"
+                    android:text="Port" />
+                <EditText
+                    android:id="@+id/edt_netw_port"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="number"
+                    android:padding="15dp"
+                    android:hint="443" />
+            </TableRow>
+
+            </TableLayout>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+
+
+                    <Button
+                        android:id="@+id/dns_direct"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:padding="15dp"
+                        android:textColor="@color/color_btn_get_txt"
+                        android:backgroundTint="@color/color_btn_light_yellow"
+                        android:text="DNS" />
+
+                    <Button
+                        android:id="@+id/dns_vpn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:padding="15dp"
+                        android:textColor="@color/color_btn_get_txt"
+                        android:backgroundTint="@color/color_btn_light_yellow"
+                        android:text="DNS over VPN" />
+
+                    <Button
+                        android:id="@+id/ping_direct"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:padding="15dp"
+                        android:textColor="@color/color_btn_clear_txt"
+                        android:backgroundTint="@color/color_btn_light_red"
+                        android:text="ping" />
+
+
+                </RelativeLayout>
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+
+                    <Button
+                        android:id="@+id/http_direct"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:padding="15dp"
+                        android:textColor="@color/color_btn_get_txt"
+                        android:backgroundTint="@color/color_btn_light_purple2"
+                        android:text="HTTP" />
+
+
+                    <Button
+                        android:id="@+id/http_vpn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:padding="15dp"
+                        android:textColor="@color/color_btn_get_txt"
+                        android:backgroundTint="@color/color_btn_light_purple2"
+                        android:text="HTTP over vpn" />
+
+
+                    <Button
+                        android:id="@+id/tcp_direct"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:padding="15dp"
+                        android:textColor="@color/color_btn_get_txt"
+                        android:backgroundTint="@color/color_btn_light_purple2"
+                        android:text="TCP" />
+
+                </RelativeLayout>
+
+            </TableRow>
+
+
+
+        </LinearLayout>
+
+        </ScrollView>
+
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:padding="15dp"
+            android:layout_weight="4"
+            android:background="@color/color_bg_light9">
+
+            <TextView
+                android:id="@+id/textView_result14"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="15dp"
+                android:autoLink="web"
+                android:linksClickable="true"
+                android:textColor="#009E12"
+                android:textSize="16sp"
+                android:text="" />
+
+        </ScrollView>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
