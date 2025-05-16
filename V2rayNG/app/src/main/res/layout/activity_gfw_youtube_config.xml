@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".gfwknocker.GFW_youtube_config_Activity">
+    tools:context=".gfwknocker.GFW_youtube_config_Activity"
+    android:fitsSystemWindows="true">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,14 +20,32 @@
             android:padding="15dp"
             android:layout_weight="4">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                tools:layout_editor_absoluteX="1dp"
+                tools:layout_editor_absoluteY="1dp">
+
             <TextView
                 android:id="@+id/textView_youtube_config"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:padding="15dp"
                 android:autoLink="web"
                 android:linksClickable="true"
-                android:text="@string/description4" />
+                android:text="@string/description42" />
+
+            <TextView
+                android:id="@+id/textView_youtube_config_EN"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="15dp"
+                android:autoLink="web"
+                android:linksClickable="true"
+                android:text="@string/description41" />
+
+            </LinearLayout>
         </ScrollView>
 
 

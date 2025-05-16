@@ -5,189 +5,392 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".gfwknocker.GFW_warpActivity">
+    tools:context=".gfwknocker.GFW_warpActivity"
+    android:fitsSystemWindows="true">
 
-
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="15dp"
-        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:padding="15dp"
             android:orientation="vertical"
             android:focusable="true"
-            android:focusableInTouchMode="true">
+            android:focusableInTouchMode="true"
+            android:background="@color/color_bg_light8">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:focusable="true"
-            android:focusableInTouchMode="true">
 
-            <TextView
-                android:id="@+id/tv_warp_description1"
+            <ScrollView
                 android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                app:layout_constraintTop_toTopOf="parent">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true">
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/tv_warp_description1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="15dp"
+                        android:autoLink="web"
+                        android:linksClickable="true"
+                        android:text="create new config or\ncopy wireguard from\nt.me/freewireguard\nthen click paste:" />
+
+
+                    <Button
+                        android:id="@+id/button_create_new_warp1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="15dp"
+                        android:layout_gravity="center"
+                        android:textColor="@color/color_btn_subfilter_txt"
+                        android:backgroundTint="@color/color_btn_subfilter_spinner"
+                        android:text="create new" />
+
+                    </TableRow>
+
+
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                    <Button
+                        android:id="@+id/button_warp_import1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="15dp"
+                        android:textColor="@color/color_btn_get_txt"
+                        android:backgroundTint="@color/color_btn_green_config"
+                        android:text="paste wireguard config" />
+
+                    <Button
+                        android:id="@+id/button_warp_clear1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="15dp"
+                        android:textColor="@color/color_btn_get_txt"
+                        android:backgroundTint="@color/color_btn_test_config"
+                        android:text="clear" />
+
+                    </TableRow>
+
+
+
+
+                    <TableLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true">
+
+
+
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <TextView
+                                android:id="@+id/tv_warp_ip1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="15dp"
+                                android:text="IP" />
+                            <EditText
+                                android:id="@+id/edt_warp_ip1"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:ems="10"
+                                android:inputType="text"
+                                android:padding="15dp"
+                                android:hint="clean ip" />
+                        </TableRow>
+
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <TextView
+                                android:id="@+id/tv_warp_port1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="15dp"
+                                android:text="port" />
+                            <EditText
+                                android:id="@+id/edt_warp_port1"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:ems="10"
+                                android:inputType="number"
+                                android:padding="15dp"
+                                android:hint="clean port" />
+                        </TableRow>
+
+
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <TextView
+                                android:id="@+id/tv_public_key1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="15dp"
+                                android:text="public key" />
+                            <EditText
+                                android:id="@+id/edt_warp_public_key1"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:ems="10"
+                                android:inputType="text"
+                                android:padding="15dp"
+                                android:hint="44 char" />
+                        </TableRow>
+
+
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <TextView
+                                android:id="@+id/tv_private_key1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="15dp"
+                                android:text="private key" />
+                            <EditText
+                                android:id="@+id/edt_warp_private_key1"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:ems="10"
+                                android:inputType="text"
+                                android:padding="15dp"
+                                android:hint="44 char (secret key)" />
+                        </TableRow>
+
+
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <TextView
+                                android:id="@+id/tv_preshared_key1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="15dp"
+                                android:text="preshared key" />
+                            <EditText
+                                android:id="@+id/edt_warp_preshared_key1"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:ems="10"
+                                android:inputType="text"
+                                android:padding="15dp"
+                                android:hint="(optional)" />
+                        </TableRow>
+
+
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <TextView
+                                android:id="@+id/tv_local_address1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="15dp"
+                                android:text="local address" />
+                            <EditText
+                                android:id="@+id/edt_warp_local_address1"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:ems="10"
+                                android:inputType="text"
+                                android:padding="15dp"
+                                android:hint="172.16.0.2/32" />
+                        </TableRow>
+
+
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                        <TextView
+                            android:id="@+id/tv_warp_reserved1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="15dp"
+                            android:text="Reserved" />
+                        <EditText
+                            android:id="@+id/edt_warp_reserved1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:inputType="text"
+                            android:padding="15dp"
+                            android:hint="0,0,0" />
+                        </TableRow>
+
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <TextView
+                                android:id="@+id/tv_warp_mtu1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="15dp"
+                                android:text="mtu" />
+                            <EditText
+                                android:id="@+id/edt_warp_mtu1"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:ems="10"
+                                android:inputType="number"
+                                android:padding="15dp"
+                                android:hint="1280" />
+                        </TableRow>
+
+
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <TextView
+                                android:id="@+id/tv_warp_keepalive1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="15dp"
+                                android:text="keepAlive" />
+                            <EditText
+                                android:id="@+id/edt_warp_keepalive1"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:ems="10"
+                                android:inputType="number"
+                                android:padding="15dp"
+                                android:hint="5" />
+                        </TableRow>
+
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <TextView
+                                android:id="@+id/tv_warp_wnoise1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="15dp"
+                                android:text="wnoise" />
+                            <EditText
+                                android:id="@+id/edt_warp_wnoise1"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:ems="10"
+                                android:inputType="text"
+                                android:padding="15dp"
+                                android:hint="quic" />
+                        </TableRow>
+
+
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <TextView
+                                android:id="@+id/tv_warp_wnoisecount1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="15dp"
+                                android:text="wnoisecount" />
+                            <EditText
+                                android:id="@+id/edt_warp_wnoisecount1"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:ems="10"
+                                android:inputType="text"
+                                android:padding="15dp"
+                                android:hint="15" />
+                        </TableRow>
+
+
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <TextView
+                                android:id="@+id/tv_warp_wnoisedelay1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="15dp"
+                                android:text="wnoisedelay" />
+                            <EditText
+                                android:id="@+id/edt_warp_wnoisedelay1"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:ems="10"
+                                android:inputType="text"
+                                android:padding="15dp"
+                                android:hint="1-2" />
+                        </TableRow>
+
+
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <TextView
+                                android:id="@+id/tv_warp_wpayloadsize1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="15dp"
+                                android:text="wpayloadsize" />
+                            <EditText
+                                android:id="@+id/edt_warp_wpayloadsize1"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:ems="10"
+                                android:inputType="text"
+                                android:padding="15dp"
+                                android:hint="5-10" />
+                        </TableRow>
+
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <TextView
+                                android:id="@+id/tv_warp_remark1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="15dp"
+                                android:text="remark" />
+                            <EditText
+                                android:id="@+id/edt_warp_remark1"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:ems="10"
+                                android:inputType="text"
+                                android:padding="15dp"
+                                android:hint="alias (name)" />
+                        </TableRow>
+
+
+                    </TableLayout>
+
+
+                </LinearLayout>
+
+            </ScrollView>
+
+            <Button
+                android:id="@+id/button_warp_save1"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="15dp"
-                android:autoLink="web"
-                android:linksClickable="true"
-                android:text="copy wireguard config from\nt.me/freewireguard\nthen click paste:" />
+                android:textColor="@color/color_btn_get_txt"
+                android:backgroundTint="@color/color_btn_get_config"
+                android:text="Save to Internal Warp" />
 
 
         </LinearLayout>
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-            <Button
-                android:id="@+id/button_warp_import"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="15dp"
-                android:textColor="@color/color_btn_get_txt"
-                android:backgroundTint="@color/color_btn_get_config"
-                android:text="paste wireguard config" />
-
-            <Button
-                android:id="@+id/button_warp_clear"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="15dp"
-                android:textColor="@color/color_btn_get_txt"
-                android:backgroundTint="@color/color_btn_get_config"
-                android:text="clear" />
-
-            </TableRow>
-
-
-            <TableLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:focusable="true"
-                android:focusableInTouchMode="true">
-
-
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <TextView
-                        android:id="@+id/tv_warp_ip"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="15dp"
-                        android:text="IP" />
-                    <EditText
-                        android:id="@+id/edt_warp_ip"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:inputType="text"
-                        android:padding="15dp"
-                        android:hint="clean ip" />
-                </TableRow>
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <TextView
-                        android:id="@+id/tv_warp_port"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="15dp"
-                        android:text="port" />
-                    <EditText
-                        android:id="@+id/edt_warp_port"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:inputType="number"
-                        android:padding="15dp"
-                        android:hint="clean port" />
-                </TableRow>
-
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <TextView
-                        android:id="@+id/tv_public_key"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="15dp"
-                        android:text="public key" />
-                    <EditText
-                        android:id="@+id/edt_warp_public_key"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:inputType="text"
-                        android:padding="15dp"
-                        android:hint="44 char" />
-                </TableRow>
-
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <TextView
-                        android:id="@+id/tv_private_key"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="15dp"
-                        android:text="private key" />
-                    <EditText
-                        android:id="@+id/edt_warp_private_key"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:inputType="text"
-                        android:padding="15dp"
-                        android:hint="44 char (secret key)" />
-                </TableRow>
-
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <TextView
-                        android:id="@+id/tv_warp_mtu"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="15dp"
-                        android:text="mtu" />
-                    <EditText
-                        android:id="@+id/edt_warp_mtu"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:inputType="number"
-                        android:padding="15dp"
-                        android:hint="1280" />
-                </TableRow>
-
-            </TableLayout>
-
-
-
-            <Button
-                android:id="@+id/button_warp_save"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="15dp"
-                android:textColor="@color/color_btn_get_txt"
-                android:backgroundTint="@color/color_btn_get_config"
-                android:text="Save  Setting" />
-
-
-        </LinearLayout>
-    </ScrollView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
