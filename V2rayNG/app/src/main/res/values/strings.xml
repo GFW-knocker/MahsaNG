@@ -16,7 +16,10 @@
     <string name="toast_services_start">Start Services</string>
     <string name="toast_services_stop">Stop Services</string>
     <string name="toast_services_success">Start Services Success</string>
-    <string name="toast_services_failure">Start Services Failure</string>
+    <string name="toast_services_failure">Start Services Failure\nRestarting phone may help</string>
+
+    <string name="toast_removed_permission">we removed storage permission\n1. open file in another app\n2. copy content using clipboard</string>
+    <string name="toast_removed_geo_local_access">we removed storage permission\nyou can update geo using url</string>
 
     <!--ServerActivity-->
     <string name="title_server">Configuration file</string>
@@ -25,6 +28,8 @@
     <string name="menu_item_del_config">Delete config</string>
     <string name="menu_item_import_config_qrcode">Import config from QRcode</string>
     <string name="menu_item_import_config_clipboard">Import config from Clipboard</string>
+    <string name="menu_item_import_config_manually_wireguard">Type manually[Wireguard]</string>
+    <string name="menu_item_import_config_manually_hysteria2">Type manually[Hysteria2]</string>
     <string name="menu_item_import_config_manually_vmess">Type manually[Vmess]</string>
     <string name="menu_item_import_config_manually_vless">Type manually[VLESS]</string>
     <string name="menu_item_import_config_manually_ss">Type manually[Shadowsocks]</string>
@@ -32,10 +37,11 @@
     <string name="menu_item_import_config_manually_trojan">Type manually[Trojan]</string>
     <string name="menu_item_import_config_custom">Custom config</string>
     <string name="menu_item_import_config_custom_clipboard">Import custom config from Clipboard</string>
-    <string name="menu_item_import_config_custom_local">Import custom config from locally</string>
+    <string name="menu_item_import_config_custom_local">Import custom config locally</string>
     <string name="menu_item_import_config_custom_url">Import custom config from URL</string>
     <string name="menu_item_import_config_custom_url_scan">Import custom config scan URL</string>
-    <string name="del_config_comfirm">Confirm delete？</string>
+    <string name="del_config_comfirm">Confirm delete ?</string>
+    <string name="del_subscription_confirm">delete this sub with its configs?</string>
     <string name="server_lab_remarks">remarks</string>
     <string name="server_lab_address">address</string>
     <string name="server_lab_port">port</string>
@@ -46,14 +52,14 @@
     <string name="server_lab_more_function">Transport</string>
     <string name="server_lab_head_type">head type</string>
     <string name="server_lab_mode_type">gRPC mode</string>
-    <string name="server_lab_request_host">request host(host/ws host/h2 host)/QUIC security</string>
-    <string name="server_lab_path">path(ws path/h2 path)/QUIC key/kcp seed/gRPC serviceName</string>
+    <string name="server_lab_request_host" translatable="false">request host(ws/xhttp/h2/httpupgrade)/QUIC security</string>
+    <string name="server_lab_path" translatable="false">path(ws path/h2 path)/QUIC key/kcp seed/gRPC serviceName</string>
     <string name="server_lab_stream_security">TLS</string>
     <string name="server_lab_stream_fingerprint" translatable="false">Fingerprint</string>
     <string name="server_lab_stream_alpn" translatable="false">Alpn</string>
     <string name="server_lab_allow_insecure">allowInsecure</string>
     <string name="server_lab_sni">SNI</string>
-    <string name="server_lab_address3">address</string>
+    <string name="server_lab_address3">ip address</string>
     <string name="server_lab_port3">port</string>
     <string name="server_lab_id3">password</string>
     <string name="server_lab_security3">security</string>
@@ -62,8 +68,13 @@
     <string name="server_lab_encryption">encryption</string>
     <string name="server_lab_flow">flow</string>
     <string name="server_lab_public_key" translatable="false">PublicKey</string>
+    <string name="server_lab_preshared_key" translatable="false">PreSharedKey(optional)</string>
     <string name="server_lab_short_id" translatable="false">ShortId</string>
     <string name="server_lab_spider_x" translatable="false">SpiderX</string>
+    <string name="server_lab_secret_key" translatable="false">Secret or Private Key</string>
+    <string name="server_lab_reserved" translatable="false">Reserved(Optional)</string>
+    <string name="server_lab_local_address" translatable="false">Local address (optional IPv4/IPv6, separated by commas)</string>
+    <string name="server_lab_local_mtu" translatable="false">Mtu(optional, default 1280)</string>
     <string name="toast_success">Success</string>
     <string name="toast_failure">Failure</string>
     <string name="toast_none_data">There is nothing</string>
@@ -82,6 +93,17 @@
     <string name="toast_asset_copy_failed">File copy failed, please use File Manager</string>
     <string name="menu_item_add_file">Add files</string>
     <string name="menu_item_download_file">Download files</string>
+
+    <string name="msg_file_not_found" translatable="false">File not found</string>
+    <string name="msg_remark_is_duplicate" translatable="false">The remarks already exists</string>
+    <string name="toast_action_not_allowed">Action not allowed</string>
+    <string name="server_obfs_password">Obfs password</string>
+    <string name="server_lab_port_hop" translatable="false">Port Hopping (will override the port)</string>
+    <string name="server_lab_port_hop_interval" translatable="false">Port Hopping Interval (default 30 sec)</string>
+    <string name="server_lab_stream_pinsha256" translatable="false">pinSHA256</string>
+    <string name="server_lab_xhttp_mode" translatable="false">XHTTP Mode</string>
+    <string name="server_lab_xhttp_extra" translatable="false">XHTTP Extra raw JSON, format: { XHTTPObject }</string>
+
 
     <!-- PerAppProxyActivity -->
     <string name="msg_dialog_progress">Loading</string>
@@ -139,8 +161,8 @@
     <string name="summary_pref_proxy_sharing_enabled">Other devices can connect to proxy by your ip address through socks/http, Only enable in trusted network to avoid unauthorized connection</string>
     <string name="toast_warning_pref_proxysharing_short">Allow connections from the LAN, Make sure you are in a trusted network</string>
 
-    <string name="title_pref_allow_insecure">allowInsecure</string>
-    <string name="summary_pref_allow_insecure">When TLS, the default allowInsecure</string>
+    <string name="title_pref_allow_insecure" translatable="false">Disable Allow Insecure</string>
+    <string name="summary_pref_allow_insecure" translatable="false">Verify config\'s cert, Don\'t allow self-signed config</string>
 
     <string name="title_pref_socks_port">SOCKS5 proxy port</string>
     <string name="summary_pref_socks_port">SOCKS5 proxy port</string>
@@ -170,22 +192,26 @@
     <string name="title_mode_help">Click me for more help</string>
     <string name="title_language">Language</string>
     <string name="title_ui_settings">UI settings</string>
+    <string name="title_pref_ui_mode_night">UI mode settings</string>
 
     <string name="title_logcat">Logcat</string>
     <string name="logcat_copy">Copy</string>
     <string name="logcat_clear">Clear</string>
-    <string name="title_service_restart">Service restart</string>
-    <string name="title_del_all_config">Delete all config</string>
-    <string name="title_del_duplicate_config">Delete duplicate config</string>
-    <string name="title_del_invalid_config">Delete invalid config(Test first)</string>
+    <string name="title_service_restart">Restart VPN</string>
+    <string name="title_del_all_config">Delete all configs</string>
+    <string name="title_del_current_group_config">Delete current configs</string>
+    <string name="title_clear_test_result">clear current test result</string>
+    <string name="title_cant_delete_selected">can\'t delete, because its selected</string>
+    <string name="title_del_duplicate_config">Delete duplicate configs</string>
+    <string name="title_del_invalid_config">Delete invalid configs(Test first)</string>
     <string name="title_export_all">Export non-custom configs to clipboard</string>
     <string name="title_sub_setting">Subscription group setting</string>
     <string name="sub_setting_remarks">remarks</string>
     <string name="sub_setting_url">Optional URL</string>
     <string name="sub_setting_enable">enable update</string>
     <string name="title_sub_update">Update subscription</string>
-    <string name="title_ping_all_server">Tcping all configuration</string>
-    <string name="title_real_ping_all_server">Real delay all configuration</string>
+    <string name="title_ping_all_server">Tcping current configs</string>
+    <string name="title_real_ping_all_server">Real delay current configs</string>
     <string name="title_user_asset_setting">Geo asset files</string>
     <string name="title_sort_by_test_results">Sorting by test results</string>
     <string name="title_filter_config">Filter configuration file</string>
@@ -201,11 +227,13 @@
     <string name="routing_settings_delete">Clear</string>
     <string name="routing_settings_scan_replace">Scan and replace</string>
     <string name="routing_settings_scan_append">Scan and append</string>
-    <string name="routing_settings_default_rules"> set default routing rules</string>
+    <string name="routing_settings_default_rules">set default routing rules</string>
+    <string name="routing_settings_china_rules"> set default china rules</string>
+    <string name="routing_settings_iran_rules"> set default iran rules</string>
 
     <string name="connection_test_pending">Check Connectivity</string>
     <string name="connection_test_testing">Testing…</string>
-    <string name="connection_test_available">Success: HTTP connection took %dms</string>
+    <string name="connection_test_available">Success: ping [ %d , %d ] ms</string>
     <string name="connection_test_error">Fail to detect internet connection: %s</string>
     <string name="connection_test_fail">Internet Unavailable</string>
     <string name="connection_test_error_status_code">Error code: #%d</string>
@@ -214,6 +242,160 @@
 
     <string name="import_subscription_success">Subscription imported Successfully</string>
     <string name="import_subscription_failure">Import subscription failed</string>
+    <string name="title_GFW_settings">GFW settings</string>
+    <string name="title_GFW_update">update GFW parameters</string>
+    <string name="title_GFW_help">GFW help</string>
+    <string name="title_GFW_mahsa_net">Mahsa_net tlgrm support</string>
+    <string name="title_GFW_top_donors">Donors list</string>
+    <string name="title_GFW_free_config">get free config</string>
+    <string name="title_GFW_tg_config">get YeBeKhe config</string>
+    <string name="title_GFW_github_config">get free config</string>
+    <string name="title_GFW_tlg_proxy">get telegram proxy</string>
+    <string name="title_GFW_donate_config">Donate config to Mahsa</string>
+    <string name="title_GFW_warp_setting">internal WARP setup</string>
+    <string name="title_GFW_warp_generate">add WARP config</string>
+    <string name="title_GFW_config_filter_dialog">Subscription List:</string>
+
+
+    <string name="title_GFW_ads_block">Ads Block</string>
+    <string name="title_GFW_ads_block_on">Ads Block (ON)</string>
+
+    <string name="title_GFW_malicious_block">Block Malicious links</string>
+    <string name="title_GFW_malicious_block_on">Block Malicious (ON)</string>
+
+    <string name="block_ads_turned_on">ADS Block added to routing rules.\nturn vpn on-off to take effect</string>
+    <string name="block_ads_turned_off">ADS Block removed from routing rules.\nturn vpn on-off to take effect</string>
+
+    <string name="block_malicious_turned_on">set of rules added:\nblock malicious links including Ads, Malware, phishing, etc.\ndirect iranian domains and IPs.\nif any issue, simply turn it off to back to default routing rules.\nturn vpn on-off to take effect.\n\npowered by:\nhttps://github.com/Chocolate4U/Iran-v2ray-rules</string>
+    <string name="block_malicious_turned_off">routing rules reset to default\niranian domains directed by default\nturn vpn on-off to take effect</string>
+
+    <string name="title_network_tools">Network tools</string>
+
+
+    <string name="title_GFW_tunnel_config">get EMS config</string>
+    <string name="title_GFW_youtube_config">add youtube config</string>
+    <string name="remote_config_url">https://raw.githubusercontent.com/GFW-knocker/MahsaNG/master/remote_config_update_v13.json</string>
+    <string name="announcement_txt_url">https://raw.githubusercontent.com/GFW-knocker/MahsaNG/master/txt_announcement.txt</string>
+    <string name="announcement_html_url">https://raw.githubusercontent.com/GFW-knocker/MahsaNG/master/web_announcement.html</string>
+    <string name="ADS_html_url">https://raw.githubusercontent.com/ircfspace/mahsaNGAd/main/ads.html</string>
+    <string name="ADS_txt_url">https://raw.githubusercontent.com/ircfspace/mahsaNGAd/main/ads.txt</string>
+    <string name="ADS_Home_txt_url">https://raw.githubusercontent.com/ircfspace/mahsaNGAd/main/ads_home.txt</string>
+    <string name="mahsa_accounts_url">https://raw.githubusercontent.com/ircfspace/mahsaNGAd/main/mahsa_accounts.txt</string>
+    <string name="tg_accounts_url">https://raw.githubusercontent.com/yebekhe/TelegramV2rayCollector/main/json/configs.json</string>
+    <string name="get_provider_config_right_menu">get provider config</string>
+    <string name="fragment_settings_right_menu">fragment settings</string>
+    <string name="captcha_hint">enter letter in lowercase</string>
+    <string name="btn_get_rotating_config">get config</string>
+    <string name="btn_test_rotating_config">test</string>
+    <string name="btn_sort_rotating_config">sort</string>
+    <string name="menu_item_import_manual_config">manual config</string>
+
+    <string name="empty_config_list_toast">please GET CONFIG first</string>
+
+    <string name="warning_mux_on">"please turn off mux\nmost configs not work with mux"</string>
+    <string name="warning_warp_on">\"warp\" is on.\nif any problem, turn it off</string>
+
+    <string name="description1" translatable="false">"با زدن آپدیت ، پارامترهای برنامه بروز خواهد شد. در صورتی که سرورها به هر دلیلی قطع شوند و نیاز به آپدیت باشد در کانال t.me/mahsa_net اطلاع رسانی میکنیم. به امید آزادی."</string>
+    <string name="description2" translatable="false">"در صفحه اصلی اپلیکیشن شما میتوانید بطور اتوماتیک کانفیگ های چرخشی هوشمند و مناسب نت خود دریافت کنید. در صورت قطعی میتوانید از منوی YeBeKhe هم کانفیگ بگیرید. برای محتوای آموزشی بیشتر به سایت رسمی ما www.mahsaserver.com و یا کانال تلگرام رسمی ما t.me/mahsa_net مراجعه فرمایید. "</string>
+    <string name="description3" translatable="false">"برای حمایت از سازنده کانفیگ ، در پیج یا کانال معرفی شده عضو شوید. با این کار کوچک ، در تامین هزینه سرور و ساخت کانفیگ های رایگان مشارکت میکنید. توجه کنید که اگر vpn ساز ضرر کند کانفیگ رایگانی ساخته نخواهد شد. برای دریافت کانفیگ رایگان دکمه پایین را بزنید هم با فلترشکن خاموش هم روشن"</string>
+    <string name="description41" translatable="false">"کانفیگ یوتیوب را با دکمه پایین به برنامه اضافه کنید. این کانفیگ بدون سرور ، دسترسی مستقیم و پرسرعت به یوتیوب فراهم میکند . اگر یوتیوب لود نشد چند بار قطع و وصل کنید تا آیپی جدید بگیرد. وگرنه باید از کانفیگ های معمولی سروردار که در صفحه اصلی اپلیکیشن ارائه میشود استفاده کنید"</string>
+    <string name="description42" translatable="false">"this config directly connect you to youtube and twitter without any server in the middle. it bypass domain filtering and works only if google and CF IPs are not blocked.\n\nsource code:\nhttps://github.com/GFW-knocker/gfw_resist_HTTPS_proxy/\n\nhttps://github.com/XTLS/Xray-examples/tree/main/Serverless-for-Iran\n\ncredit: alidxdy, rrouzbeh, patterniha"</string>
+    <string name="description5" translatable="false">"در این صفحه کانفیگ های رایگان به شکل قدیمی دریافت خواهید کرد.(برای دریافت کانفیگهای چرخشی هوشمند از صفحه اصلی اقدام کنید). جهت حمایت از سازنده کانفیگ ، در پیج یا کانال معرفی شده عضو شوید. با این کار کوچک ، در تامین هزینه سرور و ساخت کانفیگ های رایگان مشارکت میکنید. توجه کنید که اگر vpn ساز ضرر کند کانفیگ رایگانی ساخته نخواهد شد. برای دریافت کانفیگ رایگان دکمه پایین را بزنید هم با فلترشکن خاموش هم روشن"</string>
+    <string name="description6" translatable="false">"در صورت قطع کامل نت بین الملل ، مهسا شما را از طریق کانفیگ های نت ملی تانل شده یا از طریق استارلینک متصل خواهد کرد. این صفحه برای شرایط جنگی طراحی شده و در زمان صلح کانفیگی ارائه نمیدهد. پس فقط در صورت قطع کامل نت و عدم دسترسی به سرورهای اصلی ، از این صفحه کانفیگ دریافت کنید. عزیزانی که در شرایط قطع کامل نت، میتوانند با کانفیگ های تانل شده یا اتصال به استارلینک به تیم مهسانت کمک کنند ، لطفا از طریق www.mahsaserver.com/contact-us یا کانال تلگرام t.me/mahsa_net به ما پیام دهند"</string>
+    <string name="description7" translatable="false">" use link below to login and donate configs \n please save your link in secure place \n to see your donated configs use \"GiftBox\" from menu \n برای اهدای کانفیگ ، روی لینک کلیک کنید (با فیلترشکن روشن) تا وارد سایت رسمی Mahsa Net شوید. پس از اهدای کانفیگ ، کانفیگ شما بر حسب فیدبک کلاینت ها به مناطقی ارسال میشود که بهترین عملکرد را در آنجا دارد. پس ممکن است روی کلاینت شما نمایش داده نشود. اگر میخواهید کانفیگ اهدایی خود را روی گوشی خود یا اقوام خود مشاهده کنید باید از جعبه کادو اقدام کنید. لطفا لینک اختصاصی خود را در جای مطمئن ذخیره کنید."</string>
+    <string name="description8" translatable="false">"برای کانفیگ یوتیوب باید آیپی تمیز در قسمت تنظیمات ست کنید. همچنین میتوانید از کانفیگ ali-dxdydz استفاده کنید که سرعت بهتری دارد. کانفیگ ali-dxdydz را از اینجا دانلود کنید  t.me/ircfspace/224  "</string>
+
+    <string name="warp_key_notice1_en" translatable="false">"this request new key from CF, specific for you."</string>
+    <string name="warp_key_notice2_en" translatable="false">"do NOT make too much request or CF may ban you."</string>
+    <string name="warp_key_notice1_fa" translatable="false">"این یک کلید مخصوص شما از کلادفلر درخواست میکند"</string>
+    <string name="warp_key_notice2_fa" translatable="false">"بیش از حد درخواست نزنید چون شما را بن خواهد کرد"</string>
+
+
+    <string name="initial_agreement1" translatable="false">By using this software you agree with the following terms:</string>
+    <string name="initial_agreement2" translatable="false">MahsaNG uses \"vpn service\" to provide internet freedom for you.</string>
+    <string name="initial_agreement3" translatable="false">MahsaNG does NOT require any sensitive permissions such as contacts, camera, microphone, location, storage, etc.</string>
+    <string name="initial_agreement4" translatable="false">MahsaNG uses anonymous data such as Timezone, OS Version, and public IPv4 (first 3 octets only) to provide the best vpn config optimized for your network.</string>
+    <string name="initial_agreement5" translatable="false">for more info please visit:</string>
+    <string name="initial_agreement6" translatable="false">https://www.mahsaserver.com/terms</string>
+    <string name="initial_agreement7" translatable="false">https://www.mahsaserver.com/privacy</string>
+
+    <string name="captcha_title">I\'m not a robot</string>
+    <string name="captcha_submit">submit</string>
+    <string name="captcha_cancel">cancel</string>
+    <string name="toast_clipboard_menu">adding config/sub from clipboard</string>
+
+    <string name="core_version_info" translatable="false">v%1$s (%2$s)</string>
+    <string name="core_version_hardcoded" translatable="false">v13 (Mahsa-Core v25.4.30-r2)</string>
+
+    <string-array name="num_fragment_list">
+        <item>7</item>
+        <item>14</item>
+        <item>25</item>
+        <item>50</item>
+        <item>90</item>
+        <item>110</item>
+        <item>150</item>
+        <item>200</item>
+        <item>250</item>
+        <item>300</item>
+    </string-array>
+
+    <string-array name="tg_config_source">
+        <item>yebekhe reality</item>
+        <item>yebekhe vmess</item>
+        <item>yebekhe vless</item>
+    </string-array>
+
+    <string-array name="github_config_source">
+        <item>mci</item>
+        <item>mtn</item>
+        <item>all</item>
+    </string-array>
+
+    <string-array name="github_config_fragment">
+        <item>off</item>
+        <item>on</item>
+        <item>on + mux</item>
+    </string-array>
+
+    <string-array name="tg_config_number">
+        <item>5</item>
+        <item>10</item>
+        <item>15</item>
+        <item>20</item>
+        <item>30</item>
+        <item>40</item>
+        <item>50</item>
+    </string-array>
+
+    <string-array name="isp_list">
+        <item>mci</item>
+        <item>irancell</item>
+        <item>rightel</item>
+        <item>mokhaberat</item>
+        <item>shatel</item>
+        <item>asiatech</item>
+        <item>hiweb</item>
+        <item>mobinnet</item>
+        <item>parsonline</item>
+        <item>pishgaman</item>
+        <item>any</item>
+    </string-array>
+
+    <string-array name="cf_ip_list">
+        <item>203.13.32.183</item>
+        <item>203.23.106.136</item>
+        <item>203.28.8.71</item>
+        <item>203.34.80.226</item>
+        <item>104.234.158.11</item>
+        <item>170.114.46.73</item>
+        <item>194.152.44.247</item>
+        <item>plos.org</item>
+        <item>digitalocean.com</item>
+        <item>discord.com</item>
+        <item>medium.com</item>
+
+    </string-array>
 
     <string-array name="share_method">
         <item>QRcode</item>
@@ -244,5 +426,72 @@
         <item>VPN</item>
         <item>Proxy only</item>
     </string-array>
+
+    <string-array name="ui_mode_night">
+        <item>Follow system</item>
+        <item>Light</item>
+        <item>Dark</item>
+    </string-array>
+
+    <!-- Settings Activity Title -->
+    <string name="title_activity_gfw_setting">GFW_setting_Activity</string>
+
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string name="title_activity_gfw_update">GFW_update_Activity</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="lorem_ipsum">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris
+        volutpat, dolor id interdum ullamcorper, risus dolor egestas lectus, sit amet mattis purus
+        dui nec risus. Maecenas non sodales nisi, vel dictum dolor. Class aptent taciti sociosqu ad
+        litora torquent per conubia nostra, per inceptos himenaeos. Suspendisse blandit eleifend
+        diam, vel rutrum tellus vulputate quis. Aliquam eget libero aliquet, imperdiet nisl a,
+        ornare ex. Sed rhoncus est ut libero porta lobortis. Fusce in dictum tellus.\n\n
+        Suspendisse interdum ornare ante. Aliquam nec cursus lorem. Morbi id magna felis. Vivamus
+        egestas, est a condimentum egestas, turpis nisl iaculis ipsum, in dictum tellus dolor sed
+        neque. Morbi tellus erat, dapibus ut sem a, iaculis tincidunt dui. Interdum et malesuada
+        fames ac ante ipsum primis in faucibus. Curabitur et eros porttitor, ultricies urna vitae,
+        molestie nibh. Phasellus at commodo eros, non aliquet metus. Sed maximus nisl nec dolor
+        bibendum, vel congue leo egestas.\n\n
+        Sed interdum tortor nibh, in sagittis risus mollis quis. Curabitur mi odio, condimentum sit
+        amet auctor at, mollis non turpis. Nullam pretium libero vestibulum, finibus orci vel,
+        molestie quam. Fusce blandit tincidunt nulla, quis sollicitudin libero facilisis et. Integer
+        interdum nunc ligula, et fermentum metus hendrerit id. Vestibulum lectus felis, dictum at
+        lacinia sit amet, tristique id quam. Cras eu consequat dui. Suspendisse sodales nunc ligula,
+        in lobortis sem porta sed. Integer id ultrices magna, in luctus elit. Sed a pellentesque
+        est.\n\n
+        Aenean nunc velit, lacinia sed dolor sed, ultrices viverra nulla. Etiam a venenatis nibh.
+        Morbi laoreet, tortor sed facilisis varius, nibh orci rhoncus nulla, id elementum leo dui
+        non lorem. Nam mollis ipsum quis auctor varius. Quisque elementum eu libero sed commodo. In
+        eros nisl, imperdiet vel imperdiet et, scelerisque a mauris. Pellentesque varius ex nunc,
+        quis imperdiet eros placerat ac. Duis finibus orci et est auctor tincidunt. Sed non viverra
+        ipsum. Nunc quis augue egestas, cursus lorem at, molestie sem. Morbi a consectetur ipsum, a
+        placerat diam. Etiam vulputate dignissim convallis. Integer faucibus mauris sit amet finibus
+        convallis.\n\n
+        Phasellus in aliquet mi. Pellentesque habitant morbi tristique senectus et netus et
+        malesuada fames ac turpis egestas. In volutpat arcu ut felis sagittis, in finibus massa
+        gravida. Pellentesque id tellus orci. Integer dictum, lorem sed efficitur ullamcorper,
+        libero justo consectetur ipsum, in mollis nisl ex sed nisl. Donec maximus ullamcorper
+        sodales. Praesent bibendum rhoncus tellus nec feugiat. In a ornare nulla. Donec rhoncus
+        libero vel nunc consequat, quis tincidunt nisl eleifend. Cras bibendum enim a justo luctus
+        vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
+    </string>
 
 </resources>

@@ -25,10 +25,22 @@
         <item>tcp</item>
         <item>kcp</item>
         <item>ws</item>
+        <item>httpupgrade</item>
+        <item>xhttp</item>
+        <item>splithttp</item>
         <item>h2</item>
         <item>quic</item>
         <item>grpc</item>
     </string-array>
+
+
+    <string-array name="xhttp_mode" translatable="false">
+        <item>auto</item>
+        <item>packet-up</item>
+        <item>stream-up</item>
+        <item>stream-one</item>
+    </string-array>
+
 
     <string-array name="header_type_tcp" translatable="false">
         <item>none</item>
@@ -47,7 +59,7 @@
     <string-array name="mode_type_grpc" translatable="false">
         <item>gun</item>
         <item>multi</item>
- <!--Hide this option until core support it       <item>guna</item>-->
+        <!--Hide this option until core support it       <item>guna</item>-->
     </string-array>
 
     <string-array name="streamsecuritys" translatable="false">
@@ -74,10 +86,14 @@
         <item>randomized</item>
     </string-array>
 
+
     <string-array name="streamsecurity_alpn" translatable="false">
         <item></item>
+        <item>h3</item>
         <item>h2</item>
         <item>http/1.1</item>
+        <item>h3,h2,http/1.1</item>
+        <item>h3,h2</item>
         <item>h2,http/1.1</item>
     </string-array>
 
@@ -176,5 +192,29 @@
         <item>vi</item>
         <item>ru</item>
         <item>fa</item>
+    </string-array>
+
+    <string-array name="mux_xudp_quic_value" translatable="false">
+        <item>reject</item>
+        <item>allow</item>
+        <item>skip</item>
+    </string-array>
+
+    <string-array name="ui_mode_night_value" translatable="false">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
+
+    <!-- Reply Preference -->
+    <string-array name="reply_entries">
+        <item>Reply</item>
+        <item>Reply to all</item>
+    </string-array>
+
+    <string-array name="reply_values">
+        <item>reply</item>
+        <item>reply_all</item>
     </string-array>
 </resources>
