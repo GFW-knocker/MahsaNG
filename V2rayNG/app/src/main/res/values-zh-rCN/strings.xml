@@ -15,9 +15,11 @@
     <string name="toast_services_start">启动服务中</string>
     <string name="toast_services_stop">关闭中</string>
     <string name="toast_services_success">启动服务成功</string>
-    <string name="toast_services_failure">启动服务失败</string>
+    <string name="toast_services_failure">启动服务失败\n重启手机可能会有帮助</string>
 
     <!--ServerActivity-->
+    <string name="toast_removed_permission">我们移除了存储权限\n1. 使用其他应用打开文件\n2. 使用剪贴板复制内容</string>
+    <string name="toast_removed_geo_local_access">我们移除了存储权限\n您可以使用 URL 更新地理位置</string>
     <string name="title_server">配置文件</string>
     <string name="menu_item_add_config">添加配置</string>
     <string name="menu_item_save_config">保存配置</string>
@@ -77,6 +79,8 @@
     <string name="menu_item_add_file">添加文件</string>
     <string name="menu_item_download_file">下载文件</string>
 
+    <string name="toast_action_not_allowed">禁止此项操作</string>
+    <string name="server_obfs_password">混淆密码</string>
 
     <!-- PerAppProxyActivity -->
     <string name="msg_dialog_progress">正在加载</string>
@@ -131,9 +135,6 @@
     <string name="summary_pref_proxy_sharing_enabled">其他设备可以使用socks/http协议通过您的IP地址连接到代理,仅在受信任的网络中启用以避免未经授权的连接</string>
     <string name="toast_warning_pref_proxysharing_short">允许来自局域网的连接，请确保处于受信网络</string>
 
-    <string name="title_pref_allow_insecure">跳过证书验证(allowInsecure)</string>
-    <string name="summary_pref_allow_insecure">传输层安全选tls时，默认跳过证书验证(allowInsecure)</string>
-
     <string name="title_pref_socks_port">SOCKS5代理端口</string>
     <string name="summary_pref_socks_port">SOCKS5代理端口</string>
 
@@ -162,6 +163,7 @@
     <string name="title_mode_help">点此查看更多帮助</string>
     <string name="title_language">语言</string>
     <string name="title_ui_settings">用户界面设置</string>
+    <string name="title_pref_ui_mode_night">界面颜色设置</string>
 
     <string name="title_logcat">Logcat</string>
     <string name="logcat_copy">复制</string>
@@ -197,7 +199,7 @@
 
     <string name="connection_test_pending">"检查网络连接"</string>
     <string name="connection_test_testing">"测试中…"</string>
-    <string name="connection_test_available">"连接成功：延时 %d 毫秒"</string>
+    <string name="connection_test_available">"连接成功：延时 [ %d , %d ] 毫秒"</string>
     <string name="connection_test_error">"失败：%s"</string>
     <string name="connection_test_fail">"无互联网连接"</string>
     <string name="connection_test_error_status_code">"状态码无效（#%d）"</string>
@@ -234,7 +236,17 @@
         <item>VPN</item>
         <item>仅代理</item>
     </string-array>
+
+    <string-array name="ui_mode_night">
+        <item>跟随系统</item>
+        <item>浅色</item>
+        <item>深色</item>
+    </string-array>
+
+
     <string name="import_subscription_success">订阅导入成功</string>
     <string name="import_subscription_failure">导入订阅失败</string>
+    <string name="warning_mux_on">请关闭“mux”\n大多数配置不支持mux</string>
+    <string name="warning_warp_on">已开启 Warp。\n如有问题，请关闭</string>
 
 </resources>

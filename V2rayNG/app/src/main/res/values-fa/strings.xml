@@ -16,26 +16,30 @@
     <string name="toast_services_start">شروع خدمات</string>
     <string name="toast_services_stop">توقف خدمات</string>
     <string name="toast_services_success">خدمات با موفقیت شروع شد</string>
-    <string name="toast_services_failure">شروع خدمات انجام نشد</string>
+    <string name="toast_services_failure">شروع خدمات انجام نشد\nخاموش روشن کردن گوشی شاید مفید باشد</string>
 
     <!--ServerActivity-->
+    <string name="toast_removed_permission">ما دسترسی به حافظه را حذف کردیم\n1. فایل را با برنامه دیگری باز کنید\n2. محتوا را با استفاده از کلیپ بورد کپی کنید</string>
+    <string name="toast_removed_geo_local_access">ما دسترسی به حافظه را حذف کردیم\n می توانید geo را با url به روز کنید</string>
     <string name="title_server">پرونده پیکربندی</string>
     <string name="menu_item_add_config">افزودن پیکربندی</string>
     <string name="menu_item_save_config">ذخیره پیکربندی</string>
     <string name="menu_item_del_config">حذف پیکربندی</string>
     <string name="menu_item_import_config_qrcode">پیکربندی را از QRcode وارد کنید</string>
     <string name="menu_item_import_config_clipboard">پیکربندی را از کلیپ‌بورد وارد کنید</string>
+    <string name="menu_item_import_config_manually_wireguard">[Wireguard]تایپ دستی</string>
     <string name="menu_item_import_config_manually_vmess">تایپ دستی[Vmess]</string>
     <string name="menu_item_import_config_manually_vless">تایپ دستی[VLESS]</string>
     <string name="menu_item_import_config_manually_ss">تایپ دستی[Shadowsocks]</string>
     <string name="menu_item_import_config_manually_socks">تایپ دستی[Socks]</string>
     <string name="menu_item_import_config_manually_trojan">تایپ دستی[Trojan]</string>
     <string name="menu_item_import_config_custom">پیکربندی سفارشی</string>
-    <string name="menu_item_import_config_custom_clipboard">پیکربندی سفارشی را از کلیپ‌بورد وارد کنید</string>
-    <string name="menu_item_import_config_custom_local">پیکربندی سفارشی را به صورت محلی وارد کنید</string>
-    <string name="menu_item_import_config_custom_url">پیکربندی سفارشی را از طریق نشانی اینترنتی وارد کنید</string>
+    <string name="menu_item_import_config_custom_clipboard">کانفیگ سفارشی را از کلیپ‌بورد وارد کنید</string>
+    <string name="menu_item_import_config_custom_local">کانفیگ سفارشی را با فایل وارد کنید</string>
+    <string name="menu_item_import_config_custom_url">کانفیگ سفارشی را از طریق وب وارد کنید</string>
     <string name="menu_item_import_config_custom_url_scan">نشانی اینترنتی اسکن پیکربندی سفارشی را وارد کنید</string>
     <string name="del_config_comfirm">حذف شود؟</string>
+    <string name="del_subscription_confirm">این اشتراک با همه کانفیگ هایش حذف شود؟</string>
     <string name="server_lab_remarks">ملاحظات</string>
     <string name="server_lab_address">نشانی</string>
     <string name="server_lab_port">پورت</string>
@@ -51,7 +55,7 @@
     <string name="server_lab_stream_security">TLS</string>
     <string name="server_lab_allow_insecure">allowInsecure</string>
     <string name="server_lab_sni">SNI</string>
-    <string name="server_lab_address3">نشانی</string>
+    <string name="server_lab_address3">نشانی آیپی</string>
     <string name="server_lab_port3">پورت</string>
     <string name="server_lab_id3">رمز عبور</string>
     <string name="server_lab_security3">امنیت</string>
@@ -77,6 +81,9 @@
     <string name="toast_asset_copy_failed">کپی پرونده انجام نشد، لطفا از مدیر پرونده استفاده کنید</string>
     <string name="menu_item_add_file">افزودن پرونده‌ها</string>
     <string name="menu_item_download_file">دانلود پرونده‌ها</string>
+
+    <string name="toast_action_not_allowed">این عمل ممنوع است</string>
+    <string name="server_obfs_password">Obfs password</string>
 
     <!-- PerAppProxyActivity -->
     <string name="msg_dialog_progress">بارگذاری</string>
@@ -132,9 +139,6 @@
     <string name="summary_pref_proxy_sharing_enabled">دستگاه‌های دیگر می‌توانند از طریق socks/http به پراکسی توسط نشانی آی‌پی شما متصل شوند، فقط در شبکه مورد اعتماد فعال می‌شوند تا از اتصال غیرمجاز جلوگیری کنند</string>
     <string name="toast_warning_pref_proxysharing_short">اتصالات از طریق LAN را مجاز کنید، مطمئن شوید که در یک شبکه قابل اعتماد هستید</string>
 
-    <string name="title_pref_allow_insecure">allowInsecure</string>
-    <string name="summary_pref_allow_insecure">هنگام استفاده از TLS، به طور پیش‌فرض allowInsecure فعال است</string>
-
     <string name="title_pref_socks_port">پورت پروکسی SOCKS5</string>
     <string name="summary_pref_socks_port">پورت پروکسی SOCKS5</string>
 
@@ -163,25 +167,29 @@
     <string name="title_mode_help">برای راهنمایی بیشتر روی این متن، کلیک کنید</string>
     <string name="title_language">زبان</string>
     <string name="title_ui_settings">تنظیمات رابط کاربری</string>
+    <string name="title_pref_ui_mode_night">UI mode settings</string>
 
     <string name="title_logcat">گزارشات</string>
     <string name="logcat_copy">کپی</string>
     <string name="logcat_clear">پاک کردن</string>
-    <string name="title_service_restart">راه‌اندازی مجدد خدمات</string>
-    <string name="title_del_all_config">حذف تمام پیکربندی</string>
+    <string name="title_service_restart">راه‌اندازی مجدد</string>
+    <string name="title_del_all_config">حذف تمام کانفیگ ها</string>
+    <string name="title_del_current_group_config">حذف کانفیگ های فعلی</string>
+    <string name="title_clear_test_result">پاک کردن نتایج تست</string>
+    <string name="title_cant_delete_selected">نمیشود پاک کرد چون انتخاب شده</string>
     <string name="title_del_duplicate_config">حذف کانفیگ های تکراری</string>
-    <string name="title_del_invalid_config">تنظیمات نامعتبر را حذف کنید (ابتدا آزمایش کنید)</string>
-    <string name="title_export_all">خروجی گرفتن پیکربندی‌های غیرسفارشی در کلیپ‌بورد</string>
-    <string name="title_sub_setting">تنظیمات گروه‌ی اشتراک</string>
+    <string name="title_del_invalid_config">حذف کانفیگهای بدون پینگ (اول تست کنید)</string>
+    <string name="title_export_all">خروجی گرفتن کانفیگ کاستوم در کلیپ‌بورد</string>
+    <string name="title_sub_setting">تنظیمات گروهی اشتراک</string>
     <string name="sub_setting_remarks">ملاحظات</string>
     <string name="sub_setting_url">نشانی اینترنتی اختیاری</string>
     <string name="sub_setting_enable">فعال کردن به‌روزرسانی</string>
     <string name="title_sub_update">به‌روزرسانی اشتراک</string>
-    <string name="title_ping_all_server">Tcping همه پیکربندی</string>
-    <string name="title_real_ping_all_server">تاخیر واقعی همه پیکربندی</string>
+    <string name="title_ping_all_server">tcping کانفیگ های فعلی</string>
+    <string name="title_real_ping_all_server">تاخیر واقعی کانفیگهای فعلی</string>
     <string name="title_user_asset_setting">پرونده‌های دارایی جغرافیا</string>
-    <string name="title_sort_by_test_results">مرتب‌سازی بر اساس نتایج آزمایش</string>
-    <string name="title_filter_config">فیلتر پرونده پیکربندی ها</string>
+    <string name="title_sort_by_test_results">مرتب‌سازی بر اساس نتایج تست</string>
+    <string name="title_filter_config">فیلتر کانفیگ ها</string>
     <string name="filter_config_all">همه گروه‌های اشتراک</string>
     <string name="title_del_duplicate_config_count">حذف %d کانفیگ تکراری</string>
 
@@ -194,16 +202,19 @@
     <string name="routing_settings_delete">پاک کردن</string>
     <string name="routing_settings_scan_replace">اسکن و جایگزین کنید</string>
     <string name="routing_settings_scan_append">اسکن و اضافه کنید</string>
-    <string name="routing_settings_default_rules"> قوانین مسیریابی پیش‌فرض را تنظیم کنید</string>
+    <string name="routing_settings_china_rules"> قوانین مسیریابی پیش‌فرض چین</string>
+    <string name="routing_settings_iran_rules"> قوانین مسیریابی پیش‌فرض ایران</string>
+
 
     <string name="connection_test_pending">اتصال را بررسی کنید</string>
     <string name="connection_test_testing">در حال آزمایش...</string>
-    <string name="connection_test_available">موفقیت: اتصال HTTP %dms طول کشید</string>
+    <string name="connection_test_available">موفق: پینگ [ %d , %d ] </string>
     <string name="connection_test_error">اتصال به اینترنت شناسایی نشد: %s</string>
     <string name="connection_test_fail">اینترنت در دسترس نیست</string>
     <string name="connection_test_error_status_code">کد خطا: #%d</string>
     <string name="connection_connected">متصل است، برای بررسی اتصال ضربه بزنید</string>
     <string name="connection_not_connected">متصل نیست</string>
+
 
     <string-array name="share_method">
         <item>QRcode</item>
@@ -234,7 +245,66 @@
         <item>VPN</item>
         <item>فقط پروکسی</item>
     </string-array>
+
+    <string-array name="ui_mode_night">
+        <item>Follow system</item>
+        <item>Light</item>
+        <item>Dark</item>
+    </string-array>
+
+
     <string name="import_subscription_success">اشتراک با موفقیت ذخیره شد</string>
     <string name="import_subscription_failure">ذخیره اشتراک ناموفق بود</string>
+
+
+    <string name="title_GFW_settings">تنظیمات GFW</string>
+    <string name="title_GFW_update">آپدیت پارامترهای GFW</string>
+    <string name="title_GFW_free_config">دریافت کانفیگ رایگان</string>
+    <string name="title_GFW_tg_config">دریافت کانفیگ از ی.ب.خ </string>
+    <string name="title_GFW_github_config">دریافت کانفیگ رایگان</string>
+    <string name="title_GFW_tlg_proxy">دریافت پروکسی تلگرام</string>
+    <string name="title_GFW_donate_config">اهدا کانفیگ به مهسا</string>
+    <string name="title_network_tools">ابزار شبکه</string>
+    <string name="title_GFW_tunnel_config">دریافت کانفیگ اورژانسی</string>
+    <string name="title_GFW_youtube_config">کانفیگ مخصوص یوتیوب</string>
+    <string name="title_GFW_help">راهنما</string>
+    <string name="title_GFW_mahsa_net">پشتیبانی تلگرام Mahsa_net</string>
+    <string name="title_GFW_top_donors">اهداکنندگان برتر</string>
+    <string name="title_GFW_warp_setting">تنظیمات وارپ داخلی</string>
+    <string name="title_GFW_warp_generate">ساخت کانفیگ وارپ</string>
+    <string name="title_GFW_config_filter_dialog">لیست اشتراک:</string>
+
+
+    <string name="title_GFW_ads_block">مسدودساز تبلیغات</string>
+    <string name="title_GFW_ads_block_on">مسدودساز تبلیغات (روشن)</string>
+
+    <string name="title_GFW_malicious_block">مسدودساز لینکهای مخرب</string>
+    <string name="title_GFW_malicious_block_on">مسدودساز لینک مخرب (روشن)</string>
+
+    <string name="block_ads_turned_on">مسدودساز تبلیغات به قوانین مسیریابی اضافه شد\nوی پی ان را خاموش روشن کنید تا اعمال شود</string>
+    <string name="block_ads_turned_off">مسدودساز تبلیغات از قوانین مسیریابی حذف شد\nوی پی ان را خاموش روشن کنید تا اعمال شود</string>
+
+    <string name="block_malicious_turned_on">مجموعه ای از قوانین مسیریابی اضافه شد\nمسدودسازی تبلیغات، بدافزار، فیشینگ و غیره\nدامنه و آیپی های ایران مستقیم شد تا از وی پی ان عبور نکند\nاگر مشکلی وجود داشت، غیرفعال کنید تا به قوانین مسیریابی پیشفرض برگردید\nوی پی ان را خاموش روشن کنید تا اعمال شود\nنیرو گرفته از:\nhttps://github.com/Chocolate4U/Iran-v2ray-rules</string>
+    <string name="block_malicious_turned_off">قوانین مسیریابی به تنظیمات اولیه برگشت\nدامنه های ایران پیشفرض مستقیم هست\nوی پی ان را خاموش روشن کنید تا اعمال شود</string>
+
+
+
+    <string name="empty_config_list_toast">ابتدا دریافت کانفیگ بزنید</string>
+
+
+    <string name="get_provider_config_right_menu">دریافت کانفیگ اهدا کننده</string>
+    <string name="fragment_settings_right_menu">تنظیمات فرگمنت</string>
+    <string name="captcha_hint">حروف را کوچک وارد کنید</string>
+    <string name="btn_get_rotating_config">دریافت کانفیگ</string>
+    <string name="btn_test_rotating_config">تست</string>
+    <string name="btn_sort_rotating_config">مرتب</string>
+    <string name="menu_item_import_manual_config">پیکره بندی دستی</string>
+
+    <string name="captcha_title">من ربات نیستم</string>
+    <string name="captcha_submit">ارسال</string>
+    <string name="captcha_cancel">انصراف</string>
+    <string name="toast_clipboard_menu">افزودن کانفیگ/ساب از کلیپبورد</string>
+    <string name="warning_mux_on">لطفا mux را خاموش کنید\nاکثر کانفیگا با mux کار نمی کنند</string>
+    <string name="warning_warp_on">دقت کنید warp روشن است.\nاگر مشکلی دارید، آن را خاموش کنید</string>
 
 </resources>

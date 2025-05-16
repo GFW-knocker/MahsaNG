@@ -16,9 +16,11 @@
     <string name="toast_services_start">Запуск служб</string>
     <string name="toast_services_stop">Остановка служб</string>
     <string name="toast_services_success">Службы успешно запущены</string>
-    <string name="toast_services_failure">Сбой при запуске служб</string>
+    <string name="toast_services_failure">Сбой при запуске служб\nПерезагрузка телефона может помочь</string>
 
     <!--ServerActivity-->
+    <string name="toast_removed_permission">мы удалили разрешение на хранение\n1. используйте другое приложение для открытия файла\n2. скопируйте содержимое с помощью буфера обмена</string>
+    <string name="toast_removed_geo_local_access">мы удалили разрешение на хранение\nвы можете обновить гео, используя URL</string>
     <string name="title_server">Профиль</string>
     <string name="menu_item_add_config">Добавить профиль</string>
     <string name="menu_item_save_config">Сохранить профиль</string>
@@ -83,6 +85,11 @@
     <string name="menu_item_add_file">Добавить файлы</string>
     <string name="menu_item_download_file">Загрузить файлы</string>
 
+    <string name="msg_file_not_found">Файл не найден</string>
+    <string name="msg_remark_is_duplicate">Название уже существует</string>
+    <string name="toast_action_not_allowed">Это действие запрещено</string>
+    <string name="server_obfs_password">Пароль obfs</string>
+
     <!-- PerAppProxyActivity -->
     <string name="msg_dialog_progress">Загрузка…</string>
     <string name="menu_item_search">Поиск</string>
@@ -137,9 +144,6 @@
     <string name="summary_pref_proxy_sharing_enabled">Другие устройства могут подключаться к прокси по вашему IP-адресу через протокол SOCKS/HTTP. Используйте только в надёжной сети, чтобы избежать несанкционированного подключения.</string>
     <string name="toast_warning_pref_proxysharing_short">Доступ из LAN разрешён, убедитесь, что вы находитесь в надёжной сети</string>
 
-    <string name="title_pref_allow_insecure">Разрешать небезопасные</string>
-    <string name="summary_pref_allow_insecure">Для TLS по умолчанию разрешены небезопасные соединения</string>
-
     <string name="title_pref_socks_port">Порт SOCKS5-прокси</string>
     <string name="summary_pref_socks_port">Порт SOCKS5-прокси</string>
 
@@ -168,6 +172,7 @@
     <string name="title_mode_help">Нажмите для получения дополнительной информации</string>
     <string name="title_language">Язык</string>
     <string name="title_ui_settings">Настройки интерфейса</string>
+    <string name="title_pref_ui_mode_night">Тема интерфейса</string>
 
     <string name="title_logcat">Системный журнал</string>
     <string name="logcat_copy">Копировать</string>
@@ -203,7 +208,7 @@
 
     <string name="connection_test_pending">Проверить подключение</string>
     <string name="connection_test_testing">Проверка…</string>
-    <string name="connection_test_available">Успешно: рукопожатие HTTP заняло %d мс</string>
+    <string name="connection_test_available">Успешно: ping [ %d , %d ] мс</string>
     <string name="connection_test_error">Сбой проверки интернет-соединения: %s</string>
     <string name="connection_test_fail">Интернет недоступен</string>
     <string name="connection_test_error_status_code">Код ошибки: #%d</string>
@@ -239,7 +244,17 @@
         <item>VPN</item>
         <item>Только прокси</item>
     </string-array>
+
+    <string-array name="ui_mode_night">
+        <item>Как в системе</item>
+        <item>Светлая</item>
+        <item>Тёмная</item>
+    </string-array>
+
+
     <string name="import_subscription_success">Подписка импортирована</string>
     <string name="import_subscription_failure">Подписка не импортирована</string>
+    <string name="warning_mux_on">пожалуйста, отключите \"mux\"\nбольшинство конфигураций не работают с mux</string>
+    <string name="warning_warp_on">\"warp\" включен.\nесли возникнут проблемы, выключите его</string>
 
 </resources>

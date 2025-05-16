@@ -7,6 +7,8 @@
     <color name="colorUnselected">#999999</color>
     <color name="colorWhite">#CFD8DC</color>
     <color name="colorBlack">#212121</color>
+    <color name="colorConfigType">#f97910</color>
+
 
     <!--    <color name="colorPrimary">#008577</color>-->
     <!--    <color name="colorPrimaryDark">#00574B</color>-->
@@ -15,4 +17,49 @@
     <color name="colorAccent">#D81B60</color>
     <color name="colorBg">#FFFFFF</color>
     <color name="colorText">#000000</color>
+
+    <color name="color_fab_active">#f97910</color>
+    <color name="color_fab_inactive">#9C9C9C</color>
+    <color name="color_secondary">#727272</color>
+
+    <color name="color_btn_get_config">#F1F1FF</color>
+    <color name="color_btn_test_config">#FFF1F1</color>
+    <color name="color_btn_sort_config">#F1FFF1</color>
+    <color name="color_btn_green_config">#E1FFE1</color>
+    <color name="color_btn_subfilter_spinner">#E1E1F1</color>
+    <color name="color_btn_subfilter_manage">#DFE9F6</color>
+
+    <color name="color_btn_light_yellow">#f7f7d2</color>
+    <color name="color_btn_light_red">#fab4b4</color>
+    <color name="color_btn_light_purple">#E9D0FF</color>
+    <color name="color_btn_light_purple2">#F2E1FF</color>
+
+
+    <color name="color_btn_get_config_light1">#EAEAFF</color>
+    <color name="color_btn_get_config_light2">#EEEEFF</color>
+    <color name="color_btn_get_config_light3">#F1F1FF</color>
+    <color name="color_btn_get_config_light4">#FFF1F1</color>
+    <color name="color_btn_get_config_light5">#FAFAFF</color>
+    <color name="color_btn_get_config_light6">#FFFAFA</color>
+
+    <color name="color_bg_light7">#FBFFFB</color>
+    <color name="color_bg_light8">#FFFDF5</color>
+    <color name="color_bg_light9">#F3F3FF</color>
+    <color name="color_bg_light10">#FFFEFA</color>
+
+    <color name="color_btn_get_txt">#1565C0</color>
+    <color name="color_btn_test_txt">#C11E1E</color>
+    <color name="color_btn_sort_txt">#2F6D06</color>
+    <color name="color_btn_subfilter_txt">#6C22A6</color>
+    <color name="color_btn_clear_txt">#4C0286</color>
+    <color name="color_btn_warpkey_txt">#aC2266</color>
+
+
+    <color name="popup_recycler_background">#15FFCF00</color>
+
+    <color name="color_ads_background">#FFFFB3</color>
+    <color name="color_ads_text">#FF0000</color>
+    <color name="color_sponsor_fix">#363636</color>
+    <color name="color_footer_toolbox">#575757</color>
+
 </resources>
