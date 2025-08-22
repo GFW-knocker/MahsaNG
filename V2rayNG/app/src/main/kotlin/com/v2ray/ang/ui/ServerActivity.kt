@@ -1,5 +1,6 @@
 package com.v2ray.ang.ui
 
+import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.Menu
@@ -7,25 +8,41 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.WindowCompat
 import com.tencent.mmkv.MMKV
 import com.v2ray.ang.AppConfig
 import com.v2ray.ang.AppConfig.PREF_ALLOW_INSECURE
+import com.v2ray.ang.AppConfig.WIREGUARD_LOCAL_ADDRESS_V4
+import com.v2ray.ang.AppConfig.WIREGUARD_LOCAL_ADDRESS_V6
+import com.v2ray.ang.AppConfig.WIREGUARD_LOCAL_MTU
+import com.v2ray.ang.AppConfig.WIREGUARD_keep_alive
+import com.v2ray.ang.AppConfig.WIREGUARD_wnoise
+import com.v2ray.ang.AppConfig.WIREGUARD_wnoisecount
+import com.v2ray.ang.AppConfig.WIREGUARD_wnoisedelay
+import com.v2ray.ang.AppConfig.WIREGUARD_wpayloadsize
 import com.v2ray.ang.R
 import com.v2ray.ang.dto.EConfigType
 import com.v2ray.ang.dto.ServerConfig
 import com.v2ray.ang.dto.V2rayConfig
 import com.v2ray.ang.dto.V2rayConfig.Companion.DEFAULT_PORT
 import com.v2ray.ang.dto.V2rayConfig.Companion.TLS
+import com.v2ray.ang.extension.removeWhiteSpace
 import com.v2ray.ang.extension.toast
 import com.v2ray.ang.util.MmkvManager
 import com.v2ray.ang.util.MmkvManager.ID_MAIN
 import com.v2ray.ang.util.MmkvManager.KEY_SELECTED_SERVER
 import com.v2ray.ang.util.Utils
+import com.v2ray.ang.util.Utils.getIpv6Address
 
 class ServerActivity : BaseActivity() {
 
     private val mainStorage by lazy { MMKV.mmkvWithID(ID_MAIN, MMKV.MULTI_PROCESS_MODE) }
-    private val settingsStorage by lazy { MMKV.mmkvWithID(MmkvManager.ID_SETTING, MMKV.MULTI_PROCESS_MODE) }
+    private val settingsStorage by lazy {
+        MMKV.mmkvWithID(
+            MmkvManager.ID_SETTING,
+            MMKV.MULTI_PROCESS_MODE
+        )
+    }
     private val editGuid by lazy { intent.getStringExtra("guid").orEmpty() }
     private val isRunning by lazy {
         intent.getBooleanExtra("isRunning", false)
@@ -33,7 +50,8 @@ class ServerActivity : BaseActivity() {
                 && editGuid == mainStorage?.decodeString(KEY_SELECTED_SERVER)
     }
     private val createConfigType by lazy {
-        EConfigType.fromInt(intent.getIntExtra("createConfigType", EConfigType.VMESS.value)) ?: EConfigType.VMESS
+        EConfigType.fromInt(intent.getIntExtra("createConfigType", EConfigType.VMESS.value))
+            ?: EConfigType.VMESS
     }
     private val subscriptionId by lazy {
         intent.getStringExtra("subscriptionId")
@@ -66,12 +84,27 @@ class ServerActivity : BaseActivity() {
     private val allowinsecures: Array<out String> by lazy {
         resources.getStringArray(R.array.allowinsecures)
     }
-    private  val  uTlsItems:  Array<out String> by lazy {
+    private val uTlsItems: Array<out String> by lazy {
         resources.getStringArray(R.array.streamsecurity_utls)
     }
     private val alpns: Array<out String> by lazy {
         resources.getStringArray(R.array.streamsecurity_alpn)
     }
+    private val xhttpMode: Array<out String> by lazy {
+        resources.getStringArray(R.array.xhttp_mode)
+    }
+
+
+    private val fragment_array: Array<out String> by lazy {
+        resources.getStringArray(R.array.gfw_fragment)
+    }
+
+    private val mux_array: Array<out String> by lazy {
+        resources.getStringArray(R.array.gfw_mux)
+    }
+
+
+
     // Kotlin synthetics was used, but since it is removed in 1.8. We switch to old manual approach.
     // We don't use AndroidViewBinding because, it is better to share similar logics for different
     // protocols. Use findViewById manually ensures the xml are de-coupled with the activity logic.
@@ -84,6 +117,7 @@ class ServerActivity : BaseActivity() {
     private val sp_flow: Spinner? by lazy { findViewById(R.id.sp_flow) }
     private val sp_security: Spinner? by lazy { findViewById(R.id.sp_security) }
     private val sp_stream_security: Spinner? by lazy { findViewById(R.id.sp_stream_security) }
+
     private val sp_allow_insecure: Spinner? by lazy { findViewById(R.id.sp_allow_insecure) }
     private val container_allow_insecure: LinearLayout? by lazy { findViewById(R.id.l5) }
     private val et_sni: EditText? by lazy { findViewById(R.id.et_sni) }
@@ -98,52 +132,138 @@ class ServerActivity : BaseActivity() {
     private val sp_stream_alpn: Spinner? by lazy { findViewById(R.id.sp_stream_alpn) } //uTLS
     private val container_alpn: LinearLayout? by lazy { findViewById(R.id.l4) }
     private val et_public_key: EditText? by lazy { findViewById(R.id.et_public_key) }
+    private val et_preshared_key: EditText? by lazy { findViewById(R.id.et_preshared_key) }
     private val container_public_key: LinearLayout? by lazy { findViewById(R.id.l6) }
     private val et_short_id: EditText? by lazy { findViewById(R.id.et_short_id) }
     private val container_short_id: LinearLayout? by lazy { findViewById(R.id.l7) }
     private val et_spider_x: EditText? by lazy { findViewById(R.id.et_spider_x) }
+
+    private val container_ech: LinearLayout? by lazy { findViewById(R.id.l_ech) }
+    private val et_echConfigList: EditText? by lazy { findViewById(R.id.et_echConfigList) }
+    private val et_echServerKeys: EditText? by lazy { findViewById(R.id.et_echServerKeys) }
+    private val et_echForceQuery: EditText? by lazy { findViewById(R.id.et_echForceQuery) }
+
+    private val sp_frag_array: Spinner? by lazy { findViewById(R.id.sp_frag_array) }
+    private val sp_mux_array: Spinner? by lazy { findViewById(R.id.sp_mux_array) }
+    private val container_tls_frag: LinearLayout? by lazy { findViewById(R.id.l_tls_frag) }
+    private val container_nontls_frag: LinearLayout? by lazy { findViewById(R.id.l_nontls_frag) }
+    private val container_generic_frag: LinearLayout? by lazy { findViewById(R.id.l_generic_frag) }
+    private val container_mux: LinearLayout? by lazy { findViewById(R.id.l_mux_concurrency) }
+    //private val et_frag_packets: EditText? by lazy { findViewById(R.id.et_frag_packets) }
+    private val et_frag_length: EditText? by lazy { findViewById(R.id.et_frag_length) }
+    private val et_frag_interval: EditText? by lazy { findViewById(R.id.et_frag_interval) }
+    //private val et_fakehost_packets: EditText? by lazy { findViewById(R.id.et_fakehost_packets) }
+    private val et_fakehost_domain: EditText? by lazy { findViewById(R.id.et_fakehost_domain) }
+    private val et_generic_packets: EditText? by lazy { findViewById(R.id.et_generic_packets) }
+    private val et_generic_length: EditText? by lazy { findViewById(R.id.et_generic_length) }
+    private val et_generic_interval: EditText? by lazy { findViewById(R.id.et_generic_interval) }
+    private val et_mux_concurrency: EditText? by lazy { findViewById(R.id.et_mux_concurrency) }
+
     private val container_spider_x: LinearLayout? by lazy { findViewById(R.id.l8) }
+    private val et_reserved1: EditText? by lazy { findViewById(R.id.et_reserved1) }
+    private val et_reserved2: EditText? by lazy { findViewById(R.id.et_reserved2) }
+    private val et_reserved3: EditText? by lazy { findViewById(R.id.et_reserved3) }
+    private val et_local_address: EditText? by lazy { findViewById(R.id.et_local_address) }
+    private val et_local_mtu: EditText? by lazy { findViewById(R.id.et_local_mtu) }
+
+    private val et_keepalive: EditText? by lazy { findViewById(R.id.et_keepalive) }
+    private val et_wnoise: EditText? by lazy { findViewById(R.id.et_wnoise) }
+    private val et_wnoisecount: EditText? by lazy { findViewById(R.id.et_wnoisecount) }
+    private val et_wnoisedelay: EditText? by lazy { findViewById(R.id.et_wnoisedelay) }
+    private val et_wpayloadsize: EditText? by lazy { findViewById(R.id.et_wpayloadsize) }
+
+    private val et_obfs_password: EditText? by lazy { findViewById(R.id.et_obfs_password) }
+    private val et_port_hop: EditText? by lazy { findViewById(R.id.et_port_hop) }
+    private val et_port_hop_interval: EditText? by lazy { findViewById(R.id.et_port_hop_interval) }
+    private val et_pinsha256: EditText? by lazy { findViewById(R.id.et_pinsha256) }
+    private val et_extra: EditText? by lazy { findViewById(R.id.et_extra) }
+    private val layout_extra: LinearLayout? by lazy { findViewById(R.id.layout_extra) }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         title = getString(R.string.title_server)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+            if (!Utils.getDarkModeStatus(this)) {
+                WindowCompat.getInsetsController(window, window.decorView).apply {
+                    isAppearanceLightStatusBars = true
+                }
+            }
+        }
 
         val config = MmkvManager.decodeServerConfig(editGuid)
-        when(config?.configType ?: createConfigType) {
+        when (config?.configType ?: createConfigType) {
             EConfigType.VMESS -> setContentView(R.layout.activity_server_vmess)
             EConfigType.CUSTOM -> return
             EConfigType.SHADOWSOCKS -> setContentView(R.layout.activity_server_shadowsocks)
             EConfigType.SOCKS -> setContentView(R.layout.activity_server_socks)
+            EConfigType.HTTP -> setContentView(R.layout.activity_server_socks)
             EConfigType.VLESS -> setContentView(R.layout.activity_server_vless)
+            EConfigType.MVLESS -> setContentView(R.layout.activity_server_mvless)
             EConfigType.TROJAN -> setContentView(R.layout.activity_server_trojan)
-            else -> setContentView(R.layout.activity_server_vmess)
+            EConfigType.WIREGUARD -> setContentView(R.layout.activity_server_wireguard)
+            EConfigType.HYSTERIA2 -> setContentView(R.layout.activity_server_hysteria2)
         }
         sp_network?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
                 val types = transportTypes(networks[position])
                 sp_header_type?.isEnabled = types.size > 1
-                val adapter = ArrayAdapter(this@ServerActivity, android.R.layout.simple_spinner_item, types)
+                val adapter =
+                    ArrayAdapter(this@ServerActivity, android.R.layout.simple_spinner_item, types)
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                 sp_header_type?.adapter = adapter
-                sp_header_type_title?.text = if (networks[position] == "grpc")
-                    getString(R.string.server_lab_mode_type) else
-                    getString(R.string.server_lab_head_type)
+                sp_header_type_title?.text = when (networks[position]) {
+                    "grpc" -> getString(R.string.server_lab_mode_type)
+                    "xhttp" -> getString(R.string.server_lab_xhttp_mode)
+                    else -> getString(R.string.server_lab_head_type)
+                }
                 config?.getProxyOutbound()?.getTransportSettingDetails()?.let { transportDetails ->
                     sp_header_type?.setSelection(Utils.arrayFind(types, transportDetails[0]))
                     et_request_host?.text = Utils.getEditable(transportDetails[1])
                     et_path?.text = Utils.getEditable(transportDetails[2])
                 }
+
+                /*
+                et_extra?.text = Utils.getEditable(
+                    when (networks[position]) {
+                        "xhttp" -> config?.xhttpExtra
+                        else -> null
+                    }.orEmpty()
+                )
+
+                layout_extra?.visibility =
+                    when (networks[position]) {
+                        "xhttp" -> View.VISIBLE
+                        else -> View.GONE
+                    }
+                */
+                layout_extra?.visibility = View.GONE
             }
+
             override fun onNothingSelected(parent: AdapterView<*>?) {
                 // do nothing
             }
         }
+
         sp_stream_security?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
                 if (streamSecuritys[position].isBlank()) {
                     container_sni?.visibility = View.GONE
                     container_fingerprint?.visibility = View.GONE
                     container_alpn?.visibility = View.GONE
+                    container_ech?.visibility = View.GONE
                     container_allow_insecure?.visibility = View.GONE
                     container_public_key?.visibility = View.GONE
                     container_short_id?.visibility = View.GONE
@@ -152,6 +272,7 @@ class ServerActivity : BaseActivity() {
                     container_sni?.visibility = View.VISIBLE
                     container_fingerprint?.visibility = View.VISIBLE
                     container_alpn?.visibility = View.VISIBLE
+                    container_ech?.visibility = View.VISIBLE
                     if (streamSecuritys[position] == TLS) {
                         container_allow_insecure?.visibility = View.VISIBLE
                         container_public_key?.visibility = View.GONE
@@ -166,16 +287,73 @@ class ServerActivity : BaseActivity() {
                     }
                 }
             }
+
             override fun onNothingSelected(p0: AdapterView<*>?) {
                 // do nothing
             }
         }
+
+
+        sp_frag_array?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                if (position==0) {
+                    container_tls_frag?.visibility = View.GONE
+                    container_nontls_frag?.visibility = View.GONE
+                    container_generic_frag?.visibility = View.GONE
+                } else if(position==1) {
+                    container_tls_frag?.visibility = View.VISIBLE
+                    container_nontls_frag?.visibility = View.GONE
+                    container_generic_frag?.visibility = View.GONE
+                }else if(position==2){
+                    container_tls_frag?.visibility = View.GONE
+                    container_nontls_frag?.visibility = View.VISIBLE
+                    container_generic_frag?.visibility = View.GONE
+                }else{
+                    container_tls_frag?.visibility = View.GONE
+                    container_nontls_frag?.visibility = View.GONE
+                    container_generic_frag?.visibility = View.VISIBLE
+                }
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+                // do nothing
+            }
+        }
+
+
+
+        sp_mux_array?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                if (position==0) {
+                    container_mux?.visibility = View.GONE
+                } else if(position==1) {
+                    container_mux?.visibility = View.GONE
+                }else{
+                    container_mux?.visibility = View.VISIBLE
+                }
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+                // do nothing
+            }
+        }
+
+
         if (config != null) {
             bindingServer(config)
         } else {
             clearServer()
         }
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
     /**
@@ -183,37 +361,142 @@ class ServerActivity : BaseActivity() {
      */
     private fun bindingServer(config: ServerConfig): Boolean {
         val outbound = config.getProxyOutbound() ?: return false
-        val streamSetting = config.outboundBean?.streamSettings ?: return false
 
         et_remarks.text = Utils.getEditable(config.remarks)
         et_address.text = Utils.getEditable(outbound.getServerAddress().orEmpty())
-        et_port.text = Utils.getEditable(outbound.getServerPort()?.toString() ?: DEFAULT_PORT.toString())
+        et_port.text =
+            Utils.getEditable(outbound.getServerPort()?.toString() ?: DEFAULT_PORT.toString())
         et_id.text = Utils.getEditable(outbound.getPassword().orEmpty())
-        et_alterId?.text = Utils.getEditable(outbound.settings?.vnext?.get(0)?.users?.get(0)?.alterId.toString())
-        if (config.configType == EConfigType.SOCKS) {
-            et_security?.text = Utils.getEditable(outbound.settings?.servers?.get(0)?.users?.get(0)?.user.orEmpty())
-        } else if (config.configType == EConfigType.VLESS) {
+        et_alterId?.text =
+            Utils.getEditable(outbound.settings?.vnext?.get(0)?.users?.get(0)?.alterId.toString())
+        if (config.configType == EConfigType.SOCKS || config.configType == EConfigType.HTTP) {
+            et_security?.text =
+                Utils.getEditable(outbound.settings?.servers?.get(0)?.users?.get(0)?.user.orEmpty())
+        } else if (config.configType == EConfigType.VLESS || config.configType == EConfigType.MVLESS) {
             et_security?.text = Utils.getEditable(outbound.getSecurityEncryption().orEmpty())
-            val flow = Utils.arrayFind(flows, outbound.settings?.vnext?.get(0)?.users?.get(0)?.flow.orEmpty())
+            val flow = Utils.arrayFind(
+                flows,
+                outbound.settings?.vnext?.get(0)?.users?.get(0)?.flow.orEmpty()
+            )
             if (flow >= 0) {
                 sp_flow?.setSelection(flow)
             }
-        } else if (config.configType == EConfigType.TROJAN) {
-            val flow = Utils.arrayFind(flows, outbound.settings?.servers?.get(0)?.flow.orEmpty())
-            if (flow >= 0) {
-                sp_flow?.setSelection(flow)
+        } else if (config.configType == EConfigType.WIREGUARD) {
+            et_public_key?.text = Utils.getEditable(outbound.settings?.peers?.get(0)?.publicKey.orEmpty())
+            et_preshared_key?.text = Utils.getEditable(outbound.settings?.peers?.get(0)?.preSharedKey.orEmpty())
+
+            if (outbound.settings?.reserved == null) {
+                et_reserved1?.text = Utils.getEditable("0")
+                et_reserved2?.text = Utils.getEditable("0")
+                et_reserved3?.text = Utils.getEditable("0")
+            } else {
+                et_reserved1?.text =
+                    Utils.getEditable(outbound.settings?.reserved?.get(0).toString())
+                et_reserved2?.text =
+                    Utils.getEditable(outbound.settings?.reserved?.get(1).toString())
+                et_reserved3?.text =
+                    Utils.getEditable(outbound.settings?.reserved?.get(2).toString())
             }
+            if (outbound.settings?.address == null) {
+                et_local_address?.text =
+                    Utils.getEditable("${WIREGUARD_LOCAL_ADDRESS_V4},${WIREGUARD_LOCAL_ADDRESS_V6}")
+            } else {
+                val list = outbound.settings?.address as List<*>
+                et_local_address?.text = Utils.getEditable(list.joinToString())
+            }
+            if (outbound.settings?.mtu == null) {
+                et_local_mtu?.text = Utils.getEditable(WIREGUARD_LOCAL_MTU)
+            } else {
+                et_local_mtu?.text = Utils.getEditable(outbound.settings?.mtu.toString())
+            }
+
+
+            if (outbound.settings?.peers?.get(0)?.keepAlive == null) {
+                et_keepalive?.text = Utils.getEditable(WIREGUARD_keep_alive)
+            } else {
+                et_keepalive?.text = Utils.getEditable(outbound.settings?.peers?.get(0)?.keepAlive.toString())
+            }
+
+            if (outbound.settings?.wnoise == null) {
+                et_wnoise?.text = Utils.getEditable(WIREGUARD_wnoise)
+            } else {
+                et_wnoise?.text = Utils.getEditable(outbound.settings?.wnoise.orEmpty())
+            }
+
+            if (outbound.settings?.wnoisecount == null) {
+                et_wnoisecount?.text = Utils.getEditable(WIREGUARD_wnoisecount)
+            } else {
+                et_wnoisecount?.text = Utils.getEditable(outbound.settings?.wnoisecount.orEmpty())
+            }
+
+            if (outbound.settings?.wnoisedelay == null) {
+                et_wnoisedelay?.text = Utils.getEditable(WIREGUARD_wnoisedelay)
+            } else {
+                et_wnoisedelay?.text = Utils.getEditable(outbound.settings?.wnoisedelay.orEmpty())
+            }
+
+            if (outbound.settings?.wpayloadsize == null) {
+                et_wpayloadsize?.text = Utils.getEditable(WIREGUARD_wpayloadsize)
+            } else {
+                et_wpayloadsize?.text = Utils.getEditable(outbound.settings?.wpayloadsize.orEmpty())
+            }
+
+        }else if (config.configType == EConfigType.HYSTERIA2) {
+            et_obfs_password?.text = Utils.getEditable(outbound.settings?.obfsPassword.orEmpty())
+            et_port_hop?.text = Utils.getEditable(outbound.settings?.portHopping.orEmpty())
+            et_port_hop_interval?.text = Utils.getEditable(outbound.settings?.portHoppingInterval.orEmpty())
+            et_pinsha256?.text = Utils.getEditable(outbound.settings?.pinSHA256.orEmpty())
         }
-        val securityEncryptions = if (config.configType == EConfigType.SHADOWSOCKS) shadowsocksSecuritys else securitys
-        val security = Utils.arrayFind(securityEncryptions, outbound.getSecurityEncryption().orEmpty())
+
+
+        // ------------------fragment & mux-------------
+        if (config.configType == EConfigType.VLESS ||
+            config.configType == EConfigType.MVLESS ||
+            config.configType == EConfigType.TROJAN ||
+            config.configType == EConfigType.VMESS) {
+
+            val f1 = Utils.arrayFind(fragment_array, config.outboundBean?.settings?.fragment?.status.orEmpty())
+            if(f1>=0) {
+                sp_frag_array?.setSelection(f1)
+                if(f1==1){
+                    //et_frag_packets?.text = Utils.getEditable(config.outboundBean?.settings?.fragment?.packets.orEmpty())
+                    et_frag_length?.text = Utils.getEditable(config.outboundBean?.settings?.fragment?.length.orEmpty())
+                    et_frag_interval?.text = Utils.getEditable(config.outboundBean?.settings?.fragment?.interval.orEmpty())
+                }else if(f1==2){
+                    //et_fakehost_packets?.text = Utils.getEditable(config.outboundBean?.settings?.fragment?.packets.orEmpty())
+                    et_fakehost_domain?.text = Utils.getEditable(config.outboundBean?.settings?.fragment?.host1_domain.orEmpty())
+                }else if(f1==3){
+                    et_generic_packets?.text = Utils.getEditable(config.outboundBean?.settings?.fragment?.packets.orEmpty())
+                    et_generic_length?.text = Utils.getEditable(config.outboundBean?.settings?.fragment?.length.orEmpty())
+                    et_generic_interval?.text = Utils.getEditable(config.outboundBean?.settings?.fragment?.interval.orEmpty())
+                }
+            }
+
+
+            val g1 = Utils.arrayFind(mux_array, config.outboundBean?.mux?.status.orEmpty())
+            if(g1>=0) {
+                sp_mux_array?.setSelection(g1)
+                if(g1==2){
+                    val cun = config.outboundBean?.mux?.concurrency ?: 8
+                    et_mux_concurrency?.text = Utils.getEditable(cun.toString())
+                }
+            }
+
+        }
+
+        val securityEncryptions =
+            if (config.configType == EConfigType.SHADOWSOCKS) shadowsocksSecuritys else securitys
+        val security =
+            Utils.arrayFind(securityEncryptions, outbound.getSecurityEncryption().orEmpty())
         if (security >= 0) {
             sp_security?.setSelection(security)
         }
 
+        val streamSetting = config.outboundBean?.streamSettings ?: return true
         val streamSecurity = Utils.arrayFind(streamSecuritys, streamSetting.security)
         if (streamSecurity >= 0) {
             sp_stream_security?.setSelection(streamSecurity)
-            (streamSetting.tlsSettings?: streamSetting.realitySettings)?.let { tlsSetting ->
+            (streamSetting.tlsSettings ?: streamSetting.realitySettings)?.let { tlsSetting ->
                 container_sni?.visibility = View.VISIBLE
                 container_fingerprint?.visibility = View.VISIBLE
                 container_alpn?.visibility = View.VISIBLE
@@ -223,12 +506,21 @@ class ServerActivity : BaseActivity() {
                     sp_stream_fingerprint?.setSelection(utlsIndex)
                 }
                 tlsSetting.alpn?.let {
-                    val alpnIndex = Utils.arrayFind(alpns, Utils.removeWhiteSpace(tlsSetting.alpn.joinToString())!!)
+                    val alpnIndex = Utils.arrayFind(
+                        alpns,
+                        Utils.removeWhiteSpace(tlsSetting.alpn.joinToString())!!
+                    )
                     sp_stream_alpn?.setSelection(alpnIndex)
                 }
                 if (streamSetting.tlsSettings != null) {
+
+                    et_echConfigList?.text = Utils.getEditable(tlsSetting.echConfigList.orEmpty())
+                    et_echServerKeys?.text = Utils.getEditable(tlsSetting.echServerKeys.orEmpty())
+                    et_echForceQuery?.text = Utils.getEditable(tlsSetting.echForceQuery.orEmpty())
+
                     container_allow_insecure?.visibility = View.VISIBLE
-                    val allowinsecure = Utils.arrayFind(allowinsecures, tlsSetting.allowInsecure.toString())
+                    val allowinsecure =
+                        Utils.arrayFind(allowinsecures, tlsSetting.allowInsecure.toString())
                     if (allowinsecure >= 0) {
                         sp_allow_insecure?.setSelection(allowinsecure)
                     }
@@ -283,6 +575,21 @@ class ServerActivity : BaseActivity() {
 
         //et_security.text = null
         sp_flow?.setSelection(0)
+        et_public_key?.text = null
+        et_reserved1?.text = Utils.getEditable("0")
+        et_reserved2?.text = Utils.getEditable("0")
+        et_reserved3?.text = Utils.getEditable("0")
+        et_local_address?.text =
+            Utils.getEditable("${WIREGUARD_LOCAL_ADDRESS_V4},${WIREGUARD_LOCAL_ADDRESS_V6}")
+        et_local_mtu?.text = Utils.getEditable(WIREGUARD_LOCAL_MTU)
+
+        et_frag_length?.text = Utils.getEditable("")
+        et_frag_interval?.text = Utils.getEditable("")
+        et_fakehost_domain?.text = Utils.getEditable("")
+        et_generic_packets?.text = Utils.getEditable("1-1")
+        et_generic_length?.text = Utils.getEditable("")
+        et_generic_interval?.text = Utils.getEditable("")
+        et_mux_concurrency?.text = Utils.getEditable("")
         return true
     }
 
@@ -298,14 +605,29 @@ class ServerActivity : BaseActivity() {
             toast(R.string.server_lab_address)
             return false
         }
-        val port = Utils.parseInt(et_port.text.toString())
-        if (port <= 0) {
-            toast(R.string.server_lab_port)
-            return false
-        }
+
+        var port = Utils.parseInt(et_port.text.toString())
+
         val config = MmkvManager.decodeServerConfig(editGuid) ?: ServerConfig.create(createConfigType)
-        if (config.configType != EConfigType.SOCKS && TextUtils.isEmpty(et_id.text.toString())) {
-            toast(R.string.server_lab_id)
+
+        if (config.configType != EConfigType.HYSTERIA2) {
+            if ( (port <= 0) || (port >= 65536) ) {
+                toast(R.string.server_lab_port)
+                return false
+            }
+        }
+
+        port = Utils.validate_port(port)
+
+
+        if (config.configType != EConfigType.SOCKS && config.configType != EConfigType.HTTP && TextUtils.isEmpty(et_id.text.toString())) {
+            if (config.configType == EConfigType.TROJAN
+                || config.configType == EConfigType.SHADOWSOCKS
+                || config.configType == EConfigType.HYSTERIA2 ) {
+                toast(R.string.server_lab_id3)
+            } else {
+                toast(R.string.server_lab_id)
+            }
             return false
         }
         sp_stream_security?.let {
@@ -329,11 +651,107 @@ class ServerActivity : BaseActivity() {
         config.outboundBean?.settings?.servers?.get(0)?.let { server ->
             saveServers(server, port, config)
         }
-        config.outboundBean?.streamSettings?.let {
-            saveStreamSettings(it)
+        val wireguard = config.outboundBean?.settings
+        wireguard?.peers?.get(0)?.let { _ ->
+            savePeer(wireguard, port)
         }
-        if(config.subscriptionId.isEmpty() && !subscriptionId.isNullOrEmpty()) {
+        config.outboundBean?.streamSettings?.let {
+            val sni = saveStreamSettings(it)
+            saveTls(it, sni)
+        }
+        if (config.subscriptionId.isEmpty() && !subscriptionId.isNullOrEmpty()) {
             config.subscriptionId = subscriptionId!!
+        }
+
+        if (config.configType == EConfigType.HYSTERIA2) {
+            config.outboundBean?.settings?.obfsPassword = et_obfs_password?.text?.toString()
+            config.outboundBean?.settings?.portHopping = et_port_hop?.text?.toString()
+            config.outboundBean?.settings?.portHoppingInterval = et_port_hop_interval?.text?.toString()
+            config.outboundBean?.settings?.pinSHA256 = et_pinsha256?.text?.toString()
+        }
+
+
+        if (config.configType == EConfigType.VLESS || config.configType == EConfigType.MVLESS ||
+                config.configType == EConfigType.TROJAN || config.configType == EConfigType.VMESS) {
+
+
+            val fpos = sp_frag_array?.selectedItemPosition ?: 0
+            if(fpos==0){
+                config.outboundBean?.settings?.fragment = null
+            }else if(fpos==1){
+                var L7 = et_frag_length?.text?.toString()?.trim()
+                var I7 = et_frag_interval?.text?.toString()?.trim()
+                if(L7.isNullOrEmpty()){
+                    L7 = "10-20"
+                }
+                if(I7.isNullOrEmpty()){
+                    I7 = "10-20"
+                }
+                if(!Utils.fragment_param_check(L7)){
+                    toast("invalid fragment length")
+                    return false
+                }
+                if(!Utils.fragment_param_check(I7)){
+                    toast("invalid fragment interval")
+                    return false
+                }
+                config.outboundBean?.settings?.populateFragment(packets = "tlshello", length = L7, interval = I7)
+            }else if(fpos==2){
+                val D7 = et_fakehost_domain?.text?.toString()?.trim() ?: ""
+                config.outboundBean?.settings?.populateFragment(packets = "fakehost", fakehost_domain = D7)
+            }else{
+                var P8 = et_generic_packets?.text?.toString()?.trim()
+                var L8 = et_generic_length?.text?.toString()?.trim()
+                var I8 = et_generic_interval?.text?.toString()?.trim()
+                if(P8.isNullOrEmpty()){
+                    P8 = "1-1"
+                }
+                if(L8.isNullOrEmpty()){
+                    L8 = "3-5"
+                }
+                if(I8.isNullOrEmpty()){
+                    I8 = "5-10"
+                }
+                if(!Utils.fragment_param_check(P8)){
+                    toast("invalid generic packet")
+                    return false
+                }
+                if(!Utils.fragment_param_check(L8)){
+                    toast("invalid fragment length")
+                    return false
+                }
+                if(!Utils.fragment_param_check(I8)){
+                    toast("invalid fragment interval")
+                    return false
+                }
+                config.outboundBean?.settings?.populateFragment(packets = P8, length = L8, interval = I8)
+            }
+
+
+            val mpos = sp_mux_array?.selectedItemPosition ?: 0
+            if(mpos==0){
+                config.outboundBean?.populateMux(stat = "")
+            }else if(mpos==1){
+                config.outboundBean?.populateMux(stat = "OFF")
+            }else if(mpos==2){
+                var m81 = et_mux_concurrency?.text?.toString()?.trim()
+                if(m81.isNullOrEmpty()){
+                    m81 = "8"
+                }
+                val m8 = Utils.parseInt(m81)
+                if(m8<=0){
+                    toast("concurrency must > 0")
+                    return false
+                }
+                if( (config.configType==EConfigType.VLESS) || (config.configType==EConfigType.MVLESS) ) {
+                    if(config.outboundBean?.settings?.vnext?.get(0)?.users?.get(0)?.flow?.isNotEmpty() == true) {
+                        toast("mux and flow cant be set at the same time")
+                        return false
+                    }
+                }
+                config.outboundBean?.populateMux(stat = "ON", concr = m8)
+            }
+
         }
 
         MmkvManager.encodeServerConfig(editGuid, config)
@@ -342,96 +760,150 @@ class ServerActivity : BaseActivity() {
         return true
     }
 
-    private fun saveVnext(vnext: V2rayConfig.OutboundBean.OutSettingsBean.VnextBean, port: Int, config: ServerConfig) {
+    private fun saveVnext(
+        vnext: V2rayConfig.OutboundBean.OutSettingsBean.VnextBean,
+        port: Int,
+        config: ServerConfig
+    ) {
         vnext.address = et_address.text.toString().trim()
-        vnext.port = port
+        vnext.port = Utils.validate_port(port)
         vnext.users[0].id = et_id.text.toString().trim()
         if (config.configType == EConfigType.VMESS) {
             vnext.users[0].alterId = Utils.parseInt(et_alterId?.text.toString())
             vnext.users[0].security = securitys[sp_security?.selectedItemPosition ?: 0]
-        } else if (config.configType == EConfigType.VLESS) {
+        } else if (config.configType == EConfigType.VLESS || config.configType == EConfigType.MVLESS) {
             vnext.users[0].encryption = et_security?.text.toString().trim()
             vnext.users[0].flow = flows[sp_flow?.selectedItemPosition ?: 0]
         }
     }
 
-    private fun saveServers(server: V2rayConfig.OutboundBean.OutSettingsBean.ServersBean, port: Int, config: ServerConfig) {
+    private fun saveServers(
+        server: V2rayConfig.OutboundBean.OutSettingsBean.ServersBean,
+        port: Int,
+        config: ServerConfig
+    ) {
         server.address = et_address.text.toString().trim()
-        server.port = port
+        server.port = Utils.validate_port(port)
         if (config.configType == EConfigType.SHADOWSOCKS) {
             server.password = et_id.text.toString().trim()
             server.method = shadowsocksSecuritys[sp_security?.selectedItemPosition ?: 0]
-        } else if (config.configType == EConfigType.SOCKS) {
+        } else if (config.configType == EConfigType.SOCKS || config.configType == EConfigType.HTTP) {
             if (TextUtils.isEmpty(et_security?.text) && TextUtils.isEmpty(et_id.text)) {
                 server.users = null
             } else {
-                val socksUsersBean = V2rayConfig.OutboundBean.OutSettingsBean.ServersBean.SocksUsersBean()
+                val socksUsersBean =
+                    V2rayConfig.OutboundBean.OutSettingsBean.ServersBean.SocksUsersBean()
                 socksUsersBean.user = et_security?.text.toString().trim()
                 socksUsersBean.pass = et_id.text.toString().trim()
                 server.users = listOf(socksUsersBean)
             }
-        } else if (config.configType == EConfigType.TROJAN) {
+        } else if (config.configType == EConfigType.TROJAN || config.configType == EConfigType.HYSTERIA2) {
             server.password = et_id.text.toString().trim()
         }
     }
 
-    private fun saveStreamSettings(streamSetting: V2rayConfig.OutboundBean.StreamSettingsBean) {
-        val network = sp_network?.selectedItemPosition ?: return
-        val type = sp_header_type?.selectedItemPosition ?: return
-        val requestHost = et_request_host?.text?.toString()?.trim() ?: return
-        val path = et_path?.text?.toString()?.trim() ?: return
-        val sniField = et_sni?.text?.toString()?.trim() ?: return
-        val allowInsecureField = sp_allow_insecure?.selectedItemPosition ?: return
-        val streamSecurity = sp_stream_security?.selectedItemPosition ?: return
-        val utlsIndex = sp_stream_fingerprint?.selectedItemPosition ?: return
-        val alpnIndex = sp_stream_alpn?.selectedItemPosition ?: return
-        val publicKey = et_public_key?.text?.toString()?.trim() ?: return
-        val shortId = et_short_id?.text?.toString()?.trim() ?: return
-        val spiderX = et_spider_x?.text?.toString()?.trim() ?: return
-
-        var sni = streamSetting.populateTransportSettings(
-                transport = networks[network],
-                headerType = transportTypes(networks[network])[type],
-                host = requestHost,
-                path = path,
-                seed = path,
-                quicSecurity = requestHost,
-                key = path,
-                mode = transportTypes(networks[network])[type],
-                serviceName = path
-        )
-        if (sniField.isNotBlank()) {
-            sni = sniField
+    private fun savePeer(wireguard: V2rayConfig.OutboundBean.OutSettingsBean, port: Int) {
+        wireguard.secretKey = et_id.text.toString().trim()
+        wireguard.peers?.get(0)?.publicKey = et_public_key?.text.toString().trim()
+        wireguard.peers?.get(0)?.preSharedKey = et_preshared_key?.text.toString().trim()
+        wireguard.peers?.get(0)?.endpoint =
+            getIpv6Address(et_address.text.toString().trim()) + ":" + Utils.validate_port(port)
+        val reserved1 = Utils.parseInt(et_reserved1?.text.toString())
+        val reserved2 = Utils.parseInt(et_reserved2?.text.toString())
+        val reserved3 = Utils.parseInt(et_reserved3?.text.toString())
+        if (reserved1 > 0 || reserved2 > 0 || reserved3 > 0) {
+            wireguard.reserved = listOf(reserved1, reserved2, reserved3)
+        } else {
+            wireguard.reserved = null
         }
-        val allowInsecure = if (allowinsecures[allowInsecureField].isBlank()) {
-            settingsStorage?.decodeBool(PREF_ALLOW_INSECURE) ?: true   // GFW-knocker: just disable root CA check by default that cause many configs to fail
+        wireguard.address = et_local_address?.text.toString().removeWhiteSpace().split(",")
+        wireguard.mtu = Utils.parseInt(et_local_mtu?.text.toString())
+
+        wireguard.peers?.get(0)?.keepAlive = Utils.parseInt(et_keepalive?.text.toString())
+        wireguard.wnoise = et_wnoise?.text.toString().trim()
+        wireguard.wnoisecount = et_wnoisecount?.text.toString().trim()
+        wireguard.wnoisedelay = et_wnoisedelay?.text.toString().trim()
+        wireguard.wpayloadsize = et_wpayloadsize?.text.toString().trim()
+    }
+
+
+    private fun saveStreamSettings(streamSetting: V2rayConfig.OutboundBean.StreamSettingsBean): String? {
+        val network = sp_network?.selectedItemPosition ?: return null
+        val type = sp_header_type?.selectedItemPosition ?: return null
+        val requestHost = et_request_host?.text?.toString()?.trim() ?: return null
+        val path = et_path?.text?.toString()?.trim() ?: return null
+
+        val sni = streamSetting.populateTransportSettings(
+            transport = networks[network],
+            headerType = transportTypes(networks[network])[type],
+            host = requestHost,
+            path = path,
+            seed = path,
+            quicSecurity = requestHost,
+            key = path,
+            mode = transportTypes(networks[network])[type],
+            serviceName = path,
+            authority = requestHost,
+        )
+
+        return sni
+    }
+
+    private fun saveTls(streamSetting: V2rayConfig.OutboundBean.StreamSettingsBean, sni: String?) {
+        val streamSecurity = sp_stream_security?.selectedItemPosition ?: return
+        val sniField = et_sni?.text?.toString()?.trim()
+        val allowInsecureField = sp_allow_insecure?.selectedItemPosition
+        val utlsIndex = sp_stream_fingerprint?.selectedItemPosition ?: 0
+        val alpnIndex = sp_stream_alpn?.selectedItemPosition ?: 0
+        val publicKey = et_public_key?.text?.toString()
+        val shortId = et_short_id?.text?.toString()
+        val spiderX = et_spider_x?.text?.toString()
+
+        val echConfigList = et_echConfigList?.text?.toString()
+        val echServerKeys = et_echServerKeys?.text?.toString()
+        val echForceQuery = et_echForceQuery?.text?.toString()
+
+        val allowInsecure = if (allowInsecureField == null || allowinsecures[allowInsecureField].isBlank()) {
+            !(settingsStorage?.decodeBool(PREF_ALLOW_INSECURE) ?: false)
         } else {
             allowinsecures[allowInsecureField].toBoolean()
         }
 
         streamSetting.populateTlsSettings(
-                streamSecurity = streamSecuritys[streamSecurity],
-                allowInsecure = allowInsecure,
-                sni = sni,
-                fingerprint = uTlsItems[utlsIndex],
-                alpns = alpns[alpnIndex],
-                publicKey = publicKey,
-                shortId = shortId,
-                spiderX = spiderX
+            streamSecurity = streamSecuritys[streamSecurity],
+            allowInsecure = allowInsecure,
+            sni = sniField ?: sni ?: "",
+            fingerprint = uTlsItems[utlsIndex],
+            alpns = alpns[alpnIndex],
+            publicKey = publicKey,
+            shortId = shortId,
+            spiderX = spiderX,
+            echConfigList = echConfigList,
+            echServerKeys = echServerKeys,
+            echForceQuery = echForceQuery
         )
+
     }
+
 
     private fun transportTypes(network: String?): Array<out String> {
         return when (network) {
             "tcp" -> {
                 tcpTypes
             }
+
             "kcp", "quic" -> {
                 kcpAndQuicTypes
             }
+
             "grpc" -> {
                 grpcModes
             }
+
+            "xhttp" -> {
+                xhttpMode
+            }
+
             else -> {
                 arrayOf("---")
             }
@@ -482,10 +954,12 @@ class ServerActivity : BaseActivity() {
             deleteServer()
             true
         }
+
         R.id.save_config -> {
             saveServer()
             true
         }
+
         else -> super.onOptionsItemSelected(item)
     }
 }
