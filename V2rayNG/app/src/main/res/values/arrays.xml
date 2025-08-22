@@ -72,6 +72,22 @@
         <item>reality</item>
     </string-array>
 
+
+    <string-array name="gfw_fragment" translatable="false">
+        <item>OFF</item>
+        <item>ON for TLS</item>
+        <item>ON for non-TLS</item>
+        <item>ON for generic</item>
+    </string-array>
+
+
+    <string-array name="gfw_mux" translatable="false">
+        <item></item>
+        <item>OFF</item>
+        <item>ON</item>
+    </string-array>
+
+
     <string-array name="streamsecurity_utls" translatable="false">
         <item></item>
         <item>chrome</item>
@@ -83,7 +99,6 @@
         <item>360</item>
         <item>qq</item>
         <item>random</item>
-        <item>randomized</item>
     </string-array>
 
 
