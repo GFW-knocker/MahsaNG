@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.ServerActivity">
+    tools:context=".ui.ServerActivity"
+    android:fitsSystemWindows="true">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -127,6 +128,26 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="@string/server_lab_preshared_key" />
+
+
+            <EditText
+                android:id="@+id/et_preshared_key"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/edit_height"
+                android:inputType="text" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/layout_margin_top_height"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:text="@string/server_lab_reserved" />
 
             <LinearLayout
@@ -216,7 +237,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="wnoise (any HEX,quic,random)" />
+                android:text="wnoise (any HEX,quic,random,none)" />
 
             <EditText
                 android:id="@+id/et_wnoise"
@@ -235,7 +256,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="wnoisecount (1-5,10-15,...)" />
+                android:text="wnoisecount (1-5,10-15,...) max:50" />
 
             <EditText
                 android:id="@+id/et_wnoisecount"
@@ -254,7 +275,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="wnoisedelay (1-5,...)" />
+                android:text="wnoisedelay (1-5,...) max:100" />
 
             <EditText
                 android:id="@+id/et_wnoisedelay"
@@ -273,7 +294,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="wpayloadsize (1-5,10-20,...)" />
+                android:text="wpayloadsize (1-5,10-20,...) max:100" />
 
             <EditText
                 android:id="@+id/et_wpayloadsize"
