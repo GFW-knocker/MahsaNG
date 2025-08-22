@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/activity_horizontal_margin"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/g_frag"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Fragment (if OFF, global settings used)" />
+
+        <Spinner
+            android:id="@+id/sp_frag_array"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/edit_height"
+            android:entries="@array/gfw_fragment"
+            android:nextFocusDown="@+id/et_frag_packets" />
+
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:id="@+id/l_tls_frag"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="packets (tlshello)" />
+
+        <EditText
+            android:id="@+id/et_frag_packets"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/edit_height"
+            android:inputType="none"
+            android:enabled="false"
+            android:text="tlshello"
+            android:nextFocusDown="@+id/et_frag_length" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="length (5, 5-10, 10-20, any range)" />
+
+        <EditText
+            android:id="@+id/et_frag_length"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/edit_height"
+            android:inputType="text"
+            android:hint="10-20"
+            android:nextFocusDown="@+id/et_frag_interval" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="interval (5, 5-10, 10-20, any range)" />
+
+        <EditText
+            android:id="@+id/et_frag_interval"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/edit_height"
+            android:hint="10-20"
+            android:inputType="text" />
+
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:id="@+id/l_nontls_frag"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="packets (fakehost)" />
+
+        <EditText
+            android:id="@+id/et_fakehost_packets"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/edit_height"
+            android:inputType="none"
+            android:enabled="false"
+            android:text="fakehost"
+            android:nextFocusDown="@+id/et_fakehost_domain" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="fakehost domain (microsoft.com, any white domain)" />
+
+        <EditText
+            android:id="@+id/et_fakehost_domain"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/edit_height"
+            android:inputType="text" />
+
+    </LinearLayout>
+
+
+
+
+    <LinearLayout
+        android:id="@+id/l_generic_frag"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="packets (1-1, 1-2, ...)" />
+
+        <EditText
+            android:id="@+id/et_generic_packets"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/edit_height"
+            android:inputType="text"
+            android:text="1-1"
+            android:nextFocusDown="@+id/et_generic_length" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="length (5, 5-8, 10-20, any range)" />
+
+        <EditText
+            android:id="@+id/et_generic_length"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/edit_height"
+            android:inputType="text"
+            android:hint="3-5"
+            android:nextFocusDown="@+id/et_generic_interval" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="interval (5, 5-8, 10-20, any range)" />
+
+        <EditText
+            android:id="@+id/et_generic_interval"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/edit_height"
+            android:hint="5-10"
+            android:inputType="text" />
+
+    </LinearLayout>
+
+
+
+</LinearLayout>

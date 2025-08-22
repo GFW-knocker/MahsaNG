@@ -1,0 +1,57 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/activity_horizontal_margin"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:id="@+id/g_mux"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="MUX (if not set, global settings used)" />
+
+        <Spinner
+            android:id="@+id/sp_mux_array"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/edit_height"
+            android:entries="@array/gfw_mux"
+            android:nextFocusDown="@+id/et_mux_concurrency" />
+
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:id="@+id/l_mux_concurrency"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Concurrency (default = 8)" />
+
+        <EditText
+            android:id="@+id/et_mux_concurrency"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/edit_height"
+            android:inputType="number"
+            android:hint="8"
+            android:nextFocusDown="@+id/et_frag_length" />
+
+
+    </LinearLayout>
+
+
+
+</LinearLayout>
