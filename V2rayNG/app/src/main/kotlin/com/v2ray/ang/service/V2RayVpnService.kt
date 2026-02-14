@@ -131,6 +131,7 @@ class V2RayVpnService : VpnService(), ServiceControl {
             builder.addAddress(PRIVATE_VLAN6_CLIENT, 126)
             if (routingMode == ERoutingMode.BYPASS_LAN.value || routingMode == ERoutingMode.BYPASS_LAN_MAINLAND.value) {
                 builder.addRoute("2000::", 3) //currently only 1/8 of total ipV6 is in use
+                builder.addRoute("fc00::", 18) //Xray-core default FakeIPv6 Pool
             } else {
                 builder.addRoute("::", 0)
             }
