@@ -36,15 +36,123 @@
                 android:padding="10dp"/>
         </TableRow>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#CCCCCC" />
+
         <TableRow
             android:layout_width="wrap_content"
             android:layout_height="match_parent" >
+
             <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/switch_warp8"
+                android:id="@+id/switch_psiphon_alone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="WARP"
+                android:text="Psiphon only"
                 android:padding="10dp" />
+
+            <TextView
+                android:id="@+id/textView617"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="psiphon alone"
+                android:padding="15dp" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" >
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/switch_psiphon_after"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="psiphon after"
+                android:padding="10dp" />
+
+            <TextView
+                android:id="@+id/textView618"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="after config"
+                android:padding="15dp" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" >
+
+            <Button
+                android:id="@+id/button_psiphon_setting8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:textColor="@color/color_btn_get_txt"
+                android:backgroundTint="@color/color_btn_get_config"
+                android:text="Psiphon setting" />
+
+            <TextView
+                android:id="@+id/textView622"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="psiphon settings"
+                android:padding="15dp" />
+
+        </TableRow>
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#CCCCCC" />
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" >
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/switch_warp_before"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="WARP before"
+                android:padding="10dp" />
+
+            <TextView
+                android:id="@+id/textView417"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="before config"
+                android:padding="15dp" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" >
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/switch_warp_after"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="WARP after"
+                android:padding="10dp" />
+
+            <TextView
+                android:id="@+id/textView418"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="after config"
+                android:padding="15dp" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" >
+
             <Button
                 android:id="@+id/button_warp_setting8"
                 android:layout_width="wrap_content"
@@ -54,7 +162,20 @@
                 android:backgroundTint="@color/color_btn_get_config"
                 android:text="WARP setting" />
 
+            <TextView
+                android:id="@+id/textView420"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="internal warp setup"
+                android:padding="15dp" />
+
         </TableRow>
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#CCCCCC" />
 
         <TableRow
             android:layout_width="wrap_content"
