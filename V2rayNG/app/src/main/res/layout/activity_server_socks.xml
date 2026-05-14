@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.ServerActivity">
+    tools:context=".feature.server.ServerActivity"
+    android:fitsSystemWindows="true">
 
     <LinearLayout
         android:layout_width="match_parent"

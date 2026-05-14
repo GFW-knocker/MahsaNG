@@ -20,7 +20,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="dnstt config"
+                android:text="MasterDns v2026.05.10"
                 android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
         </LinearLayout>
 
@@ -43,57 +43,49 @@
 
         </LinearLayout>
 
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/layout_margin_top_height"
-            android:orientation="vertical"
-            android:visibility="gone">
+            android:orientation="vertical">
 
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/server_lab_address3" />
+                android:text="Resolver IP" />
 
             <EditText
                 android:id="@+id/et_address"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/edit_height"
+                android:hint="8.8.8.8"
                 android:inputType="text" />
         </LinearLayout>
-
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/layout_margin_top_height"
-            android:orientation="vertical"
-            android:visibility="gone">
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/server_lab_port3" />
+                android:text="Resolver Port (default 53)" />
 
             <EditText
                 android:id="@+id/et_port"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/edit_height"
+                android:hint="53"
                 android:inputType="number" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/layout_margin_top_height"
             android:orientation="vertical"
             android:visibility="gone">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/server_lab_id4" />
 
             <EditText
                 android:id="@+id/et_id"
@@ -109,12 +101,56 @@
             android:orientation="vertical">
 
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="dns ip" />
+                android:text="Domains (one per line)" />
 
             <EditText
-                android:id="@+id/et_dnsip"
+                android:id="@+id/et_masterdns_domains"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minLines="2"
+                android:gravity="top"
+                android:hint="v.domain.com"
+                android:inputType="textMultiLine" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/layout_margin_top_height"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Additional Resolvers (one per line, optional)" />
+
+            <EditText
+                android:id="@+id/et_masterdns_resolvers"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minLines="2"
+                android:gravity="top"
+                android:hint="8.8.8.8"
+                android:inputType="textMultiLine" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/layout_margin_top_height"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Encryption Key" />
+
+            <EditText
+                android:id="@+id/et_masterdns_encryption_key"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/edit_height"
                 android:inputType="text" />
@@ -130,136 +166,15 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="dns port" />
-
-            <EditText
-                android:id="@+id/et_dnsport"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/edit_height"
-                android:inputType="number" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/layout_margin_top_height"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="dns domain" />
-
-
-            <EditText
-                android:id="@+id/et_dnsdomain"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/edit_height"
-                android:inputType="text" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/layout_margin_top_height"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="dns PublicKey" />
-
-            <EditText
-                android:id="@+id/et_dnspubkey"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/edit_height"
-                android:inputType="text" />
-
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/layout_margin_top_height"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="protocol" />
+                android:text="Data Encryption Method" />
 
             <Spinner
-                android:id="@+id/sp_dnsprotocol"
+                android:id="@+id/sp_masterdns_encryption_method"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/edit_height"
-                android:entries="@array/dnstt_protocol" />
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:id="@+id/l_socksuser"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/layout_margin_top_height"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="socks user (optional)" />
-
-
-            <EditText
-                android:id="@+id/et_socksuser"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/edit_height"
-                android:inputType="text" />
+                android:entries="@array/masterdns_encryption_method" />
 
         </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/l_sockspassword"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/layout_margin_top_height"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="socks password (optional)" />
-
-            <EditText
-                android:id="@+id/et_sockspassword"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/edit_height"
-                android:inputType="text" />
-
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:id="@+id/l_vlessuuid"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/layout_margin_top_height"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="vless UUID (optional)" />
-
-            <EditText
-                android:id="@+id/et_vlessuuid"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/edit_height"
-                android:inputType="text" />
-
-        </LinearLayout>
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -270,13 +185,94 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="permit" />
+                android:text="Permit" />
 
             <Spinner
-                android:id="@+id/sp_dnspermit"
+                android:id="@+id/sp_masterdns_permit"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/edit_height"
                 android:entries="@array/dnstt_permit" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/layout_margin_top_height"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Min Upload MTU" />
+
+            <EditText
+                android:id="@+id/et_masterdns_min_upload_mtu"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/edit_height"
+                android:hint="38"
+                android:inputType="number" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/layout_margin_top_height"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Min Download MTU" />
+
+            <EditText
+                android:id="@+id/et_masterdns_min_download_mtu"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/edit_height"
+                android:hint="100"
+                android:inputType="number" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/layout_margin_top_height"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Max Upload MTU" />
+
+            <EditText
+                android:id="@+id/et_masterdns_max_upload_mtu"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/edit_height"
+                android:hint="150"
+                android:inputType="number" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/layout_margin_top_height"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Max Download MTU" />
+
+            <EditText
+                android:id="@+id/et_masterdns_max_download_mtu"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/edit_height"
+                android:hint="500"
+                android:inputType="number" />
+
         </LinearLayout>
 
         <LinearLayout

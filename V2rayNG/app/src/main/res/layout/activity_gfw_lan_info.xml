@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".GFW_lan_info_Activity"
+    tools:context=".feature.laninfo.GFW_lan_info_Activity"
     android:fitsSystemWindows="true">
 
     <LinearLayout
@@ -206,6 +206,54 @@
             </TableRow>
 
 
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+
+                    <Button
+                        android:id="@+id/ipapi_direct"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:padding="15dp"
+                        android:textColor="@color/color_btn_get_txt"
+                        android:backgroundTint="@color/color_btn_light_blue2"
+                        android:text="IP-API" />
+
+
+                    <Button
+                        android:id="@+id/ipapi_vpn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:padding="15dp"
+                        android:textColor="@color/color_btn_get_txt"
+                        android:backgroundTint="@color/color_btn_light_blue2"
+                        android:text="IP-API over vpn" />
+
+
+                    <Button
+                        android:id="@+id/ipinfo_clear"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:padding="15dp"
+                        android:textColor="@color/color_btn_clear_txt"
+                        android:backgroundTint="@color/color_btn_get_config_light4"
+                        android:text="CLEAR" />
+
+
+                </RelativeLayout>
+
+            </TableRow>
+
+
 
         </LinearLayout>
 
@@ -226,6 +274,7 @@
                 android:padding="15dp"
                 android:autoLink="web"
                 android:linksClickable="true"
+                android:textIsSelectable="true"
                 android:textColor="#009E12"
                 android:textSize="16sp"
                 android:text="" />

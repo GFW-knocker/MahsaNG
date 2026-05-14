@@ -20,10 +20,11 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="dnstt config"
+                android:text="FlowDriver v0.0.5 (high latency, no ping)"
                 android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
         </LinearLayout>
 
+        <!-- Remarks -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -40,21 +41,34 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/edit_height"
                 android:inputType="text" />
-
         </LinearLayout>
 
-
+        <!-- Target IP (address:port) -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/layout_margin_top_height"
-            android:orientation="vertical"
-            android:visibility="gone">
+            android:orientation="vertical">
 
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/server_lab_address3" />
+                android:text="Target IP (host:port)" />
+
+            <EditText
+                android:id="@+id/et_flowdriver_target_ip"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/edit_height"
+                android:hint="216.239.38.120:443"
+                android:inputType="text" />
+        </LinearLayout>
+
+        <!-- Hidden address/port/id fields required by ServerActivity -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
 
             <EditText
                 android:id="@+id/et_address"
@@ -63,18 +77,11 @@
                 android:inputType="text" />
         </LinearLayout>
 
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/layout_margin_top_height"
             android:orientation="vertical"
             android:visibility="gone">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/server_lab_port3" />
 
             <EditText
                 android:id="@+id/et_port"
@@ -86,14 +93,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/layout_margin_top_height"
             android:orientation="vertical"
             android:visibility="gone">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/server_lab_id4" />
 
             <EditText
                 android:id="@+id/et_id"
@@ -102,25 +103,7 @@
                 android:inputType="text" />
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/layout_margin_top_height"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="dns ip" />
-
-            <EditText
-                android:id="@+id/et_dnsip"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/edit_height"
-                android:inputType="text" />
-
-        </LinearLayout>
-
+        <!-- SNI -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -130,15 +113,76 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="dns port" />
+                android:text="SNI" />
 
             <EditText
-                android:id="@+id/et_dnsport"
+                android:id="@+id/et_flowdriver_sni"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/edit_height"
+                android:hint="google.com"
+                android:inputType="text" />
+        </LinearLayout>
+
+        <!-- Host Header -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/layout_margin_top_height"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Host Header" />
+
+            <EditText
+                android:id="@+id/et_flowdriver_host_header"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/edit_height"
+                android:hint="www.googleapis.com"
+                android:inputType="text" />
+        </LinearLayout>
+
+        <!-- Google Folder ID -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/layout_margin_top_height"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Google Drive Folder ID" />
+
+            <EditText
+                android:id="@+id/et_flowdriver_folder_id"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/edit_height"
+                android:inputType="text" />
+        </LinearLayout>
+
+        <!-- Refresh Rate ms -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/layout_margin_top_height"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Refresh Rate (ms, min 100)" />
+
+            <EditText
+                android:id="@+id/et_flowdriver_refresh_ms"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/edit_height"
+                android:hint="100"
                 android:inputType="number" />
         </LinearLayout>
 
+        <!-- Flush Rate ms -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -148,17 +192,37 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="dns domain" />
-
+                android:text="Flush Rate (ms)" />
 
             <EditText
-                android:id="@+id/et_dnsdomain"
+                android:id="@+id/et_flowdriver_flush_ms"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/edit_height"
-                android:inputType="text" />
-
+                android:hint="300"
+                android:inputType="number" />
         </LinearLayout>
 
+        <!-- Insecure Skip Verify -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/layout_margin_top_height"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Insecure Skip Verify" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/sw_flowdriver_insecure"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <!-- Credentials JSON -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -168,17 +232,21 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="dns PublicKey" />
+                android:text="credentials.json (paste full content)" />
 
             <EditText
-                android:id="@+id/et_dnspubkey"
+                android:id="@+id/et_flowdriver_credentials"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/edit_height"
-                android:inputType="text" />
-
+                android:layout_height="wrap_content"
+                android:minLines="4"
+                android:gravity="top"
+                android:hint="{...}"
+                android:inputType="textMultiLine"
+                android:fontFamily="monospace"
+                android:textSize="12sp" />
         </LinearLayout>
 
-
+        <!-- Credentials Token -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -188,95 +256,18 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="protocol" />
-
-            <Spinner
-                android:id="@+id/sp_dnsprotocol"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/edit_height"
-                android:entries="@array/dnstt_protocol" />
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:id="@+id/l_socksuser"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/layout_margin_top_height"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="socks user (optional)" />
-
+                android:text="credentials.json.token (paste full content)" />
 
             <EditText
-                android:id="@+id/et_socksuser"
+                android:id="@+id/et_flowdriver_token"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/edit_height"
-                android:inputType="text" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/l_sockspassword"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/layout_margin_top_height"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="socks password (optional)" />
-
-            <EditText
-                android:id="@+id/et_sockspassword"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/edit_height"
-                android:inputType="text" />
-
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:id="@+id/l_vlessuuid"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/layout_margin_top_height"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="vless UUID (optional)" />
-
-            <EditText
-                android:id="@+id/et_vlessuuid"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/edit_height"
-                android:inputType="text" />
-
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/layout_margin_top_height"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="permit" />
-
-            <Spinner
-                android:id="@+id/sp_dnspermit"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/edit_height"
-                android:entries="@array/dnstt_permit" />
+                android:minLines="4"
+                android:gravity="top"
+                android:hint="{...}"
+                android:inputType="textMultiLine"
+                android:fontFamily="monospace"
+                android:textSize="12sp" />
         </LinearLayout>
 
         <LinearLayout
