@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context=".feature.tunnel.GFW_tunnel_config_Activity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:focusable="false"> <ScrollView
+        android:id="@+id/scrollView_info"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="8dp"
+        android:focusable="true"
+        android:clickable="true"
+        android:background="@drawable/tv_focus_bg"
+        android:nextFocusDown="@+id/mahsa_EMS_repo_checkbox">
+
+        <TextView
+            android:id="@+id/textView_info7"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:autoLink="web"
+            android:linksClickable="true"
+            android:text="@string/description6"
+            android:textColor="@color/colorWhite" />
+    </ScrollView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            android:layout_gravity="center"
+            android:layout_weight="1.8"
+            android:padding="16dp"
+            android:focusable="false">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="10dp">
+
+                <CheckBox
+                    android:id="@+id/mahsa_EMS_repo_checkbox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Mahsa Repo"
+                    android:padding="10dp"
+                    android:checked="true"
+                    android:focusable="true"
+                    android:background="@drawable/tv_focus_bg"
+                    android:nextFocusUp="@+id/scrollView_info"
+                    android:nextFocusRight="@+id/mahsa_EMS__repo"
+                    android:nextFocusDown="@+id/manual_EMS_repo_checkbox" />
+
+                <EditText
+                    android:id="@+id/mahsa_EMS__repo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="text"
+                    android:padding="12dp"
+                    android:enabled="false"
+                    android:focusable="true"
+                    android:background="@drawable/tv_focus_bg"
+                    android:nextFocusLeft="@+id/mahsa_EMS_repo_checkbox"
+                    android:nextFocusDown="@+id/manual_EMS_repo_edittext"
+                    android:text="mahsa emergency repository" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <CheckBox
+                    android:id="@+id/manual_EMS_repo_checkbox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Manual Repo"
+                    android:padding="10dp"
+                    android:checked="false"
+                    android:focusable="true"
+                    android:background="@drawable/tv_focus_bg"
+                    android:nextFocusUp="@+id/mahsa_EMS_repo_checkbox"
+                    android:nextFocusRight="@+id/manual_EMS_repo_edittext"
+                    android:nextFocusDown="@+id/EMS_button1" />
+
+                <EditText
+                    android:id="@+id/manual_EMS_repo_edittext"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="text"
+                    android:padding="12dp"
+                    android:hint="Enter URL..."
+                    android:focusable="true"
+                    android:background="@drawable/tv_focus_bg"
+                    android:nextFocusLeft="@+id/manual_EMS_repo_checkbox"
+                    android:nextFocusUp="@+id/mahsa_EMS__repo"
+                    android:nextFocusDown="@+id/EMS_button1" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/EMS_button1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="24dp"
+            android:padding="15dp"
+            android:focusable="true"
+            android:background="@drawable/btn_get_ems"
+            android:textColor="@color/color_btn_get_txt"
+            android:nextFocusUp="@+id/manual_EMS_repo_checkbox"
+            android:text="Get Emergency Config" />
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
