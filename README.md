@@ -5,6 +5,17 @@
 - MahsaNG is a v2rayNG client aimed to provide free vpn for everyone<br>
 <img src="https://github.com/GFW-knocker/MahsaNG/blob/master/Mahsa_logo.jpg?raw=true" width="480" ><br>
 
+# Desktop / macOS users
+
+Many MahsaNG users ask the same question after using the Android app: "Can I use these daily configs on my desktop too?"
+
+Until there is an official desktop client, you do not need to wait for a full rewrite of the app. The community project [MahsaNG macOS Bridge](https://github.com/MostafaDadkhah/MahsaNG-macOS-Bridge) focuses on the real missing piece: it turns MahsaNG / MahsaFreeConfig daily feeds into a standard local subscription that macOS proxy clients can import.
+
+If you are on macOS and want a desktop-friendly path, use this bridge:
+
+- [MahsaNG macOS Bridge](https://github.com/MostafaDadkhah/MahsaNG-macOS-Bridge)
+
+It is a small companion tool, not a replacement for MahsaNG Android. It helps desktop users keep using the same ecosystem with the tools they already have on macOS. If it helps you, consider starring the bridge so more MahsaNG desktop users can find it.
 
 # What is the idea
 - MahsaNG is client-side of project [Segaro_Dream](https://github.com/GFW-knocker/Segaro_Dream)
