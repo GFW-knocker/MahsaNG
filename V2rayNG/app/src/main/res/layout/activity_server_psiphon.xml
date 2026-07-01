@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="15dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="2dp"
+            android:textStyle="bold"
+            android:text="Remark" />
+
+        <EditText
+            android:id="@+id/et_psi_remarks"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:inputType="text"
+            android:hint="psiphon config name" />
+
+        <!-- Shown only for AES-crypted configs (locked) -->
+        <TextView
+            android:id="@+id/tv_psi_crypted_notice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:textStyle="bold"
+            android:text="This psiphon config is AES-encrypted.\nIts settings are hidden and cannot be edited here.\nOnly the remark above can be changed." />
+
+        <EditText
+            android:id="@+id/et_psi_crypted_token"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_marginBottom="8dp"
+            android:enabled="false"
+            android:focusable="false"
+            android:minLines="2"
+            android:maxLines="4"
+            android:gravity="top|start"
+            android:textSize="11sp"
+            android:inputType="textMultiLine"
+            android:hint="encrypted body" />
+
+        <!-- Editable settings (raw configs and new configs) -->
+        <LinearLayout
+            android:id="@+id/container_psi_fields"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="2dp"
+                android:textStyle="bold"
+                android:text="Country" />
+
+            <Spinner
+                android:id="@+id/sp_psi_country"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:entries="@array/psiphon_country_list" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="2dp"
+                android:textStyle="bold"
+                android:text="Protocol" />
+
+            <Spinner
+                android:id="@+id/sp_psi_protocol"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:entries="@array/psiphon_protocol_list" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="2dp"
+                android:textStyle="bold"
+                android:text="Aggressive" />
+
+            <Spinner
+                android:id="@+id/sp_psi_aggressive"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:entries="@array/psiphon_aggressive_list" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#33888888"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="4dp"
+                android:textStyle="bold"
+                android:textSize="13sp"
+                android:text="CDN Fronting (used when Protocol == cdn_fronting)" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="2dp"
+                android:textStyle="bold"
+                android:text="CDN type" />
+
+            <Spinner
+                android:id="@+id/sp_psi_cdn_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:entries="@array/psiphon_cdn_type_list" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="6dp">
+
+                <CheckBox
+                    android:id="@+id/cb_psi_tls"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="12dp"
+                    android:checked="true"
+                    android:text="tls" />
+
+                <CheckBox
+                    android:id="@+id/cb_psi_http"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="12dp"
+                    android:checked="true"
+                    android:text="http" />
+
+                <CheckBox
+                    android:id="@+id/cb_psi_quic"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="quic" />
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="2dp"
+                android:textStyle="bold"
+                android:text="CDN IPs" />
+
+            <EditText
+                android:id="@+id/et_psi_cdn_ips"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:minLines="3"
+                android:maxLines="5"
+                android:gravity="top|start"
+                android:inputType="textMultiLine"
+                android:scrollbars="vertical"
+                android:hint="one IP per line or comma-separated (empty = default)" />
+
+            <TextView
+                android:id="@+id/tv_psi_cdn_sni_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="2dp"
+                android:textStyle="bold"
+                android:text="SNI server name" />
+
+            <EditText
+                android:id="@+id/et_psi_cdn_sni"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:inputType="textUri"
+                android:hint="leave empty for default" />
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TableRow>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:textStyle="bold"
+                        android:text="no-SNI (DisableSNI)" />
+                    <androidx.appcompat.widget.SwitchCompat
+                        android:id="@+id/sw_psi_no_sni"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:checked="false" />
+                </TableRow>
+
+                <TableRow>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:textStyle="bold"
+                        android:text="Skip Cert Verification" />
+                    <androidx.appcompat.widget.SwitchCompat
+                        android:id="@+id/sw_psi_skip_cert"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:checked="true" />
+                </TableRow>
+
+                <TableRow>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:textStyle="bold"
+                        android:text="Add built-in configs" />
+                    <androidx.appcompat.widget.SwitchCompat
+                        android:id="@+id/sw_psi_builtin"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:checked="true" />
+                </TableRow>
+
+            </TableLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>

@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.ServerActivity">
+    tools:context=".feature.server.ServerActivity"
+    android:fitsSystemWindows="true">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -117,6 +118,9 @@
                 android:entries="@array/ss_securitys" />
         </LinearLayout>
 
+        <include layout="@layout/layout_transport" />
+
+        <include layout="@layout/tls_layout" />
 
         <LinearLayout
             android:layout_width="match_parent"
