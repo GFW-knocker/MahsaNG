@@ -20,7 +20,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="GooseRelay v1.7.1"
+                android:text="Skirk v0.1.55 (high latency, no ping)"
                 android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
         </LinearLayout>
 
@@ -43,26 +43,20 @@
 
         </LinearLayout>
 
+        <!-- Hidden fields required by ServerActivity -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/layout_margin_top_height"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Google Host" />
+            android:orientation="vertical"
+            android:visibility="gone">
 
             <EditText
                 android:id="@+id/et_address"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/edit_height"
-                android:hint="216.239.38.120"
                 android:inputType="text" />
         </LinearLayout>
 
-        <!-- Hidden port and id fields required by ServerActivity -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -98,16 +92,17 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="SNI (one per line)" />
+                android:text="config (paste client.skirk here)" />
 
             <EditText
-                android:id="@+id/et_gooserelay_sni"
+                android:id="@+id/et_skirk_config"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:minLines="2"
+                android:layout_height="200dp"
                 android:gravity="top"
-                android:hint="www.google.com"
-                android:inputType="textMultiLine" />
+                android:hint="skirk: ..."
+                android:inputType="textMultiLine"
+                android:scrollbars="vertical"
+                android:overScrollMode="always" />
 
         </LinearLayout>
 
@@ -120,73 +115,14 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Script Keys (one per line)" />
+                android:text="Client ID (optional)" />
 
             <EditText
-                android:id="@+id/et_gooserelay_script_keys"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:minLines="2"
-                android:gravity="top"
-                android:hint="script_key"
-                android:inputType="textMultiLine" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/layout_margin_top_height"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Tunnel Key" />
-
-            <EditText
-                android:id="@+id/et_gooserelay_tunnel_key"
+                android:id="@+id/et_skirk_client_id"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/edit_height"
+                android:hint="my-laptop"
                 android:inputType="text" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/layout_margin_top_height"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="SOCKS User (optional)" />
-
-            <EditText
-                android:id="@+id/et_gooserelay_socks_user"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/edit_height"
-                android:inputType="text" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/layout_margin_top_height"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="SOCKS Password (optional)" />
-
-            <EditText
-                android:id="@+id/et_gooserelay_socks_pass"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/edit_height"
-                android:inputType="textPassword" />
 
         </LinearLayout>
 
@@ -202,7 +138,7 @@
                 android:text="Permit" />
 
             <Spinner
-                android:id="@+id/sp_gooserelay_permit"
+                android:id="@+id/sp_skirk_permit"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/edit_height"
                 android:entries="@array/dnstt_permit" />

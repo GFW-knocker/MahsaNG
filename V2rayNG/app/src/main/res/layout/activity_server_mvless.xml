@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.ServerActivity"
+    tools:context=".feature.server.ServerActivity"
     android:fitsSystemWindows="true">
 
     <LinearLayout
@@ -50,6 +50,7 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/tv_address_mvless"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/server_lab_address" />
@@ -142,6 +143,7 @@
         <include layout="@layout/tls_layout"  />
         <include layout="@layout/gfw_fragment_layout"  />
         <include layout="@layout/gfw_mux_layout"  />
+        <include layout="@layout/gfw_permit_layout"  />
 
         <LinearLayout
             android:layout_width="match_parent"
