@@ -1,13 +1,27 @@
 <resources>
 
     <style name="AppThemeDayNight" parent="Theme.AppCompat.DayNight.DarkActionBar">
+        <!-- Swaps inflated text widgets for crash-safe subclasses (drag-shadow bug). -->
+        <item name="viewInflaterClass">com.v2ray.ang.util.SafeAppCompatViewInflater</item>
         <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimaryDark">@color/colorPrimary</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="colorMainBg">@color/colorBg</item>
         <item name="colorMainText">@color/colorText</item>
         <item name="android:statusBarColor">@color/colorPrimary</item>
         <item name="android:navigationBarColor">@color/colorPrimary</item>
+        <item name="android:windowBackground">@color/colorPrimary</item>
+        <item name="alertDialogTheme">@style/AppDialogTheme</item>
+        <item name="materialAlertDialogTheme">@style/AppDialogTheme</item>
+        <item name="actionBarTheme">@style/ThemeOverlay.AppCompat.Light</item>
+    </style>
+
+    <style name="AppDialogTheme" parent="Theme.AppCompat.DayNight.Dialog.Alert">
+        <!-- Swaps inflated text widgets for crash-safe subclasses (drag-shadow bug). -->
+        <item name="viewInflaterClass">com.v2ray.ang.util.SafeAppCompatViewInflater</item>
+        <item name="android:windowBackground">@color/colorPrimary</item>
+        <item name="android:textColorPrimary">@color/colorText</item>
+        <item name="colorAccent">@color/colorAccent</item>
     </style>
 
     <style name="AppThemeDayNight.NoActionBar" parent="AppThemeDayNight">
@@ -17,6 +31,8 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Swaps inflated text widgets for crash-safe subclasses (drag-shadow bug). -->
+        <item name="viewInflaterClass">com.v2ray.ang.util.SafeAppCompatViewInflater</item>
         <!-- Customize your theme here. -->
         <!--<item name="colorPrimary">@color/colorPrimary</item>-->
         <!--<item name="colorPrimaryDark">@color/colorPrimaryDark</item>-->
@@ -38,6 +54,20 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="FabSquircle" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">22dp</item>
+    </style>
+    <style name="ToolbarTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+            <item name="colorControlNormal">@color/colorBlack</item>
+            <item name="android:textColorPrimary">@color/colorText</item>
+    </style>
+    <style name="PopupMenuTheme" parent="ThemeOverlay.AppCompat.DayNight">
+        <item name="android:colorBackground">@color/colorPrimary</item>
+        <item name="android:textColorPrimary">@color/colorText</item>
+        <item name="android:textColorSecondary">@color/colorText</item>
+    </style>
 
 
 </resources>
