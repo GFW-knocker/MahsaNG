@@ -3,6 +3,9 @@
 
     <style name="AppThemeDayNight" parent="Theme.AppCompat.DayNight.DarkActionBar">
 
+        <!-- Swaps inflated text widgets for crash-safe subclasses (drag-shadow bug). -->
+        <item name="viewInflaterClass">com.v2ray.ang.util.SafeAppCompatViewInflater</item>
+
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
@@ -10,6 +13,21 @@
         <item name="colorMainText">@color/colorText</item>
         <item name="android:statusBarColor">@color/colorPrimary</item>
         <item name="android:navigationBarColor">@color/colorPrimary</item>
+        <item name="android:windowBackground">@color/colorPrimary</item>
+        <item name="alertDialogTheme">@style/AppDialogTheme</item>
+        <item name="materialAlertDialogTheme">@style/AppDialogTheme</item>
+        <item name="actionBarTheme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
     </style>
 
+    <style name="AppDialogTheme" parent="Theme.AppCompat.DayNight.Dialog.Alert">
+        <!-- Swaps inflated text widgets for crash-safe subclasses (drag-shadow bug). -->
+        <item name="viewInflaterClass">com.v2ray.ang.util.SafeAppCompatViewInflater</item>
+        <item name="android:windowBackground">@color/colorPrimary</item>
+        <item name="android:textColorPrimary">@color/colorText</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+    <style name="ToolbarTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="colorControlNormal">@color/colorWhite</item>
+        <item name="android:textColorPrimary">@color/colorText</item>
+    </style>
 </resources>
