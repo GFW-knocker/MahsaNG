@@ -1,41 +1,144 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <group
-        android:id="@+id/group_main">
+    <group android:id="@+id/group_social">
         <item
-            android:id="@+id/sub_setting"
-            android:icon="@drawable/ic_subscriptions_white_24dp"
-            android:title="@string/title_sub_setting" />
+            android:id="@+id/social_row"
+            android:enabled="false"
+            app:actionLayout="@layout/drawer_header_social"
+            tools:ignore="MenuTitle" />
+    </group>
+
+    <group android:id="@+id/group_main">
+
         <item
-            android:id="@+id/settings"
-            android:icon="@drawable/ic_settings_white_24dp"
-            android:title="@string/title_settings" />
+            android:id="@+id/GFW_ads_block"
+            android:icon="@drawable/ic_ads_block"
+            android:title="@string/title_GFW_ads_block"
+            app:actionLayout="@layout/item_switch" />
+
         <item
-                android:id="@+id/user_asset_setting"
-                android:icon="@drawable/ic_file_white_24dp"
-                android:title="@string/title_user_asset_setting" />
+            android:id="@+id/GFW_malicious_block"
+            android:icon="@drawable/ic_block_malicious"
+            android:title="@string/title_GFW_malicious_block"
+            app:actionLayout="@layout/item_switch" />
+
+        <item
+            android:id="@+id/GFW_github_config"
+            android:icon="@drawable/ic_get_free_config"
+            android:title="@string/title_GFW_github_config" />
+
+
+        <item
+            android:id="@+id/GFW_warp_generate"
+            android:icon="@drawable/ic_internal_warp"
+            android:title="@string/title_GFW_warp_generate" />
+
+        <item
+            android:id="@+id/GFW_masque_generate"
+            android:icon="@drawable/ic_masque_relay"
+            android:title="@string/title_GFW_masque_generate" />
+
+
+        <item
+            android:id="@+id/GFW_youtube_config"
+            android:icon="@drawable/ic_add_youtube"
+            android:title="@string/title_GFW_youtube_config" />
+
+
+        <item
+            android:id="@+id/GFW_tlg_proxy"
+            android:icon="@drawable/ic_telegram_proxy"
+            android:title="@string/title_GFW_tlg_proxy" />
+
+
+        <item
+            android:id="@+id/GFW_donate_config"
+            android:icon="@drawable/ic_donate"
+            android:title="@string/title_GFW_donate_config" />
+
+
+        <item
+            android:id="@+id/GFW_tunnel_config"
+            android:icon="@drawable/ic_ems_config"
+            android:title="@string/title_GFW_tunnel_config" />
+
+        <item
+            android:id="@+id/GFW_scanner"
+            android:icon="@drawable/ic_dns_scanner"
+            android:title="@string/title_scanner" />
+
+        <item
+            android:id="@+id/GFW_ip_scanner"
+            android:icon="@drawable/ic_ip_scanner"
+            android:title="@string/title_cdn_ip_scanner" />
+
+
+        <item
+            android:id="@+id/network_tools"
+            android:icon="@drawable/ic_network_tools"
+            android:title="@string/title_network_tools" />
+
+        <item
+            android:id="@+id/GFW_psiphon_setting140"
+            android:icon="@drawable/ic_psiphon_setting"
+            android:title="@string/title_GFW_psiphon_setting" />
+
+        <item
+            android:id="@+id/GFW_warp_setting"
+            android:icon="@drawable/ic_add_warp"
+            android:title="@string/title_GFW_warp_setting" />
+
+        <item
+            android:id="@+id/GFW_update"
+            android:icon="@drawable/ic_gfw_params"
+            android:title="@string/title_GFW_update" />
+
     </group>
 
     <group android:id="@+id/group_id2">
         <item
-            android:id="@+id/promotion"
-            android:icon="@drawable/ic_whatshot_white_24dp"
-            android:title="@string/title_pref_promotion" />
+            android:id="@+id/sub_setting"
+            android:icon="@drawable/ic_subscription_group"
+            android:title="@string/title_sub_setting" />
+
+        <item
+            android:id="@+id/config_backup"
+            android:icon="@drawable/ic_config_backup"
+            android:title="@string/title_config_backup" />
+
+        <item
+            android:id="@+id/settings"
+            android:icon="@drawable/ic_settings"
+            android:title="@string/title_settings" />
+
+        <item
+            android:id="@+id/user_asset_setting"
+            android:icon="@drawable/ic_geo_assets"
+            android:title="@string/title_user_asset_setting" />
+
         <item
             android:id="@+id/logcat"
-            android:icon="@drawable/ic_logcat_white_24dp"
+            android:icon="@drawable/ic_logcat"
             android:title="@string/title_logcat" />
+
+
         <item
-            android:id="@+id/feedback"
-            android:icon="@drawable/ic_feedback_white_24dp"
-            android:title="@string/title_pref_feedback" />
-        <!-- place holder for version text at the bottom -->
-        <item
-            android:id="@+id/placeholder"
-            android:enabled="false"
-            android:title="" />
+            android:id="@+id/GFW_about"
+            android:icon="@drawable/ic_about"
+            android:title="@string/title_about" />
+
+
     </group>
+
+    <!-- place holder for version text at the bottom -->
+    <item
+        android:id="@+id/placeholder"
+        android:enabled="false"
+        android:title="@string/core_version_hardcoded" />
+
+
 </menu>
