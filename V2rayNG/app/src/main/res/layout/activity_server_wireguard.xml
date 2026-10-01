@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.ServerActivity"
+    tools:context=".feature.server.ServerActivity"
     android:fitsSystemWindows="true">
 
     <LinearLayout
@@ -237,7 +237,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="wnoise (any HEX,quic,random,none)" />
+                android:text="wnoise (any HEX,quic,quicv1,quicinit,random,none)" />
 
             <EditText
                 android:id="@+id/et_wnoise"
