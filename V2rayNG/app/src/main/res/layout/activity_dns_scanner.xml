@@ -1,125 +1,389 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    tools:context=".feature.dnsScanner.DnsScannerActivity">
 
-    <TextView
-        android:id="@+id/textViewHeader"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:letterSpacing="0.2"
-        android:textColor="#94A3B8"
-        android:textSize="12sp"
-        android:textStyle="bold"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <FrameLayout
-        android:id="@+id/scannerContainer"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:background="@drawable/bg_circle_outline"
-        app:layout_constraintBottom_toTopOf="@+id/guideline"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewHeader">
-
-        <ProgressBar
-            android:id="@+id/radarProgress"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:indeterminate="true"
-            android:visibility="invisible"
-            android:indeterminateDrawable="@drawable/circular_progress_style"
-          />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/txtStatusPercent"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="sans-serif-black"
-                android:text="@string/status_ready_to_scan"
-                android:textColor="@color/colorText"
-                android:textSize="16sp" />
-
-        </LinearLayout>
-    </FrameLayout>
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.3" />
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/resultCard"
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scanContent"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginHorizontal="24dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginBottom="16dp"
-        app:cardCornerRadius="16dp"
-        app:cardElevation="3dp"
-        app:layout_constraintBottom_toTopOf="@+id/btnAction"
-        app:layout_constraintTop_toBottomOf="@+id/guideline">
+        android:layout_weight="1"
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:paddingBottom="16dp">
+            android:padding="16dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:baselineAligned="false"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <FrameLayout
+                    android:id="@+id/scannerContainer"
+                    android:layout_width="136dp"
+                    android:layout_height="136dp">
+
+                    <com.v2ray.ang.feature.dnsScanner.SegmentedRingView
+                        android:id="@+id/radarProgress"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/imgRingCheck"
+                            android:layout_width="34dp"
+                            android:layout_height="34dp"
+                            android:contentDescription="@null"
+                            android:src="@drawable/ic_check"
+                            android:visibility="gone"
+                            app:tint="@color/ping_ok" />
+
+                        <TextView
+                            android:id="@+id/txtStatusPercent"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/colorText"
+                            android:textDirection="ltr"
+                            android:textSize="26sp"
+                            android:textStyle="bold"
+                            tools:text="32%" />
+
+                        <TextView
+                            android:id="@+id/txtRingScanned"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="monospace"
+                            android:textColor="@color/color_secondary"
+                            android:textDirection="ltr"
+                            android:textSize="11sp"
+                            tools:text="3120/9600" />
+
+                        <TextView
+                            android:id="@+id/txtRingFound"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:textColor="@color/colorAccent"
+                            android:textSize="11sp"
+                            tools:text="Found: 3" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/txtFoundBadge"
+                        android:layout_width="wrap_content"
+                        android:layout_height="22dp"
+                        android:layout_gravity="top|end"
+                        android:layout_marginTop="6dp"
+                        android:layout_marginEnd="6dp"
+                        android:background="@drawable/circle_green"
+                        android:gravity="center"
+                        android:minWidth="22dp"
+                        android:paddingHorizontal="5dp"
+                        android:textColor="@color/colorWhiteFull"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:visibility="invisible"
+                        tools:text="3"
+                        tools:visibility="visible" />
+                </FrameLayout>
+
+                <LinearLayout
+                    android:id="@+id/statsCard"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_card"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="14dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingVertical="8dp">
+
+                        <TextView
+                            android:id="@+id/txtStatLabel1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="8dp"
+                            android:maxLines="1"
+                            android:text="@string/dns_scan_stat_elapsed"
+                            android:textColor="@color/color_secondary"
+                            android:textSize="12sp" />
+
+                        <Space
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:layout_weight="1" />
+
+                        <TextView
+                            android:id="@+id/txtStatValue1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="monospace"
+                            android:text="@string/dns_scan_stat_empty"
+                            android:textColor="@color/colorText"
+                            android:textDirection="ltr"
+                            android:textSize="13sp" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:alpha="0.3"
+                        android:background="@color/color_secondary" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingVertical="8dp">
+
+                        <TextView
+                            android:id="@+id/txtStatLabel2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="8dp"
+                            android:maxLines="1"
+                            android:text="@string/dns_scan_stat_remaining"
+                            android:textColor="@color/color_secondary"
+                            android:textSize="12sp" />
+
+                        <Space
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:layout_weight="1" />
+
+                        <TextView
+                            android:id="@+id/txtStatValue2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="monospace"
+                            android:text="@string/dns_scan_stat_empty"
+                            android:textColor="@color/colorText"
+                            android:textDirection="ltr"
+                            android:textSize="13sp" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:alpha="0.3"
+                        android:background="@color/color_secondary" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingVertical="8dp">
+
+                        <TextView
+                            android:id="@+id/txtStatLabel3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="8dp"
+                            android:maxLines="1"
+                            android:text="@string/dns_scan_stat_speed"
+                            android:textColor="@color/color_secondary"
+                            android:textSize="12sp" />
+
+                        <Space
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:layout_weight="1" />
+
+                        <TextView
+                            android:id="@+id/txtStatValue3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="monospace"
+                            android:text="@string/dns_scan_stat_empty"
+                            android:textColor="@color/colorAccent"
+                            android:textDirection="ltr"
+                            android:textSize="13sp" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:alpha="0.3"
+                        android:background="@color/color_secondary" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingVertical="8dp">
+
+                        <TextView
+                            android:id="@+id/txtStatLabel4"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="8dp"
+                            android:maxLines="1"
+                            android:text="@string/dns_scan_stat_hit_rate"
+                            android:textColor="@color/color_secondary"
+                            android:textSize="12sp" />
+
+                        <Space
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:layout_weight="1" />
+
+                        <TextView
+                            android:id="@+id/txtStatValue4"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="monospace"
+                            android:text="@string/dns_scan_stat_empty"
+                            android:textColor="@color/colorText"
+                            android:textDirection="ltr"
+                            android:textSize="13sp" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <include
+                android:id="@+id/layoutErrorState"
+                layout="@layout/layout_error_state"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:id="@+id/logStrip"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/bg_dns_log_strip"
+                android:gravity="center_vertical"
+                android:minHeight="64dp"
+                android:orientation="horizontal"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="8dp">
+
+                <ImageView
+                    android:id="@+id/imgStripCheck"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_marginEnd="8dp"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_check"
+                    android:visibility="gone"
+                    app:tint="@color/ping_ok" />
+
+                <TextView
+                    android:id="@+id/txtLog"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:fontFamily="monospace"
+                    android:gravity="bottom|start"
+                    android:lines="3"
+                    android:maxLines="3"
+                    android:textColor="@color/text_hint"
+                    android:textDirection="ltr"
+                    android:textSize="11.5sp"
+                    tools:text="185.51.200.2  timeout\n2.188.21.130  refused\n78.157.42.100  ✓ 41ms" />
+
+                <TextView
+                    android:id="@+id/txtStripMessage"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textColor="@color/ping_ok"
+                    android:textSize="13sp"
+                    android:visibility="gone"
+                    tools:text="Scan finished · 5 resolvers found" />
+            </LinearLayout>
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
-                android:text="@string/top_5_best"
-                android:textColor="@color/colorText"
-                android:textSize="12sp"
-                android:paddingTop="10dp"
+                android:id="@+id/textViewHeader"
+                style="@style/SectionLabel"
+                android:layout_marginTop="20dp"
+                android:text="@string/dns_scan_top_results"
+                android:textColor="@color/color_secondary"
                 android:textStyle="bold" />
 
-            <ScrollView
+            <FrameLayout
+                android:id="@+id/resultCard"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:fadeScrollbars="false">
+                android:layout_height="wrap_content">
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvResults"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:clipToPadding="false"
-                    android:paddingBottom="16dp"
-                    tools:listitem="@layout/item_scan_result" />            </ScrollView>
+                    android:layout_height="wrap_content"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    android:nestedScrollingEnabled="false"
+                    android:overScrollMode="never"
+                    tools:itemCount="5"
+                    tools:listitem="@layout/item_dns_scan_result" />
+            </FrameLayout>
         </LinearLayout>
-    </androidx.cardview.widget.CardView>
+    </androidx.core.widget.NestedScrollView>
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btnAction"
+    <LinearLayout
+        android:id="@+id/footLayout"
+        style="?android:attr/buttonBarStyle"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:layout_margin="24dp"
-        android:background="@drawable/bg_button_rounded"
-        android:text="@string/start"
-        android:textColor="#000000"
-        android:textSize="14sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        android:layout_height="wrap_content"
+        android:baselineAligned="false"
+        android:orientation="horizontal"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="10dp">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <Button
+            android:id="@+id/btnAction"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_card_button_ripple"
+            android:stateListAnimator="@null"
+            android:text="@string/dns_scan_start"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:textSize="15sp" />
+
+        <Button
+            android:id="@+id/btnCopyResults"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:alpha="0.5"
+            android:background="@drawable/bg_card_button_gray"
+            android:enabled="false"
+            android:stateListAnimator="@null"
+            android:text="@string/dns_scan_copy_results"
+            android:textAllCaps="false"
+            android:textColor="@color/colorWhite"
+            android:textSize="15sp" />
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,372 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context=".feature.proxy.TelegramProxyActivity">
+
+    <LinearLayout
+        android:id="@+id/layout_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="12dp">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:layout_width="170dp"
+                    android:layout_height="100dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_margin="10dp"
+                    android:contentDescription="@null"
+                    android:scaleType="fitXY"
+                    app:srcCompat="@drawable/mahsa_banner" />
+
+                <LinearLayout
+                    android:id="@+id/layout_header_tools"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/status_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingHorizontal="20dp">
+
+                        <View
+                            android:id="@+id/dot_header_summary"
+                            android:layout_width="7dp"
+                            android:layout_height="7dp"
+                            android:layout_marginEnd="6dp"
+                            android:background="@drawable/bg_dot_accent"
+                            android:importantForAccessibility="no"
+                            android:visibility="gone"
+                            tools:visibility="visible" />
+
+                        <TextView
+                            android:id="@+id/text_header_summary"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/colorText"
+                            android:textSize="13sp"
+                            tools:text="24 active proxies" />
+
+                        <Space
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:layout_weight="1" />
+
+                        <TextView
+                            android:id="@+id/text_header_updated"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:textColor="@color/color_secondary"
+                            android:textDirection="locale"
+                            android:textSize="12sp"
+                            android:visibility="gone"
+                            tools:text="1 Aug 2026 · 26m ago"
+                            tools:visibility="visible" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:orientation="horizontal"
+                        android:paddingHorizontal="20dp">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <ImageButton
+                                android:id="@+id/btn_sort_ping"
+                                android:layout_width="match_parent"
+                                android:layout_height="48dp"
+                                android:background="@drawable/bg_button_theme"
+                                android:contentDescription="@string/sort_by_ping"
+                                android:padding="12dp"
+                                android:scaleType="fitCenter"
+                                android:src="@drawable/ic_sort_selectable"
+                                app:tint="@color/colorAccent" />
+
+                            <TextView
+                                android:id="@+id/text_sort_label"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:ellipsize="end"
+                                android:gravity="center"
+                                android:maxLines="2"
+                                android:text="@string/sort_by_ping"
+                                android:textColor="@color/colorText"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="6dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <FrameLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="48dp">
+
+                                <ImageButton
+                                    android:id="@+id/btn_test_ping"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:background="@drawable/bg_button_theme"
+                                    android:contentDescription="@string/test_ping"
+                                    android:padding="12dp"
+                                    android:scaleType="fitCenter"
+                                    android:src="@drawable/ic_bolt"
+                                    app:tint="@color/colorAccent" />
+
+                                <ProgressBar
+                                    android:id="@+id/progress_test_ping"
+                                    android:layout_width="16dp"
+                                    android:layout_height="16dp"
+                                    android:layout_gravity="center"
+                                    android:indeterminateTint="@color/colorAccent"
+                                    android:visibility="invisible" />
+                            </FrameLayout>
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:ellipsize="end"
+                                android:gravity="center"
+                                android:maxLines="2"
+                                android:text="@string/test_ping"
+                                android:textColor="@color/colorText"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="6dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <FrameLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="48dp">
+
+                                <ImageButton
+                                    android:id="@+id/btn_real_delay"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:background="@drawable/bg_button_theme"
+                                    android:contentDescription="@string/real_delay_test"
+                                    android:padding="12dp"
+                                    android:scaleType="fitCenter"
+                                    android:src="@drawable/ic_tool_delay"
+                                    app:tint="@color/colorAccent" />
+
+                                <ProgressBar
+                                    android:id="@+id/progress_real_delay"
+                                    android:layout_width="16dp"
+                                    android:layout_height="16dp"
+                                    android:layout_gravity="center"
+                                    android:indeterminateTint="@color/colorAccent"
+                                    android:visibility="invisible" />
+                            </FrameLayout>
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:ellipsize="end"
+                                android:gravity="center"
+                                android:maxLines="2"
+                                android:text="@string/real_delay_test"
+                                android:textColor="@color/colorText"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="6dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <FrameLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="48dp">
+
+                                <ImageButton
+                                    android:id="@+id/btn_single_test"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:background="@drawable/bg_button_accent"
+                                    android:contentDescription="@string/check_proxy"
+                                    android:padding="12dp"
+                                    android:scaleType="fitCenter"
+                                    android:src="@drawable/ic_ping"
+                                    app:tint="@color/colorBlackText" />
+
+                                <ProgressBar
+                                    android:id="@+id/progress_check_proxy"
+                                    android:layout_width="16dp"
+                                    android:layout_height="16dp"
+                                    android:layout_gravity="center"
+                                    android:indeterminateTint="@color/colorBlackText"
+                                    android:visibility="invisible" />
+                            </FrameLayout>
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:ellipsize="end"
+                                android:gravity="center"
+                                android:maxLines="2"
+                                android:text="@string/check_proxy"
+                                android:textColor="@color/colorText"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="6dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <ImageButton
+                                android:id="@+id/btn_clear_results"
+                                android:layout_width="match_parent"
+                                android:layout_height="48dp"
+                                android:background="@drawable/bg_button_theme"
+                                android:contentDescription="@string/clear_results"
+                                android:padding="12dp"
+                                android:scaleType="fitCenter"
+                                android:src="@drawable/ic_delete_black_24dp"
+                                app:tint="@color/colorAccent" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:ellipsize="end"
+                                android:gravity="center"
+                                android:maxLines="2"
+                                android:text="@string/clear_results"
+                                android:textColor="@color/colorText"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:layout_marginHorizontal="20dp"
+                        android:layout_marginTop="16dp"
+                        android:background="@color/card_border"
+                        android:importantForAccessibility="no" />
+
+                </LinearLayout>
+
+                <FrameLayout
+                    android:id="@+id/layout_list_loading"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1">
+
+                    <ProgressBar
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_gravity="center"
+                        android:indeterminateTint="@color/text_hint" />
+                </FrameLayout>
+
+                <include
+                    android:id="@+id/layout_error"
+                    layout="@layout/layout_error_state"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:visibility="gone" />
+
+                <LinearLayout
+                    android:id="@+id/layout_list_empty"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    tools:visibility="visible">
+
+
+                    <ImageView
+                        android:layout_width="52dp"
+                        android:layout_height="52dp"
+                        android:layout_gravity="center"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_radar_empty"
+                        app:tint="@color/color_secondary" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="@string/proxy_list_empty"
+                        android:textColor="@color/colorText"
+                        android:textSize="14sp" />
+
+
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_proxies"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false"
+                    android:overScrollMode="never" />
+
+
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+        <Button
+            android:id="@+id/btn_copy_selected"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/bg_card_button_ripple"
+            android:fontFamily="sans-serif-medium"
+            android:minHeight="52dp"
+            android:stateListAnimator="@null"
+            android:text="@string/select_proxies_to_copy"
+            android:textAllCaps="false"
+            android:textColor="@color/primary_button_text"
+            android:textSize="15sp" />
+    </LinearLayout>
+</FrameLayout>
