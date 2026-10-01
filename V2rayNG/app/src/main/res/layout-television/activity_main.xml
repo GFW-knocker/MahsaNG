@@ -18,16 +18,17 @@
             android:layout_height="wrap_content"
             android:elevation="0dp"
             android:focusable="false"
+            android:theme="@style/ThemeOverlay.Tv.ToolbarButtons"
+            android:touchscreenBlocksFocus="false"
             app:elevation="0dp">
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:clickable="true"
                 android:descendantFocusability="afterDescendants"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
+                android:focusable="false"
+                android:touchscreenBlocksFocus="false"
                 android:nextFocusDown="@+id/report_flag_button"
                 app:popupTheme="@style/PopupMenuTheme"
                 app:theme="@style/ToolbarTheme" />

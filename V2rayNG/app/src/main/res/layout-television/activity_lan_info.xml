@@ -1,0 +1,507 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingHorizontal="24dp"
+    android:paddingVertical="32dp"
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    android:fitsSystemWindows="true">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:baselineAligned="false"
+            android:orientation="horizontal"
+            android:paddingHorizontal="20dp"
+            android:paddingTop="24dp"
+            android:paddingBottom="16dp"
+            android:clipToPadding="false"
+            android:clipChildren="false">
+
+            <FrameLayout
+                android:id="@+id/snackbarContainer"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="20dp"
+                android:layout_weight="1"
+                android:clipChildren="false"
+                android:clipToPadding="false">
+
+            <LinearLayout
+                android:id="@+id/leftColumn"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipChildren="false"
+                android:clipToPadding="false"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/network_check_title"
+                    android:textColor="@color/colorText"
+                    android:textSize="17sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginBottom="16dp"
+                    android:text="@string/network_check_subtitle"
+                    android:textColor="@color/color_secondary"
+                    android:textSize="12sp" />
+
+                <LinearLayout
+                    android:id="@+id/info_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_card"
+                    android:baselineAligned="false"
+                    android:minHeight="58dp"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="14dp">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="10dp"
+                        android:layout_weight="0.6"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingVertical="8dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.6"
+                            android:text="@string/ip_domain"
+                            android:textColor="@color/colorText"
+                            android:textSize="14sp"
+                            tools:ignore="NestedWeights" />
+
+                        <EditText
+                            android:id="@+id/editIpDomain"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:autofillHints=""
+                            android:imeOptions="actionNext"
+                            android:inputType="textUri"
+                            android:background="@drawable/bg_edit_field"
+                            android:hint="@string/ip_domain_default"
+                            android:maxLines="1"
+                            android:textColor="@color/colorText"
+                            android:textColorHint="@color/color_secondary"
+                            android:textSize="15sp">
+
+                            <requestFocus />
+
+                        </EditText>
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginVertical="10dp"
+                        android:layout_marginEnd="14dp"
+                        android:alpha="0.3"
+                        android:background="@color/color_secondary" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.4"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingVertical="8dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.6"
+                            android:text="@string/port"
+                            android:textColor="@color/colorText"
+                            android:textSize="14sp"
+                            tools:ignore="NestedWeights" />
+
+                        <EditText
+                            android:id="@+id/editPort"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:autofillHints=""
+                            android:background="@drawable/bg_edit_field"
+                            android:hint="@string/port_default"
+                            android:inputType="number"
+                            android:maxLines="1"
+                            android:textColor="@color/colorText"
+                            android:textColorHint="@color/color_secondary"
+                            android:textSize="15sp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tvFieldError"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginTop="4dp"
+                    android:textColor="@color/color_field_error"
+                    android:textSize="12sp"
+                    android:visibility="gone"
+                    tools:text="Please enter an IP or domain"
+                    tools:visibility="visible" />
+
+                <TextView
+                    style="@style/SectionLabel"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="4dp"
+                    android:text="@string/section_domain_checks" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="6dp"
+                    android:baselineAligned="false"
+                    android:clipChildren="false"
+                    android:clipToPadding="false"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:id="@+id/btnDns"
+                        style="@style/CustomIconButton"
+                        android:layout_marginEnd="12dp"
+                        android:minHeight="52dp"
+                        android:paddingVertical="8dp"
+                        android:background="@drawable/bg_button_theme">
+
+                        <ImageView
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:contentDescription="@null"
+                            android:src="@drawable/ic_dns_net"
+                            app:tint="@color/color_secondary" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:text="@string/dns"
+                            android:textAllCaps="false"
+                            android:textColor="@color/colorText"
+                            android:textSize="13sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/btnDnsOverVpn"
+                        style="@style/CustomIconButton"
+                        android:minHeight="52dp"
+                        android:paddingVertical="8dp"
+                        android:background="@drawable/bg_button_theme">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:contentDescription="@null"
+                            android:src="@drawable/ic_dns_over_vpn"
+                            app:tint="@color/color_secondary" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:text="@string/dns_over_vpn"
+                            android:textAllCaps="false"
+                            android:textColor="@color/colorText"
+                            android:textSize="13sp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <TextView
+                    style="@style/SectionLabel"
+                    android:layout_marginBottom="4dp"
+                    android:text="@string/section_http_checks" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="6dp"
+                    android:baselineAligned="false"
+                    android:clipChildren="false"
+                    android:clipToPadding="false"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:id="@+id/btnHttp"
+                        style="@style/CustomIconButton"
+                        android:layout_marginEnd="12dp"
+                        android:minHeight="52dp"
+                        android:paddingVertical="8dp"
+                        android:background="@drawable/bg_button_theme">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:contentDescription="@null"
+                            android:src="@drawable/ic_http"
+                            app:tint="@color/color_secondary" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:text="@string/http"
+                            android:textAllCaps="false"
+                            android:textColor="@color/colorText"
+                            android:textSize="13sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/btnHttpOverVpn"
+                        style="@style/CustomIconButton"
+                        android:minHeight="52dp"
+                        android:paddingVertical="8dp"
+                        android:background="@drawable/bg_button_theme">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:contentDescription="@null"
+                            android:src="@drawable/ic_http_over_vpn"
+                            app:tint="@color/color_secondary" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:text="@string/http_over_vpn"
+                            android:textAllCaps="false"
+                            android:textColor="@color/colorText"
+                            android:textSize="13sp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <TextView
+                    style="@style/SectionLabel"
+                    android:layout_marginBottom="4dp"
+                    android:text="@string/section_ip_api_checks" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="6dp"
+                    android:baselineAligned="false"
+                    android:clipChildren="false"
+                    android:clipToPadding="false"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:id="@+id/btnIpApi"
+                        style="@style/CustomIconButton"
+                        android:layout_marginEnd="12dp"
+                        android:minHeight="52dp"
+                        android:paddingVertical="8dp"
+                        android:background="@drawable/bg_button_theme">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:contentDescription="@null"
+                            android:src="@drawable/ic_ip_api"
+                            app:tint="@color/color_secondary" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:text="@string/ip_api"
+                            android:textAllCaps="false"
+                            android:textColor="@color/colorText"
+                            android:textSize="13sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/btnIpApiOverVpn"
+                        style="@style/CustomIconButton"
+                        android:minHeight="52dp"
+                        android:paddingVertical="8dp"
+                        android:background="@drawable/bg_button_theme">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:contentDescription="@null"
+                            android:src="@drawable/ic_ip_api_over_vpn"
+                            app:tint="@color/color_secondary" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:text="@string/ip_api_over_vpn"
+                            android:textAllCaps="false"
+                            android:textColor="@color/colorText"
+                            android:textSize="13sp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <TextView
+                    style="@style/SectionLabel"
+                    android:layout_marginBottom="4dp"
+                    android:text="@string/section_tcp_check" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:baselineAligned="false"
+                    android:clipChildren="false"
+                    android:clipToPadding="false"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:id="@+id/btnTcp"
+                        style="@style/CustomIconButton"
+                        android:layout_marginEnd="12dp"
+                        android:minHeight="52dp"
+                        android:paddingVertical="8dp"
+                        android:background="@drawable/bg_button_theme">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:contentDescription="@null"
+                            android:src="@drawable/ic_swap"
+                            app:tint="@color/color_secondary" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="6dp"
+                            android:text="@string/tcp"
+                            android:textAllCaps="false"
+                            android:textColor="@color/colorText"
+                            android:textSize="13sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/btnPing"
+                        style="@style/CustomIconButton"
+                        android:minHeight="52dp"
+                        android:paddingVertical="8dp"
+                        android:background="@drawable/bg_card_button_ripple">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:contentDescription="@null"
+                            android:src="@drawable/ic_ping"
+                            app:tint="@color/colorWhiteFull" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="6dp"
+                            android:text="@string/ping"
+                            android:textAllCaps="false"
+                            android:textColor="@color/colorWhiteFull"
+                            android:textSize="13sp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+            </LinearLayout>
+            </FrameLayout>
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="20dp"
+                android:alpha="0.3"
+                android:background="@color/color_secondary" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.42"
+                android:paddingTop="34dp"
+                android:clipChildren="false"
+                android:clipToPadding="false"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/btnLanIp"
+                    style="@style/Button.Default"
+                    android:layout_marginTop="24dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="52dp"
+                    android:layout_marginBottom="20dp"
+                    android:background="@drawable/bg_button_theme"
+                    android:text="@string/lan_ip" />
+
+                <Button
+                    android:id="@+id/btnDirectIp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="52dp"
+                    android:layout_marginBottom="20dp"
+                    android:background="@drawable/bg_button_accent"
+                    android:text="@string/direct_ip"
+                    android:textAllCaps="false"
+                    android:textColor="@color/colorBlackText" />
+
+                <Button
+                    android:id="@+id/btnVpnIp"
+                    style="@style/Button.Default"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="52dp"
+                    android:layout_marginBottom="6dp"
+                    android:background="@drawable/bg_button_theme"
+                    android:text="@string/vpn_ip" />
+
+                <TextView
+                    android:id="@+id/tvLanHint"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_weight="1"
+                    android:gravity="bottom"
+                    android:text="@string/long_press_hint_tv"
+                    android:textColor="@color/color_secondary"
+                    android:textSize="14sp"
+                    tools:ignore="NestedWeights" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <FrameLayout
+        android:id="@+id/loadingOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorBgBlack"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:id="@+id/progressLoading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+
+    </FrameLayout>
+
+</FrameLayout>

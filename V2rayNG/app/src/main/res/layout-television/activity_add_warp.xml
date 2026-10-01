@@ -1,0 +1,1017 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:baselineAligned="false"
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    android:orientation="vertical"
+    android:paddingHorizontal="24dp"
+    android:paddingVertical="12dp"
+    tools:context=".feature.warpGenerator.AddWarpActivity"
+    tools:ignore="NestedWeights,TooManyViews">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:fontFamily="sans-serif-medium"
+        android:text="@string/title_create_new_warp"
+        android:textColor="@color/colorText"
+        android:textSize="24sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:baselineAligned="false"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:orientation="horizontal">
+
+        <FrameLayout
+            android:id="@+id/formContainer"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="24dp"
+            android:layout_weight="1">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:text="@string/warp_section_endpoint_keys"
+                    android:textColor="@color/color_secondary"
+                    android:textSize="14sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_card"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="14dp"
+                    android:paddingVertical="4dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:baselineAligned="false"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="10dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:paddingVertical="12dp">
+
+                                <TextView
+                                    android:id="@+id/tv_warp_ip2"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="0.5"
+                                    android:text="@string/warp_ip"
+                                    android:textColor="@color/colorText"
+                                    android:textSize="14sp" />
+
+                                <EditText
+                                    android:id="@+id/edt_warp_ip2"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/bg_edit_field"
+                                    android:hint="@string/warp_hint_clean_ip"
+                                    android:imeOptions="actionNext"
+                                    android:importantForAutofill="no"
+                                    android:inputType="text"
+                                    android:maxLines="1"
+                                    android:nextFocusLeft="@+id/edt_warp_ip2"
+                                    android:nextFocusRight="@+id/edt_warp_public_key2"
+                                    android:nextFocusUp="@+id/edt_warp_ip2"
+                                    android:nextFocusDown="@+id/edt_warp_port2"
+                                    android:nextFocusForward="@+id/edt_warp_port2"
+                                    android:textColor="@color/colorText"
+                                    android:textColorHint="@color/color_secondary"
+                                    android:textSize="14sp" />
+                            </LinearLayout>
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:alpha="0.3"
+                                android:background="@color/color_secondary" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:paddingVertical="12dp">
+
+                                <TextView
+                                    android:id="@+id/tv_warp_port2"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="0.5"
+                                    android:text="@string/warp_port"
+                                    android:textColor="@color/colorText"
+                                    android:textSize="14sp" />
+
+                                <EditText
+                                    android:id="@+id/edt_warp_port2"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/bg_edit_field"
+                                    android:hint="@string/warp_hint_clean_port"
+                                    android:imeOptions="actionNext"
+                                    android:importantForAutofill="no"
+                                    android:inputType="number"
+                                    android:maxLines="1"
+                                    android:nextFocusLeft="@+id/edt_warp_port2"
+                                    android:nextFocusRight="@+id/edt_warp_private_key2"
+                                    android:nextFocusUp="@+id/edt_warp_ip2"
+                                    android:nextFocusDown="@+id/edt_warp_preshared_key2"
+                                    android:nextFocusForward="@+id/edt_warp_public_key2"
+                                    android:textColor="@color/colorText"
+                                    android:textColorHint="@color/color_secondary"
+                                    android:textSize="14sp" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:paddingVertical="12dp">
+
+                                <TextView
+                                    android:id="@+id/tv_public_key2"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="0.5"
+                                    android:text="@string/warp_public_key"
+                                    android:textColor="@color/colorText"
+                                    android:textSize="14sp" />
+
+                                <EditText
+                                    android:id="@+id/edt_warp_public_key2"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/bg_edit_field"
+                                    android:hint="@string/warp_hint_44_char"
+                                    android:imeOptions="actionNext"
+                                    android:importantForAutofill="no"
+                                    android:inputType="text"
+                                    android:maxLines="1"
+                                    android:nextFocusLeft="@+id/edt_warp_ip2"
+                                    android:nextFocusRight="@+id/button_warp_new_ip2"
+                                    android:nextFocusUp="@+id/edt_warp_public_key2"
+                                    android:nextFocusDown="@+id/edt_warp_private_key2"
+                                    android:nextFocusForward="@+id/edt_warp_private_key2"
+                                    android:textColor="@color/colorText"
+                                    android:textColorHint="@color/color_secondary"
+                                    android:textSize="14sp" />
+                            </LinearLayout>
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:alpha="0.3"
+                                android:background="@color/color_secondary" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:paddingVertical="12dp">
+
+                                <TextView
+                                    android:id="@+id/tv_private_key2"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="0.5"
+                                    android:text="@string/warp_private_key"
+                                    android:textColor="@color/colorText"
+                                    android:textSize="14sp" />
+
+                                <EditText
+                                    android:id="@+id/edt_warp_private_key2"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/bg_edit_field"
+                                    android:hint="@string/warp_hint_secret_key"
+                                    android:imeOptions="actionNext"
+                                    android:importantForAutofill="no"
+                                    android:inputType="text"
+                                    android:maxLines="1"
+                                    android:nextFocusLeft="@+id/edt_warp_port2"
+                                    android:nextFocusRight="@+id/button_warp_new_key2"
+                                    android:nextFocusUp="@+id/edt_warp_public_key2"
+                                    android:nextFocusDown="@+id/edt_warp_wnoise2"
+                                    android:nextFocusForward="@+id/edt_warp_preshared_key2"
+                                    android:textColor="@color/colorText"
+                                    android:textColorHint="@color/color_secondary"
+                                    android:textSize="14sp" />
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tv_warp_check_result2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:paddingHorizontal="2dp"
+                        android:text="@string/warp_gen_check_idle"
+                        android:textColor="@color/color_secondary"
+                        android:textSize="13sp" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="@string/warp_section_tunnel_settings"
+                    android:textColor="@color/color_secondary"
+                    android:textSize="14sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_card"
+                    android:baselineAligned="false"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="14dp"
+                    android:paddingVertical="4dp">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="10dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:paddingVertical="12dp">
+
+                            <TextView
+                                android:id="@+id/tv_preshared_key2"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.5"
+                                android:text="@string/warp_preshared_key"
+                                android:textColor="@color/colorText"
+                                android:textSize="14sp" />
+
+                            <EditText
+                                android:id="@+id/edt_warp_preshared_key2"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:background="@drawable/bg_edit_field"
+                                android:hint="@string/warp_hint_optional"
+                                android:imeOptions="actionNext"
+                                android:importantForAutofill="no"
+                                android:inputType="text"
+                                android:maxLines="1"
+                                android:nextFocusLeft="@+id/edt_warp_preshared_key2"
+                                android:nextFocusRight="@+id/edt_warp_wnoise2"
+                                android:nextFocusUp="@+id/edt_warp_port2"
+                                android:nextFocusDown="@+id/edt_warp_local_address2"
+                                android:nextFocusForward="@+id/edt_warp_local_address2"
+                                android:textColor="@color/colorText"
+                                android:textColorHint="@color/color_secondary"
+                                android:textSize="14sp" />
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:alpha="0.3"
+                            android:background="@color/color_secondary" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:paddingVertical="12dp">
+
+                            <TextView
+                                android:id="@+id/tv_local_address2"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.5"
+                                android:text="@string/warp_local_address"
+                                android:textColor="@color/colorText"
+                                android:textSize="14sp" />
+
+                            <EditText
+                                android:id="@+id/edt_warp_local_address2"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:background="@drawable/bg_edit_field"
+                                android:hint="@string/warp_hint_local_address"
+                                android:imeOptions="actionNext"
+                                android:importantForAutofill="no"
+                                android:inputType="text"
+                                android:maxLines="1"
+                                android:nextFocusLeft="@+id/edt_warp_local_address2"
+                                android:nextFocusRight="@+id/edt_warp_wnoisecount2"
+                                android:nextFocusUp="@+id/edt_warp_preshared_key2"
+                                android:nextFocusDown="@+id/edt_warp_reserved2"
+                                android:nextFocusForward="@+id/edt_warp_reserved2"
+                                android:textColor="@color/colorText"
+                                android:textColorHint="@color/color_secondary"
+                                android:textSize="14sp" />
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:alpha="0.3"
+                            android:background="@color/color_secondary" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:paddingVertical="12dp">
+
+                            <TextView
+                                android:id="@+id/tv_warp_reserved2"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.5"
+                                android:text="@string/warp_reserved"
+                                android:textColor="@color/colorText"
+                                android:textSize="14sp" />
+
+                            <EditText
+                                android:id="@+id/edt_warp_reserved2"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:background="@drawable/bg_edit_field"
+                                android:hint="@string/warp_hint_reserved"
+                                android:imeOptions="actionNext"
+                                android:importantForAutofill="no"
+                                android:inputType="text"
+                                android:maxLines="1"
+                                android:nextFocusLeft="@+id/edt_warp_reserved2"
+                                android:nextFocusRight="@+id/edt_warp_wnoisedelay2"
+                                android:nextFocusUp="@+id/edt_warp_local_address2"
+                                android:nextFocusDown="@+id/edt_warp_mtu2"
+                                android:nextFocusForward="@+id/edt_warp_mtu2"
+                                android:textColor="@color/colorText"
+                                android:textColorHint="@color/color_secondary"
+                                android:textSize="14sp" />
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:alpha="0.3"
+                            android:background="@color/color_secondary" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:paddingVertical="12dp">
+
+                            <TextView
+                                android:id="@+id/tv_warp_mtu2"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.5"
+                                android:text="@string/warp_mtu"
+                                android:textColor="@color/colorText"
+                                android:textSize="14sp" />
+
+                            <EditText
+                                android:id="@+id/edt_warp_mtu2"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:background="@drawable/bg_edit_field"
+                                android:hint="@string/warp_hint_mtu"
+                                android:imeOptions="actionNext"
+                                android:importantForAutofill="no"
+                                android:inputType="number"
+                                android:maxLines="1"
+                                android:nextFocusLeft="@+id/edt_warp_mtu2"
+                                android:nextFocusRight="@+id/edt_warp_wpayloadsize2"
+                                android:nextFocusUp="@+id/edt_warp_reserved2"
+                                android:nextFocusDown="@+id/edt_warp_keepalive2"
+                                android:nextFocusForward="@+id/edt_warp_keepalive2"
+                                android:textColor="@color/colorText"
+                                android:textColorHint="@color/color_secondary"
+                                android:textSize="14sp" />
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:alpha="0.3"
+                            android:background="@color/color_secondary" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:paddingVertical="12dp">
+
+                            <TextView
+                                android:id="@+id/tv_warp_keepalive2"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.5"
+                                android:text="@string/warp_keepalive"
+                                android:textColor="@color/colorText"
+                                android:textSize="14sp" />
+
+                            <EditText
+                                android:id="@+id/edt_warp_keepalive2"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:background="@drawable/bg_edit_field"
+                                android:hint="@string/warp_hint_keepalive"
+                                android:imeOptions="actionNext"
+                                android:importantForAutofill="no"
+                                android:inputType="number"
+                                android:maxLines="1"
+                                android:nextFocusLeft="@+id/edt_warp_keepalive2"
+                                android:nextFocusRight="@+id/edt_warp_remark2"
+                                android:nextFocusUp="@+id/edt_warp_mtu2"
+                                android:nextFocusDown="@+id/edt_warp_keepalive2"
+                                android:nextFocusForward="@+id/edt_warp_wnoise2"
+                                android:textColor="@color/colorText"
+                                android:textColorHint="@color/color_secondary"
+                                android:textSize="14sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:paddingVertical="12dp">
+
+                            <TextView
+                                android:id="@+id/tv_warp_wnoise2"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.5"
+                                android:text="@string/warp_wnoise"
+                                android:textColor="@color/colorText"
+                                android:textSize="14sp" />
+
+                            <EditText
+                                android:id="@+id/edt_warp_wnoise2"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:background="@drawable/bg_edit_field"
+                                android:hint="@string/warp_hint_wnoise"
+                                android:imeOptions="actionNext"
+                                android:importantForAutofill="no"
+                                android:inputType="text"
+                                android:maxLines="1"
+                                android:nextFocusLeft="@+id/edt_warp_preshared_key2"
+                                android:nextFocusRight="@+id/button_warp_paste2"
+                                android:nextFocusUp="@+id/edt_warp_private_key2"
+                                android:nextFocusDown="@+id/edt_warp_wnoisecount2"
+                                android:nextFocusForward="@+id/edt_warp_wnoisecount2"
+                                android:textColor="@color/colorText"
+                                android:textColorHint="@color/color_secondary"
+                                android:textSize="14sp" />
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:alpha="0.3"
+                            android:background="@color/color_secondary" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:paddingVertical="12dp">
+
+                            <TextView
+                                android:id="@+id/tv_warp_wnoisecount2"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.5"
+                                android:text="@string/warp_wnoisecount"
+                                android:textColor="@color/colorText"
+                                android:textSize="14sp" />
+
+                            <EditText
+                                android:id="@+id/edt_warp_wnoisecount2"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:background="@drawable/bg_edit_field"
+                                android:hint="@string/warp_hint_wnoisecount"
+                                android:imeOptions="actionNext"
+                                android:importantForAutofill="no"
+                                android:inputType="text"
+                                android:maxLines="1"
+                                android:nextFocusLeft="@+id/edt_warp_local_address2"
+                                android:nextFocusRight="@+id/button_warp_clear2"
+                                android:nextFocusUp="@+id/edt_warp_wnoise2"
+                                android:nextFocusDown="@+id/edt_warp_wnoisedelay2"
+                                android:nextFocusForward="@+id/edt_warp_wnoisedelay2"
+                                android:textColor="@color/colorText"
+                                android:textColorHint="@color/color_secondary"
+                                android:textSize="14sp" />
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:alpha="0.3"
+                            android:background="@color/color_secondary" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:paddingVertical="12dp">
+
+                            <TextView
+                                android:id="@+id/tv_warp_wnoisedelay2"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.5"
+                                android:text="@string/warp_wnoisedelay"
+                                android:textColor="@color/colorText"
+                                android:textSize="14sp" />
+
+                            <EditText
+                                android:id="@+id/edt_warp_wnoisedelay2"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:background="@drawable/bg_edit_field"
+                                android:hint="@string/warp_hint_wnoisedelay"
+                                android:imeOptions="actionNext"
+                                android:importantForAutofill="no"
+                                android:inputType="text"
+                                android:maxLines="1"
+                                android:nextFocusLeft="@+id/edt_warp_reserved2"
+                                android:nextFocusRight="@+id/button_warp_free_configs2"
+                                android:nextFocusUp="@+id/edt_warp_wnoisecount2"
+                                android:nextFocusDown="@+id/edt_warp_wpayloadsize2"
+                                android:nextFocusForward="@+id/edt_warp_wpayloadsize2"
+                                android:textColor="@color/colorText"
+                                android:textColorHint="@color/color_secondary"
+                                android:textSize="14sp" />
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:alpha="0.3"
+                            android:background="@color/color_secondary" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:paddingVertical="12dp">
+
+                            <TextView
+                                android:id="@+id/tv_warp_wpayloadsize2"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.5"
+                                android:text="@string/warp_wpayloadsize"
+                                android:textColor="@color/colorText"
+                                android:textSize="14sp" />
+
+                            <EditText
+                                android:id="@+id/edt_warp_wpayloadsize2"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:background="@drawable/bg_edit_field"
+                                android:hint="@string/warp_hint_wpayloadsize"
+                                android:imeOptions="actionNext"
+                                android:importantForAutofill="no"
+                                android:inputType="text"
+                                android:maxLines="1"
+                                android:nextFocusLeft="@+id/edt_warp_mtu2"
+                                android:nextFocusRight="@+id/button_warp_free_configs2"
+                                android:nextFocusUp="@+id/edt_warp_wnoisedelay2"
+                                android:nextFocusDown="@+id/edt_warp_remark2"
+                                android:nextFocusForward="@+id/edt_warp_remark2"
+                                android:textColor="@color/colorText"
+                                android:textColorHint="@color/color_secondary"
+                                android:textSize="14sp" />
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:alpha="0.3"
+                            android:background="@color/color_secondary" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:paddingVertical="12dp">
+
+                            <TextView
+                                android:id="@+id/tv_warp_remark2"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.5"
+                                android:text="@string/warp_remark"
+                                android:textColor="@color/colorText"
+                                android:textSize="14sp" />
+
+                            <EditText
+                                android:id="@+id/edt_warp_remark2"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:background="@drawable/bg_edit_field"
+                                android:hint="@string/warp_hint_remark"
+                                android:imeOptions="actionDone"
+                                android:importantForAutofill="no"
+                                android:inputType="text"
+                                android:maxLines="1"
+                                android:nextFocusLeft="@+id/edt_warp_keepalive2"
+                                android:nextFocusRight="@+id/button_warp_add_this_config2"
+                                android:nextFocusUp="@+id/edt_warp_wpayloadsize2"
+                                android:nextFocusDown="@+id/button_warp_new_ip2"
+                                android:nextFocusForward="@+id/button_warp_new_ip2"
+                                android:textColor="@color/colorText"
+                                android:textColorHint="@color/color_secondary"
+                                android:textSize="14sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </FrameLayout>
+
+        <LinearLayout
+            android:id="@+id/footLayout"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.42"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/button_warp_new_ip2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="0dp"
+                android:layout_marginBottom="7dp"
+                android:background="@drawable/bg_button_theme"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:minHeight="52dp"
+                android:nextFocusLeft="@+id/edt_warp_public_key2"
+                android:nextFocusRight="@+id/button_warp_new_ip2"
+                android:nextFocusUp="@+id/button_warp_new_ip2"
+                android:nextFocusDown="@+id/button_warp_check_endpoint2"
+                android:orientation="horizontal"
+                android:paddingHorizontal="16dp">
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:contentDescription="@null"
+                    android:duplicateParentState="true"
+                    android:src="@drawable/ic_shield_guard_filled"
+                    app:tint="@color/colorText" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:duplicateParentState="true"
+                    android:text="@string/warp_gen_new_ip"
+                    android:textAllCaps="false"
+                    android:textColor="@color/colorText"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="7dp"
+                android:baselineAligned="false"
+                android:clipChildren="false"
+                android:clipToPadding="false"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:id="@+id/button_warp_check_endpoint2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_button_theme"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:minHeight="52dp"
+                    android:nextFocusLeft="@+id/edt_warp_port2"
+                    android:nextFocusRight="@+id/button_warp_open_scanner"
+                    android:nextFocusUp="@+id/button_warp_new_ip2"
+                    android:nextFocusDown="@+id/button_warp_new_key2"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="16dp">
+
+                    <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:contentDescription="@null"
+                        android:duplicateParentState="true"
+                        android:src="@drawable/ic_ping"
+                        app:tint="@color/colorText" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:duplicateParentState="true"
+                        android:text="@string/warp_gen_check_endpoint"
+                        android:textAllCaps="false"
+                        android:textColor="@color/colorText"
+                        android:textSize="15sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/button_warp_open_scanner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:background="@drawable/bg_button_theme"
+                    android:clickable="true"
+                    android:contentDescription="@string/title_cdn_ip_scanner"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:minWidth="52dp"
+                    android:minHeight="52dp"
+                    android:nextFocusLeft="@+id/button_warp_check_endpoint2"
+                    android:nextFocusRight="@+id/button_warp_open_scanner"
+                    android:nextFocusUp="@+id/button_warp_new_ip2"
+                    android:nextFocusDown="@+id/button_warp_new_key2"
+                    android:paddingHorizontal="16dp">
+
+                    <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:contentDescription="@null"
+                        android:duplicateParentState="true"
+                        android:src="@drawable/ic_ip_scanner"
+                        app:tint="@color/colorText" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/button_warp_new_key2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="7dp"
+                android:background="@drawable/bg_button_theme"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:minHeight="52dp"
+                android:nextFocusLeft="@+id/edt_warp_private_key2"
+                android:nextFocusRight="@+id/button_warp_new_key2"
+                android:nextFocusUp="@+id/button_warp_check_endpoint2"
+                android:nextFocusDown="@+id/button_warp_paste2"
+                android:orientation="horizontal"
+                android:paddingHorizontal="16dp">
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:contentDescription="@null"
+                    android:duplicateParentState="true"
+                    android:src="@drawable/ic_key"
+                    app:tint="@color/colorText" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:duplicateParentState="true"
+                    android:text="@string/warp_gen_new_key"
+                    android:textAllCaps="false"
+                    android:textColor="@color/colorText"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/button_warp_paste2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="7dp"
+                android:background="@drawable/bg_button_theme"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:minHeight="52dp"
+                android:nextFocusLeft="@+id/edt_warp_wnoise2"
+                android:nextFocusRight="@+id/button_warp_paste2"
+                android:nextFocusUp="@+id/button_warp_new_key2"
+                android:nextFocusDown="@+id/button_warp_clear2"
+                android:orientation="horizontal"
+                android:paddingHorizontal="16dp">
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:contentDescription="@null"
+                    android:duplicateParentState="true"
+                    android:src="@drawable/ic_clipboard_filled_import"
+                    app:tint="@color/colorText" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:duplicateParentState="true"
+                    android:text="@string/warp_paste_config"
+                    android:textAllCaps="false"
+                    android:textColor="@color/colorText"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/button_warp_clear2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="7dp"
+                android:background="@drawable/bg_button_theme"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:minHeight="52dp"
+                android:nextFocusLeft="@+id/edt_warp_wnoisecount2"
+                android:nextFocusRight="@+id/button_warp_clear2"
+                android:nextFocusUp="@+id/button_warp_paste2"
+                android:nextFocusDown="@+id/button_warp_free_configs2"
+                android:orientation="horizontal"
+                android:paddingHorizontal="16dp">
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:contentDescription="@null"
+                    android:duplicateParentState="true"
+                    android:src="@drawable/ic_delete_black_24dp"
+                    app:tint="@color/red" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:duplicateParentState="true"
+                    android:text="@string/warp_clear"
+                    android:textAllCaps="false"
+                    android:textColor="@color/red"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/button_warp_free_configs2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_button_telegram"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:minHeight="52dp"
+                android:nextFocusLeft="@+id/edt_warp_wnoisedelay2"
+                android:nextFocusRight="@+id/button_warp_free_configs2"
+                android:nextFocusUp="@+id/button_warp_clear2"
+                android:nextFocusDown="@+id/button_warp_export_to_clip2"
+                android:orientation="horizontal"
+                android:paddingHorizontal="16dp">
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:contentDescription="@null"
+                    android:duplicateParentState="true"
+                    android:src="@drawable/ic_telegram"
+                    app:tint="@color/colorAccent" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:duplicateParentState="true"
+                    android:text="@string/warp_telegram_channel"
+                    android:textAllCaps="false"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_warp_description1"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="top|center_horizontal"
+                android:paddingHorizontal="8dp"
+                android:textAlignment="center"
+                android:textColor="@color/color_secondary"
+                android:textSize="12sp" />
+
+            <Button
+                android:id="@+id/button_warp_export_to_clip2"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:background="@drawable/bg_card"
+                android:nextFocusLeft="@+id/edt_warp_remark2"
+                android:nextFocusRight="@+id/button_warp_export_to_clip2"
+                android:nextFocusUp="@+id/button_warp_free_configs2"
+                android:nextFocusDown="@+id/button_warp_add_this_config2"
+                android:stateListAnimator="@null"
+                android:text="@string/warp_gen_export_to_clipboard"
+                android:textAllCaps="false"
+                android:textColor="@color/colorText"
+                android:textSize="15sp" />
+
+            <Button
+                android:id="@+id/button_warp_add_this_config2"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginTop="7dp"
+                android:background="@drawable/bg_card_button_ripple"
+                android:nextFocusLeft="@+id/edt_warp_remark2"
+                android:nextFocusRight="@+id/button_warp_add_this_config2"
+                android:nextFocusUp="@+id/button_warp_export_to_clip2"
+                android:nextFocusDown="@+id/button_warp_add_this_config2"
+                android:stateListAnimator="@null"
+                android:text="@string/warp_gen_add_to_config"
+                android:textAllCaps="false"
+                android:textColor="@android:color/white"
+                android:textSize="15sp" />
+
+
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

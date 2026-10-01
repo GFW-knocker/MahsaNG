@@ -1,0 +1,513 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:baselineAligned="false"
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    android:orientation="vertical"
+    android:paddingHorizontal="24dp"
+    android:paddingVertical="20dp"
+    tools:context=".feature.dnsScanner.DnsScannerActivity"
+    tools:ignore="NestedWeights,TooManyViews">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="14dp"
+        android:fontFamily="sans-serif-medium"
+        android:text="@string/title_ip_scanner"
+        android:textColor="@color/colorText"
+        android:textSize="26sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:baselineAligned="false"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:orientation="horizontal">
+
+        <FrameLayout
+            android:id="@+id/snackbarHost"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="20dp"
+            android:layout_weight="0.7"
+            android:clipChildren="false"
+            android:clipToPadding="false">
+
+            <LinearLayout
+                android:id="@+id/scanContent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipChildren="false"
+                android:clipToPadding="false"
+                android:orientation="vertical"
+                tools:ignore="UselessParent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:baselineAligned="false"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <FrameLayout
+                        android:id="@+id/scannerContainer"
+                        android:layout_width="150dp"
+                        android:layout_height="150dp">
+
+                        <com.v2ray.ang.feature.dnsScanner.SegmentedRingView
+                            android:id="@+id/radarProgress"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center_horizontal"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:id="@+id/imgRingCheck"
+                                android:layout_width="38dp"
+                                android:layout_height="38dp"
+                                android:contentDescription="@null"
+                                android:src="@drawable/ic_check"
+                                android:visibility="gone" />
+
+                            <TextView
+                                android:id="@+id/txtStatusPercent"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/colorText"
+                                android:textDirection="ltr"
+                                android:textSize="28sp"
+                                android:textStyle="bold"
+                                tools:text="32%" />
+
+                            <TextView
+                                android:id="@+id/txtRingScanned"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="monospace"
+                                android:textColor="@color/color_secondary"
+                                android:textDirection="ltr"
+                                android:textSize="12sp"
+                                tools:text="3120/9600" />
+
+                            <TextView
+                                android:id="@+id/txtRingFound"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:textColor="@color/colorAccent"
+                                android:textSize="12sp"
+                                tools:text="Found: 3" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/txtFoundBadge"
+                            android:layout_width="wrap_content"
+                            android:layout_height="24dp"
+                            android:layout_gravity="top|end"
+                            android:layout_marginTop="6dp"
+                            android:layout_marginEnd="6dp"
+                            android:background="@drawable/circle_green"
+                            android:gravity="center"
+                            android:minWidth="24dp"
+                            android:paddingHorizontal="5dp"
+                            android:textColor="@color/colorWhiteFull"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            android:visibility="invisible"
+                            tools:text="3"
+                            tools:visibility="visible" />
+                    </FrameLayout>
+
+                    <LinearLayout
+                        android:id="@+id/statsCard"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="4dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_card"
+                        android:orientation="vertical"
+                        android:paddingHorizontal="14dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:paddingVertical="8dp">
+
+                            <TextView
+                                android:id="@+id/txtStatLabel1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="8dp"
+                                android:maxLines="1"
+                                android:text="@string/dns_scan_stat_elapsed"
+                                android:textColor="@color/color_secondary"
+                                android:textSize="12sp" />
+
+                            <Space
+                                android:layout_width="0dp"
+                                android:layout_height="0dp"
+                                android:layout_weight="1" />
+
+                            <TextView
+                                android:id="@+id/txtStatValue1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="monospace"
+                                android:text="@string/dns_scan_stat_empty"
+                                android:textColor="@color/colorText"
+                                android:textDirection="ltr"
+                                android:textSize="13sp" />
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:alpha="0.3"
+                            android:background="@color/color_secondary" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:paddingVertical="8dp">
+
+                            <TextView
+                                android:id="@+id/txtStatLabel2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="8dp"
+                                android:maxLines="1"
+                                android:text="@string/dns_scan_stat_remaining"
+                                android:textColor="@color/color_secondary"
+                                android:textSize="12sp" />
+
+                            <Space
+                                android:layout_width="0dp"
+                                android:layout_height="0dp"
+                                android:layout_weight="1" />
+
+                            <TextView
+                                android:id="@+id/txtStatValue2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="monospace"
+                                android:text="@string/dns_scan_stat_empty"
+                                android:textColor="@color/colorText"
+                                android:textDirection="ltr"
+                                android:textSize="13sp" />
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:alpha="0.3"
+                            android:background="@color/color_secondary" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:paddingVertical="8dp">
+
+                            <TextView
+                                android:id="@+id/txtStatLabel3"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="8dp"
+                                android:maxLines="1"
+                                android:text="@string/dns_scan_stat_speed"
+                                android:textColor="@color/color_secondary"
+                                android:textSize="12sp" />
+
+                            <Space
+                                android:layout_width="0dp"
+                                android:layout_height="0dp"
+                                android:layout_weight="1" />
+
+                            <TextView
+                                android:id="@+id/txtStatValue3"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="monospace"
+                                android:text="@string/dns_scan_stat_empty"
+                                android:textColor="@color/colorAccent"
+                                android:textDirection="ltr"
+                                android:textSize="13sp" />
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:alpha="0.3"
+                            android:background="@color/color_secondary" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:paddingVertical="8dp">
+
+                            <TextView
+                                android:id="@+id/txtStatLabel4"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="8dp"
+                                android:maxLines="1"
+                                android:text="@string/dns_scan_stat_hit_rate"
+                                android:textColor="@color/color_secondary"
+                                android:textSize="12sp" />
+
+                            <Space
+                                android:layout_width="0dp"
+                                android:layout_height="0dp"
+                                android:layout_weight="1" />
+
+                            <TextView
+                                android:id="@+id/txtStatValue4"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="monospace"
+                                android:text="@string/dns_scan_stat_empty"
+                                android:textColor="@color/colorAccent"
+                                android:textDirection="ltr"
+                                android:textSize="13sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/logStrip"
+                        android:layout_width="200dp"
+                        android:layout_height="match_parent"
+                        android:layout_margin="5dp"
+                        android:layout_marginStart="16dp"
+                        android:background="@drawable/bg_dns_log_strip"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="8dp"
+                        android:visibility="gone"
+                        tools:visibility="visible">
+
+                        <ImageView
+                            android:id="@+id/imgStripCheck"
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
+                            android:layout_marginBottom="10dp"
+                            android:contentDescription="@null"
+                            android:src="@drawable/ic_check"
+                            android:visibility="gone"
+                            app:tint="@color/ping_ok" />
+
+                        <TextView
+                            android:id="@+id/txtLog"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:ellipsize="end"
+                            android:fontFamily="monospace"
+                            android:gravity="center|start"
+                            android:lineSpacingExtra="4dp"
+                            android:maxLines="4"
+                            android:textColor="@color/text_hint"
+                            android:textDirection="ltr"
+                            android:textSize="12sp"
+                            tools:text="185.51.200.2  timeout\n2.188.21.130  refused\n5.200.200.200  timeout\n78.157.42.100  ✓ 41ms" />
+
+                        <TextView
+                            android:id="@+id/txtStripMessage"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:textColor="@color/colorAccent"
+                            android:textSize="14sp"
+                            android:visibility="gone"
+                            tools:text="Scan finished · 5 resolvers found" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- Shown instead of the log box and results when there is no internet;
+                     its retry button is hidden on TV, where btnAction retries instead. -->
+                <include
+                    android:id="@+id/layoutErrorState"
+                    layout="@layout/layout_error_state"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/textViewHeader"
+                    style="@style/SectionLabel"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/dns_scan_top_results"
+                    android:textAllCaps="true"
+                    android:textColor="@color/color_secondary"
+                    android:textStyle="bold" />
+
+                <FrameLayout
+                    android:id="@+id/resultCard"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:clipChildren="false"
+                    android:clipToPadding="false">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvResults"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clipChildren="false"
+                        android:clipToPadding="false"
+                        android:focusable="false"
+                        android:overScrollMode="never"
+                        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                        app:spanCount="2"
+                        tools:itemCount="5"
+                        tools:listitem="@layout/item_dns_scan_result" />
+
+                    <TextView
+                        android:id="@+id/txtResultsHint"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:text="@string/dns_scan_hint_start"
+                        android:textColor="@color/color_secondary"
+                        android:textSize="14sp"
+                        android:visibility="gone"
+                        tools:visibility="visible" />
+                </FrameLayout>
+            </LinearLayout>
+        </FrameLayout>
+
+        <View
+            android:layout_width="0.5dp"
+            android:layout_height="match_parent"
+            android:alpha="0.3"
+            android:background="@color/color_secondary" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="20dp"
+            android:layout_weight="0.30"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:orientation="vertical">
+
+            <!-- Secondary pills; hidden while offline, like the phone's footer. -->
+            <LinearLayout
+                android:id="@+id/footLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clipChildren="false"
+                android:clipToPadding="false"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/btnCopyResults"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:layout_marginBottom="8dp"
+                    android:alpha="0.5"
+                    android:background="@drawable/bg_button_theme"
+                    android:clickable="true"
+                    android:enabled="false"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:nextFocusRight="@id/btnCopyResults"
+                    android:nextFocusUp="@id/btnCopyResults"
+                    android:nextFocusDown="@+id/btnAddRange"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:contentDescription="@null"
+                        android:duplicateParentState="true"
+                        android:src="@drawable/ic_copy_white"
+                        app:tint="@color/colorText" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
+                        android:duplicateParentState="true"
+                        android:text="@string/dns_scan_copy_results"
+                        android:textAllCaps="false"
+                        android:textColor="@color/colorText"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/btnAddRange"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/bg_button_theme"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:nextFocusRight="@id/btnAddRange"
+                    android:nextFocusUp="@id/btnCopyResults"
+                    android:nextFocusDown="@+id/btnAction"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:contentDescription="@null"
+                        android:duplicateParentState="true"
+                        android:src="@drawable/ic_add_white_24dp"
+                        app:tint="@color/colorText" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
+                        android:duplicateParentState="true"
+                        android:text="@string/dns_scan_add_range"
+                        android:textAllCaps="false"
+                        android:textColor="@color/colorText"
+                        android:textSize="14sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <Button
+                android:id="@+id/btnAction"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:background="@drawable/bg_card_button_ripple"
+                android:nextFocusRight="@id/btnAction"
+                android:nextFocusUp="@id/btnAddRange"
+                android:nextFocusDown="@id/btnAction"
+                android:stateListAnimator="@null"
+                android:text="@string/dns_scan_start"
+                android:textAllCaps="false"
+                android:textColor="@android:color/white"
+                android:textSize="15sp" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

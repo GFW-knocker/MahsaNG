@@ -1,0 +1,885 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:baselineAligned="false"
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    android:orientation="vertical"
+    android:paddingHorizontal="24dp"
+    android:paddingVertical="20dp"
+    tools:ignore="NestedWeights,TooManyViews">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="14dp"
+        android:fontFamily="sans-serif-medium"
+        android:text="@string/title_cdn_ip_scanner"
+        android:textColor="@color/colorText"
+        android:textSize="26sp" />
+
+    <LinearLayout
+        android:id="@+id/layoutConfigSummary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:focusable="false"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/tvConfigSummary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorText"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:baselineAligned="false"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:orientation="horizontal">
+
+        <FrameLayout
+            android:id="@+id/layoutScrollContent"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="20dp"
+            android:layout_weight="1">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                tools:ignore="UselessParent">
+
+                <LinearLayout
+                    android:id="@+id/layoutConfigHeader"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:focusable="false"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tvSectionConfig"
+                        style="@style/SectionLabel"
+                        android:text="@string/section_scan_configuration" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layoutConfigCard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_card"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="4dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:baselineAligned="false"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingTop="5dp">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1.2"
+                            android:addStatesFromChildren="true"
+                            android:orientation="vertical"
+                            android:paddingHorizontal="10dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/ip_scanner_provider_label"
+                                android:textColor="@color/color_secondary"
+                                android:textSize="12sp" />
+
+                            <Spinner
+                                android:id="@+id/spProvider"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:dropDownVerticalOffset="8dp"
+                                android:nextFocusLeft="@id/spProvider"
+                                android:nextFocusRight="@+id/swCert"
+                                android:nextFocusUp="@id/spProvider"
+                                android:popupBackground="@drawable/bg_spinner_dropdown"
+                                android:spinnerMode="dropdown" />
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginVertical="10dp"
+                            android:alpha="0.3"
+                            android:background="@color/color_secondary" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.7"
+                            android:addStatesFromChildren="true"
+                            android:orientation="vertical"
+                            android:paddingHorizontal="10dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/ip_scanner_check_cert"
+                                android:textColor="@color/colorText"
+                                android:textSize="12sp" />
+
+                            <androidx.appcompat.widget.SwitchCompat
+                                android:id="@+id/swCert"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="6dp"
+                                android:checked="true"
+                                android:nextFocusLeft="@id/spProvider"
+                                android:nextFocusRight="@+id/etSni"
+                                android:nextFocusUp="@id/swCert" />
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginVertical="10dp"
+                            android:alpha="0.3"
+                            android:background="@color/color_secondary" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1.1"
+                            android:addStatesFromChildren="true"
+                            android:orientation="vertical"
+                            android:paddingHorizontal="10dp">
+
+                            <TextView
+                                android:id="@+id/tvSniLabel"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/ip_scanner_sni_label"
+                                android:textColor="@color/colorText"
+                                android:textSize="12sp" />
+
+                            <EditText
+                                android:id="@+id/etSni"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:background="@drawable/bg_edit_field"
+                                android:hint="@string/ip_scanner_sni_hint"
+                                android:importantForAutofill="no"
+                                android:inputType="textUri"
+                                android:maxLines="1"
+                                android:nextFocusLeft="@id/swCert"
+                                android:nextFocusRight="@+id/btnCopyGreen"
+                                android:nextFocusUp="@id/etSni"
+                                android:nextFocusDown="@+id/etCustom"
+                                android:singleLine="true"
+                                android:textColor="@color/colorText"
+                                android:textColorHint="@color/color_secondary"
+                                android:textSize="14sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/layoutConfigExtras"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="visible">
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginHorizontal="10dp"
+                            android:alpha="0.3"
+                            android:background="@color/color_secondary" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:baselineAligned="false"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <LinearLayout
+                                android:id="@+id/layoutScanPort"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:addStatesFromChildren="true"
+                                android:orientation="vertical"
+                                android:padding="4dp"
+                                android:visibility="gone">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/ip_scanner_port_label"
+                                    android:textColor="@color/color_secondary"
+                                    android:textSize="12sp" />
+
+                                <EditText
+                                    android:id="@+id/etScanPort"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="4dp"
+                                    android:background="@drawable/bg_edit_field"
+                                    android:hint="@string/ip_scanner_port_hint"
+                                    android:imeOptions="actionNext"
+                                    android:importantForAutofill="no"
+                                    android:inputType="number"
+                                    android:maxLines="1"
+                                    android:nextFocusLeft="@id/etScanPort"
+                                    android:nextFocusRight="@+id/spMasqueCarrier"
+                                    android:singleLine="true"
+                                    android:textColor="@color/colorText"
+                                    android:textColorHint="@color/color_secondary"
+                                    android:textSize="13sp" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/layoutMasqueCarrier"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:baselineAligned="false"
+                                android:orientation="horizontal"
+                                android:visibility="gone">
+
+                                <View
+                                    android:layout_width="1dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginVertical="10dp"
+                                    android:alpha="0.3"
+                                    android:background="@color/color_secondary" />
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:addStatesFromChildren="true"
+                                    android:orientation="vertical"
+                                    android:padding="4dp">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="@string/ip_scanner_masque_carrier_label"
+                                        android:textColor="@color/color_secondary"
+                                        android:textSize="12sp" />
+
+                                    <Spinner
+                                        android:id="@+id/spMasqueCarrier"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="4dp"
+                                        android:dropDownVerticalOffset="8dp"
+                                        android:nextFocusLeft="@id/etScanPort"
+                                        android:nextFocusRight="@+id/spMasqueNoise"
+                                        android:popupBackground="@drawable/bg_spinner_dropdown"
+                                        android:spinnerMode="dropdown" />
+                                </LinearLayout>
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/layoutMasqueNoise"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:baselineAligned="false"
+                                android:orientation="horizontal"
+                                android:visibility="gone">
+
+                                <View
+                                    android:layout_width="1dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginVertical="10dp"
+                                    android:alpha="0.3"
+                                    android:background="@color/color_secondary" />
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:addStatesFromChildren="true"
+                                    android:orientation="vertical"
+                                    android:padding="4dp">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="@string/ip_scanner_masque_noise_label"
+                                        android:textColor="@color/color_secondary"
+                                        android:textSize="12sp" />
+
+                                    <Spinner
+                                        android:id="@+id/spMasqueNoise"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="4dp"
+                                        android:dropDownVerticalOffset="8dp"
+                                        android:nextFocusLeft="@id/spMasqueCarrier"
+                                        android:nextFocusRight="@+id/etScanConfig"
+                                        android:popupBackground="@drawable/bg_spinner_dropdown"
+                                        android:spinnerMode="dropdown" />
+                                </LinearLayout>
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/layoutScanConfig"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="2.4"
+                                android:baselineAligned="false"
+                                android:orientation="horizontal"
+                                android:visibility="gone">
+
+                                <View
+                                    android:layout_width="1dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginVertical="10dp"
+                                    android:alpha="0.3"
+                                    android:background="@color/color_secondary" />
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:addStatesFromChildren="true"
+                                    android:orientation="vertical"
+                                    android:padding="10dp">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="@string/ip_scanner_wg_config_label"
+                                        android:textColor="@color/color_secondary"
+                                        android:textSize="12sp" />
+
+                                    <EditText
+                                        android:id="@+id/etScanConfig"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="4dp"
+                                        android:background="@drawable/bg_result_card"
+                                        android:fontFamily="monospace"
+                                        android:gravity="top|start"
+                                        android:hint="@string/ip_scanner_wg_config_hint"
+                                        android:imeOptions="actionDone"
+                                        android:importantForAutofill="no"
+                                        android:inputType="textMultiLine"
+                                        android:maxLines="2"
+                                        android:minLines="1"
+                                        android:nextFocusLeft="@id/spMasqueNoise"
+                                        android:nextFocusRight="@+id/etCustom"
+                                        android:padding="4dp"
+                                        android:scrollbars="vertical"
+                                        android:textColor="@color/colorText"
+                                        android:textColorHint="@color/color_secondary"
+                                        android:textSize="13sp" />
+                                </LinearLayout>
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/layoutCustomCell"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="3.4"
+                                android:baselineAligned="false"
+                                android:orientation="horizontal"
+                                android:visibility="gone">
+
+                                <View
+                                    android:layout_width="1dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginVertical="10dp"
+                                    android:alpha="0.3"
+                                    android:background="@color/color_secondary" />
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:addStatesFromChildren="true"
+                                    android:orientation="vertical"
+                                    android:padding="10dp">
+
+                                    <TextView
+                                        android:id="@+id/tvCustomLabel"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="@string/ip_scanner_custom_label"
+                                        android:textColor="@color/color_secondary"
+                                        android:textSize="12sp" />
+
+                                    <EditText
+                                        android:id="@+id/etCustom"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="4dp"
+                                        android:background="@drawable/bg_result_card"
+                                        android:fontFamily="monospace"
+                                        android:gravity="top|start"
+                                        android:hint="@string/ip_scanner_custom_hint"
+                                        android:importantForAutofill="no"
+                                        android:inputType="textMultiLine"
+                                        android:maxLines="2"
+                                        android:minLines="1"
+                                        android:nextFocusLeft="@id/etScanConfig"
+                                        android:nextFocusRight="@+id/btnCopyGreen"
+                                        android:padding="8dp"
+                                        android:scrollbars="vertical"
+                                        android:textColor="@color/colorText"
+                                        android:textColorHint="@color/color_secondary"
+                                        android:textSize="13sp" />
+                                </LinearLayout>
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tvSectionStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:visibility="gone" />
+
+                <LinearLayout
+                    android:id="@+id/layoutStatusCard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/bg_card"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="14dp"
+                    android:paddingVertical="12dp"
+                    android:visibility="gone"
+                    tools:visibility="visible">
+
+                    <View
+                        android:id="@+id/statusDot"
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:background="@drawable/circle_green"
+                        android:backgroundTint="@color/green_600" />
+
+                    <TextView
+                        android:id="@+id/tvStatus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:text="@string/status_ready_to_scan"
+                        android:textColor="@color/colorText"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/tvSamplingNote"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:textColor="@color/color_secondary"
+                        android:textSize="12sp"
+                        android:visibility="gone" />
+
+                    <ProgressBar
+                        android:id="@+id/pbScan"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="0dp"
+                        android:layout_height="6dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_weight="1"
+                        android:max="100"
+                        android:progress="0"
+                        android:progressBackgroundTint="@color/progress_track"
+                        android:progressDrawable="@drawable/progress_horizontal_main"
+                        android:progressTint="@color/colorAccent" />
+
+                    <TextView
+                        android:id="@+id/tvScanPercent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:text="@string/ip_scanner_percent_zero"
+                        android:textColor="@color/color_secondary"
+                        android:textSize="12sp"
+                        tools:text="45%" />
+
+                    <TextView
+                        android:id="@+id/tvStatusCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:fontFamily="sans-serif-medium"
+                        android:textColor="@color/colorText"
+                        android:textSize="14sp"
+                        tools:text="Found: 9" />
+                </LinearLayout>
+
+                <!-- RESULTS header + legend -->
+                <LinearLayout
+                    android:id="@+id/layoutResultsHeader"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingBottom="8dp"
+                    android:visibility="gone"
+                    tools:visibility="visible">
+
+                    <TextView
+                        style="@style/SectionLabel"
+                        android:layout_marginBottom="0dp"
+                        android:text="@string/section_results" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:layout_weight="1" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginEnd="4dp"
+                        android:text="@string/cert"
+                        android:textColor="@color/color_secondary"
+                        android:textSize="11sp" />
+
+                    <View
+                        android:layout_width="8dp"
+                        android:layout_height="8dp"
+                        android:background="@drawable/circle_green" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:text="@string/ip_scanner_legend_match"
+                        android:textColor="@color/color_secondary"
+                        android:textSize="11sp" />
+
+                    <View
+                        android:layout_width="8dp"
+                        android:layout_height="8dp"
+                        android:layout_marginStart="10dp"
+                        android:background="@drawable/circle_yellow" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:text="@string/ip_scanner_legend_valid"
+                        android:textColor="@color/color_secondary"
+                        android:textSize="11sp" />
+
+                    <View
+                        android:layout_width="8dp"
+                        android:layout_height="8dp"
+                        android:layout_marginStart="10dp"
+                        android:background="@drawable/circle_red" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:text="@string/ip_scanner_legend_failed"
+                        android:textColor="@color/color_secondary"
+                        android:textSize="11sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layoutResultsCard"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_card"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="8dp"
+                    android:paddingVertical="4dp"
+                    android:visibility="gone"
+                    tools:visibility="visible">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvResults"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clipToPadding="false"
+                        android:scrollbars="vertical"
+                        tools:listitem="@layout/item_scan_result" />
+                </LinearLayout>
+            </LinearLayout>
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.40"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/section_export"
+                style="@style/SectionLabel"
+                android:visibility="gone"
+                tools:visibility="visible" />
+
+            <LinearLayout
+                android:id="@+id/layoutExportRow1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clipChildren="false"
+                android:clipToPadding="false"
+                android:orientation="vertical"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <LinearLayout
+                    android:id="@+id/btnCopyGreen"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/bg_button_theme"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:nextFocusRight="@id/btnCopyGreen"
+                    android:nextFocusUp="@id/spProvider"
+                    android:nextFocusDown="@+id/btnCopyTop16"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:contentDescription="@null"
+                        android:duplicateParentState="true"
+                        android:src="@drawable/ic_copy_white"
+                        app:tint="@color/green_600" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
+                        android:duplicateParentState="true"
+                        android:text="@string/ip_scanner_copy_green"
+                        android:textAllCaps="false"
+                        android:textColor="@color/green_600"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/btnCopyTop16"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/bg_button_theme"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:nextFocusRight="@id/btnCopyTop16"
+                    android:nextFocusUp="@id/btnCopyGreen"
+                    android:nextFocusDown="@+id/btnCopyAll"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:contentDescription="@null"
+                        android:duplicateParentState="true"
+                        android:src="@drawable/ic_copy_white"
+                        app:tint="@color/colorText" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
+                        android:duplicateParentState="true"
+                        android:text="@string/ip_scanner_copy_top_16"
+                        android:textAllCaps="false"
+                        android:textColor="@color/colorText"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/btnCopyAll"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/bg_button_theme"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:nextFocusRight="@id/btnCopyAll"
+                    android:nextFocusUp="@id/btnCopyTop16"
+                    android:nextFocusDown="@+id/btnSort"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:contentDescription="@null"
+                        android:duplicateParentState="true"
+                        android:src="@drawable/ic_copy_white"
+                        app:tint="@color/colorText" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
+                        android:duplicateParentState="true"
+                        android:text="@string/ip_scanner_copy_all"
+                        android:textAllCaps="false"
+                        android:textColor="@color/colorText"
+                        android:textSize="14sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layoutExportRow2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clipChildren="false"
+                android:clipToPadding="false"
+                android:orientation="vertical"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <LinearLayout
+                    android:id="@+id/btnSort"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/bg_button_theme"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:nextFocusRight="@id/btnSort"
+                    android:nextFocusUp="@id/btnCopyAll"
+                    android:nextFocusDown="@+id/btnCopyJson"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:contentDescription="@null"
+                        android:duplicateParentState="true"
+                        android:src="@drawable/ic_sort"
+                        app:tint="@color/colorText" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
+                        android:duplicateParentState="true"
+                        android:text="@string/ip_scanner_sort"
+                        android:textAllCaps="false"
+                        android:textColor="@color/colorText"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/btnCopyJson"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/bg_button_theme"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:nextFocusRight="@id/btnCopyJson"
+                    android:nextFocusUp="@id/btnSort"
+                    android:nextFocusDown="@+id/btnClear"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:contentDescription="@null"
+                        android:duplicateParentState="true"
+                        android:src="@drawable/ic_json_icon"
+                        app:tint="@color/colorText" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
+                        android:duplicateParentState="true"
+                        android:text="@string/ip_scanner_copy_json"
+                        android:textAllCaps="false"
+                        android:textColor="@color/colorText"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/btnClear"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/bg_button_theme"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:nextFocusRight="@id/btnClear"
+                    android:nextFocusUp="@id/btnCopyJson"
+                    android:nextFocusDown="@+id/btnScan"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:contentDescription="@null"
+                        android:duplicateParentState="true"
+                        android:src="@drawable/ic_delete_black_24dp"
+                        app:tint="@color/colorText" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
+                        android:duplicateParentState="true"
+                        android:text="@string/warp_clear"
+                        android:textAllCaps="false"
+                        android:textColor="@color/colorText"
+                        android:textSize="14sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <Button
+                android:id="@+id/btnScan"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:background="@drawable/bg_card_button_ripple"
+                android:nextFocusRight="@id/btnScan"
+                android:nextFocusUp="@id/btnClear"
+                android:nextFocusDown="@id/btnScan"
+                android:stateListAnimator="@null"
+                android:text="@string/ip_scanner_start"
+                android:textAllCaps="false"
+                android:textColor="@android:color/white"
+                android:textSize="15sp"
+                android:textStyle="bold">
+
+            </Button>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
