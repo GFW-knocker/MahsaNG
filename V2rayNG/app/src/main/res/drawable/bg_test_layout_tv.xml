@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:state_focused="true">
+        <shape android:shape="rectangle">
+            <gradient
+                android:startColor="@color/donor_grad_start"
+                android:endColor="@color/colorAccentTheme"
+                android:angle="135"
+                android:type="linear" />
+            <stroke
+                android:width="2dp"
+                android:color="@color/donor_stroke" />
+        </shape>
+    </item>
+
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:startColor="@color/donor_grad_start"
+                android:endColor="@color/colorAccentTheme"
+                android:angle="135"
+                android:type="linear" />
+            <stroke
+                android:width="0dp"
+                android:color="@color/donor_stroke" />
+        </shape>
+    </item>
+
+</selector>
