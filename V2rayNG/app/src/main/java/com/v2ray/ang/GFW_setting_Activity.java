@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.v2ray.ang.gfwknocker.my_preference_storage;
+import com.v2ray.ang.service.FragmentorNumericSettings;
 
 import java.util.Arrays;
 
@@ -125,8 +126,15 @@ public class GFW_setting_Activity extends AppCompatActivity {
                 boolean use_fragment = sw_frag.isChecked();
                 String isp = isp_spinner.getSelectedItem().toString();
                 int isp_item_index = isp_spinner.getSelectedItemPosition();
-                int num_fragment = Integer.parseInt(nfrag.getText().toString());
-                double fragment_sleep = Double.parseDouble(sleepfrag.getText().toString());
+                FragmentorNumericSettings.Parsed numeric = FragmentorNumericSettings.parse(
+                        nfrag.getText().toString(), sleepfrag.getText().toString());
+                if (numeric == null) {
+                    Toast.makeText(GFW_setting_Activity.this,
+                            "Fragments must be 1-2048 and delay 0-1 seconds", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                int num_fragment = numeric.getFragments();
+                double fragment_sleep = numeric.getDelaySeconds();
                 String manual_ip = cfip.getText().toString();
                 boolean is_manual_ip = ip_checkbox.isChecked();
                 boolean is_cdn_ip = cdn_checkbox.isChecked();
@@ -137,7 +145,15 @@ public class GFW_setting_Activity extends AppCompatActivity {
                 for(int i=0;i<n_item;i++){
                     cdn_ip_list[i] = cfip_list.getItemAtPosition(i).toString();
                 }
-                String cdn_ip = cdn_ip_list[cflist_item_index];
+                String cdn_ip = mystrg.get_value("cdn_ip", "");
+                if (cflist_item_index >= 0 && cflist_item_index < n_item) {
+                    cdn_ip = cdn_ip_list[cflist_item_index];
+                } else if (is_cdn_ip) {
+                    Toast.makeText(GFW_setting_Activity.this,
+                            "Select a valid CDN address", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                if (cflist_item_index < 0) cflist_item_index = 0;
 
 
 
@@ -273,7 +289,7 @@ public class GFW_setting_Activity extends AppCompatActivity {
 
 
         String[] myiplist = mystrg.get_array("cfip_list");
-        if(myiplist.length>0) {
+        if(myiplist != null && myiplist.length > 0) {
 //            System.out.println("cfip_list in mystrg ->"+Arrays.toString(myiplist));
 
             ArrayAdapter<String> adpt = new ArrayAdapter<String>(this,
@@ -283,9 +299,11 @@ public class GFW_setting_Activity extends AppCompatActivity {
             cfip_list.setAdapter(adpt);
         }
 
-        int cflist_id = Integer.parseInt(mystrg.get_value("cflist_item_index","0"));
+        int cflist_id = FragmentorNumericSettings.selectedIndex(
+                mystrg.get_value("cflist_item_index","0"), cfip_list.getCount());
         cfip_list.setSelection(cflist_id);
-        int isp_id = Integer.parseInt(mystrg.get_value("isp_item_index","0"));
+        int isp_id = FragmentorNumericSettings.selectedIndex(
+                mystrg.get_value("isp_item_index","0"), isp_spinner.getCount());
         isp_spinner.setSelection(isp_id);
         nfrag.setText(mystrg.get_value("nfrag","90"));
         sleepfrag.setText(mystrg.get_value("sleepfrag","0.007"));

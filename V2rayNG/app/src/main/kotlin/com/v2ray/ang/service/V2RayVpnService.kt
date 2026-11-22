@@ -7,6 +7,8 @@ import android.content.pm.PackageManager
 import android.net.*
 import android.os.Build
 import android.os.ParcelFileDescriptor
+import android.os.Handler
+import android.os.Looper
 import android.os.StrictMode
 import android.util.Log
 import androidx.annotation.RequiresApi
@@ -16,11 +18,10 @@ import com.v2ray.ang.BuildConfig
 import com.v2ray.ang.R
 import com.v2ray.ang.dto.ERoutingMode
 import com.v2ray.ang.util.MmkvManager
+import com.v2ray.ang.util.UnderlyingNetworkOwner
 import com.v2ray.ang.util.MyContextWrapper
 import com.v2ray.ang.util.Utils
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import java.io.File
 import java.lang.ref.SoftReference
 
@@ -37,10 +38,11 @@ class V2RayVpnService : VpnService(), ServiceControl {
     private val settingsStorage by lazy { MMKV.mmkvWithID(MmkvManager.ID_SETTING, MMKV.MULTI_PROCESS_MODE) }
 
     private lateinit var mInterface: ParcelFileDescriptor
-    private var isRunning = false
 
-    //val fd: Int get() = mInterface.fd
-    private lateinit var process: Process
+    private val tunProcesses = TunnelProcessOwner<Process>()
+    private val tunExitTracker = TunnelProcessExitTracker<Process>()
+    private val tunCloseTracker = TunDescriptorCloseTracker<ParcelFileDescriptor>()
+    private val fdScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
     /**destroy
      * Unfortunately registerDefaultNetworkCallback is going to return our VPN interface: https://android.googlesource.com/platform/frameworks/base/+/dda156ab0c5d66ad82bdcf76cda07cbc0a9c8a2e
@@ -61,21 +63,63 @@ class V2RayVpnService : VpnService(), ServiceControl {
 
     private val connectivity by lazy { getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager }
 
-    @delegate:RequiresApi(Build.VERSION_CODES.P)
-    private val defaultNetworkCallback by lazy {
-        object : ConnectivityManager.NetworkCallback() {
+    private val owner = UnderlyingNetworkOwner<Network>()
+    private val networkHandler = Handler(Looper.getMainLooper())
+    private var registeredNetworkCallback: ConnectivityManager.NetworkCallback? = null
+
+    /**
+     * Binder callbacks can arrive late or out of order. Queue only a versioned
+     * selection and revalidate on the main thread before updating the VPN.
+     */
+    private fun postUnderlyingNetworkUpdate(update: UnderlyingNetworkOwner.Update<Network>?) {
+        if (update == null) return
+        networkHandler.post {
+            owner.publishIfCurrent(update) { network ->
+                runCatching {
+                    setUnderlyingNetworks(network?.let { arrayOf(it) })
+                }.onFailure {
+                    Log.w(packageName, "Could not publish underlying network")
+                }
+            }
+        }
+    }
+
+    @Synchronized
+    private fun registerUnderlyingNetworkCallback() {
+        releaseUnderlyingNetworkCallback()
+        val epoch = owner.begin()
+        val callback = object : ConnectivityManager.NetworkCallback() {
             override fun onAvailable(network: Network) {
-                setUnderlyingNetworks(arrayOf(network))
+                postUnderlyingNetworkUpdate(owner.onAvailable(epoch, network))
             }
 
             override fun onCapabilitiesChanged(network: Network, networkCapabilities: NetworkCapabilities) {
-                // it's a good idea to refresh capabilities
-                setUnderlyingNetworks(arrayOf(network))
+                // Capabilities from an old upstream must not replace the new one.
+                postUnderlyingNetworkUpdate(owner.onCapabilitiesChanged(epoch, network))
             }
 
             override fun onLost(network: Network) {
-                setUnderlyingNetworks(null)
+                postUnderlyingNetworkUpdate(owner.onLost(epoch, network))
             }
+        }
+        registeredNetworkCallback = callback
+        try {
+            connectivity.requestNetwork(defaultNetworkRequest, callback)
+        } catch (_: Exception) {
+            registeredNetworkCallback = null
+            postUnderlyingNetworkUpdate(owner.stop())
+            Log.w(packageName, "Unable to register underlying network observer")
+        }
+    }
+
+    @Synchronized
+    private fun releaseUnderlyingNetworkCallback() {
+        val callback = registeredNetworkCallback
+        registeredNetworkCallback = null
+        // Invalidate queued notifications before unregistering the callback.
+        postUnderlyingNetworkUpdate(owner.stop())
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && callback != null) {
+            runCatching { connectivity.unregisterNetworkCallback(callback) }
         }
     }
 
@@ -97,8 +141,16 @@ class V2RayVpnService : VpnService(), ServiceControl {
 //    }
 
     override fun onDestroy() {
+        releaseUnderlyingNetworkCallback()
+        stopOwnedTun2socks()
+        fdScope.cancel()
+        // Android may destroy the service without an explicit stop or revoke.
+        // Always release the TUN, even when startup never completed.
+        closeOwnedTunDescriptors()
+        // CoreStopGate makes repeated shutdown idempotent. The manager checks
+        // ownership and initiates stop/foreground cleanup under one monitor.
+        V2RayServiceManager.stopV2rayPointIfOwner(this, cancelForeground = true)
         super.onDestroy()
-        V2RayServiceManager.cancelNotification()
     }
 
     private fun setup() {
@@ -189,38 +241,61 @@ class V2RayVpnService : VpnService(), ServiceControl {
             }
         }
 
-        // Close the old interface since the parameters have been changed.
-        try {
-            mInterface.close()
-        } catch (ignored: Exception) {
-            // ignored
+        // A replaced TUN is still our responsibility until its own close
+        // succeeds. Failed closure must never disappear behind a new handle.
+        if (this::mInterface.isInitialized && !closeTrackedTunDescriptor(mInterface)) {
+            Log.w(packageName, "Previous Xray TUN closure unverified")
+            stopV2Ray()
+            return
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            try {
-                connectivity.requestNetwork(defaultNetworkRequest, defaultNetworkCallback)
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
+            registerUnderlyingNetworkCallback()
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             builder.setMetered(false)
         }
 
-        // Create a new interface using the builder and save the parameters.
+        if (!fdScope.isActive) {
+            throw IllegalStateException("Xray VPN service lifecycle is no longer active")
+        }
+
+        // Reserve BEFORE Builder.establish(), which can complete after Stop.
+        if (!tunCloseTracker.beginEstablish()) {
+            throw IllegalStateException("Xray VPN TUN establishment blocked by Stop")
+        }
+        var establishmentPending = true
         try {
-            mInterface = builder.establish()!!
-            isRunning = true
-            runTun2socks()
+            val established = builder.establish()
+                ?: error("Unable to establish Xray VPN TUN")
+            // Register and publish while holding the same monitor used by
+            // requestStop. A late descriptor is tracked but never published.
+            val started = synchronized(tunCloseTracker) {
+                val allowed = tunCloseTracker.registered(established)
+                establishmentPending = false
+                if (allowed) {
+                    mInterface = established
+                    tunProcesses.begin()
+                } else null
+            }
+            if (started == null) {
+                closeTrackedTunDescriptor(established)
+                return
+            }
+            val (generation, previousChild) = started
+            previousChild?.destroy()
+            runTun2socks(generation)
         } catch (e: Exception) {
-            // non-nullable lateinit var
-            e.printStackTrace()
+            if (establishmentPending) tunCloseTracker.establishFailed()
+            Log.e(packageName, "Xray VPN TUN establishment failed", e)
+            // stopV2Ray requests stopSelf BEFORE closing any tracked PFD.
             stopV2Ray()
         }
     }
 
-    private fun runTun2socks() {
+    private fun runTun2socks(generation: Long) {
+        if (!tunProcesses.isCurrent(generation)) return
         val socksPort = Utils.parseInt(settingsStorage?.decodeString(AppConfig.PREF_SOCKS_PORT), AppConfig.PORT_SOCKS.toInt())
         val cmd = arrayListOf(File(applicationContext.applicationInfo.nativeLibraryDir, TUN2SOCKS).absolutePath,
                 "--netif-ipaddr", PRIVATE_VLAN4_ROUTER,
@@ -242,57 +317,166 @@ class V2RayVpnService : VpnService(), ServiceControl {
         }
         Log.d(packageName, cmd.toString())
 
+        // Account for a ProcessBuilder.start() that may finish after Stop.
+        // Without this, a late unadopted child could outlive Stop Success.
+        if (!tunExitTracker.beginLaunch()) return
+        var launchUnaccounted = true
         try {
-            val proBuilder = ProcessBuilder(cmd)
-            proBuilder.redirectErrorStream(true)
-            process = proBuilder
-                    .directory(applicationContext.filesDir)
-                    .start()
-            Thread(Runnable {
-                Log.d(packageName,"$TUN2SOCKS check")
-                process.waitFor()
-                Log.d(packageName,"$TUN2SOCKS exited")
-                if (isRunning) {
-                    Log.d(packageName,"$TUN2SOCKS restart")
-                    runTun2socks()
-                }
-            }).start()
-            Log.d(packageName, process.toString())
+            val child = ProcessBuilder(cmd)
+                .redirectErrorStream(true)
+                .directory(applicationContext.filesDir)
+                .start()
+            val registered = tunExitTracker.registered(child)
+            launchUnaccounted = false
+            val adopted = registered && tunProcesses.adopt(generation, child)
 
-            sendFd()
+            // Always watch a successfully spawned child, even if Stop won
+            // adoption. waitFor() is available on the app's minimum API.
+            Thread({
+                val exitCode = runCatching { child.waitFor() }.getOrNull()
+                if (exitCode != null) {
+                    tunExitTracker.observedExit(child)
+                    if (adopted) {
+                        if (tunProcesses.departed(generation, child)) {
+                            Log.d(packageName, "$TUN2SOCKS exited ($exitCode), restarting owned session")
+                            runTun2socks(generation)
+                        } else if (tunProcesses.isCurrent(generation)) {
+                            // A running VPN with no native bridge must stop.
+                            Log.e(packageName, "$TUN2SOCKS restart budget exhausted")
+                            stopV2Ray()
+                        }
+                    }
+                }
+            }, "tun2socks-watch").start()
+
+            if (!adopted) {
+                // The tracker retains this exact child until watcher exit.
+                child.destroy()
+                return
+            }
+            sendFd(generation, child)
         } catch (e: Exception) {
-            Log.d(packageName, e.toString())
+            if (launchUnaccounted) tunExitTracker.launchFailed()
+            Log.e(packageName, "tun2socks start failed: $e")
+            // A failed current-generation restart must not leave a live VPN without a bridge.
+            if (tunProcesses.isCurrent(generation)) stopV2Ray()
         }
     }
 
-    private fun sendFd() {
+    private fun sendFd(generation: Long, child: Process) {
+        if (!tunProcesses.owns(generation, child)) return
         val fd = mInterface.fileDescriptor
         val path = File(applicationContext.filesDir, "sock_path").absolutePath
-        Log.d(packageName, path)
 
-        GlobalScope.launch(Dispatchers.IO) {
-            var tries = 0
-            while (true) try {
-                Thread.sleep(50L shl tries)
-                Log.d(packageName, "sendFd tries: $tries")
-                LocalSocket().use { localSocket ->
-                    localSocket.connect(LocalSocketAddress(path, LocalSocketAddress.Namespace.FILESYSTEM))
-                    localSocket.setFileDescriptorsForSend(arrayOf(fd))
-                    localSocket.outputStream.write(42)
+        fdScope.launch {
+            for (tries in 0..5) {
+                if (!isActive || !tunProcesses.owns(generation, child)) return@launch
+                delay(50L shl tries)
+                if (!isActive || !tunProcesses.owns(generation, child)) return@launch
+                try {
+                    LocalSocket().use { socket ->
+                        socket.connect(
+                            LocalSocketAddress(path, LocalSocketAddress.Namespace.FILESYSTEM)
+                        )
+                        // Socket file paths can be reused by a restarted child.
+                        if (!tunProcesses.owns(generation, child)) return@launch
+                        socket.setFileDescriptorsForSend(arrayOf(fd))
+                        socket.outputStream.write(42)
+                    }
+                    return@launch
+                } catch (e: Exception) {
+                    Log.d(packageName, "sendFd retry $tries failed: $e")
                 }
-                break
-            } catch (e: Exception) {
-                Log.d(packageName, e.toString())
-                if (tries > 5) break
-                tries += 1
+            }
+
+            // Without the FD, tun2socks cannot forward device packets. Do not
+            // leave an apparently connected VPN that silently blackholes them.
+            if (isActive && tunProcesses.owns(generation, child)) {
+                Log.e(packageName, "tun2socks FD handoff exhausted; stopping VPN")
+                withContext(Dispatchers.Main) {
+                    if (tunProcesses.owns(generation, child)) stopV2Ray()
+                }
             }
         }
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        // Satisfy Android O+ startForegroundService() contract before any early return.
+        V2RayServiceManager.ensureForeground(this)
         V2RayServiceManager.startV2rayPoint()
         return START_STICKY
         //return super.onStartCommand(intent, flags, startId)
+    }
+
+    internal fun isLifecycleActive(): Boolean = fdScope.isActive
+
+    /**
+     * Reopen local TUN/subprocess trackers on a reused V2RayVpnService instance
+     * ONLY while its fdScope is still active and after a verified clean stop left
+     * zero pending establishments, unclosed descriptors, pending launches or live
+     * tun2socks children.
+     */
+    internal fun prepareForVerifiedRestart(): Boolean {
+        if (!fdScope.isActive) return false
+        return tunCloseTracker.resetForNewSession() && tunExitTracker.resetForNewSession()
+    }
+
+    /** Signal termination on any lifecycle thread; do not block Android main. */
+    private fun stopOwnedTun2socks() {
+        val owned = tunProcesses.stop()
+        // Keep every launched child (including late/unadopted children) on the
+        // pending list until its own waitFor() watcher observes actual exit.
+        val pending = tunExitTracker.requestStop()
+        pending.forEach { child ->
+            runCatching { child.destroy() }.onFailure {
+                Log.w(packageName, "Unable to request tun2socks termination")
+            }
+        }
+        if (owned != null && pending.none { it === owned }) {
+            runCatching { owned.destroy() }.onFailure {
+                Log.w(packageName, "Unable to request owned tun2socks termination")
+            }
+        }
+    }
+
+    /**
+     * ONLY V2RayServiceManager's IO cleanup calls this bounded observer.
+     * Not an authoritative native/TUN completion receipt for a VPN generation.
+     */
+    internal fun stopAndAwaitTun2socksExit(): Boolean {
+        stopOwnedTun2socks()
+        return tunExitTracker.awaitStopped(3_000L)
+    }
+
+    /**
+     * Only a successfully returned close() for this exact descriptor removes
+     * it from the pending set. The monitor prevents competing close calls.
+     */
+    private fun closeTrackedTunDescriptor(descriptor: ParcelFileDescriptor): Boolean =
+        synchronized(tunCloseTracker) {
+            if (!tunCloseTracker.isOutstanding(descriptor)) return@synchronized true
+            val closed = runCatching { descriptor.close() }
+                .onFailure { Log.w(packageName, "Xray VPN TUN descriptor close failed", it) }
+                .isSuccess
+            if (closed) tunCloseTracker.closeReturned(descriptor)
+            closed
+        }
+
+    /** Request closure without a blocking wait on Android's lifecycle thread. */
+    private fun closeOwnedTunDescriptors() {
+        tunCloseTracker.requestStop().forEach { closeTrackedTunDescriptor(it) }
+    }
+
+    /**
+     * Called only during the manager's IO shutdown. This verifies close()
+     * returned for each owned PFD and no establishment remains in flight.
+     * It cannot prove duplicated/native FD aliases were released.
+     */
+    internal fun stopAndAwaitTunDescriptorClose(): Boolean {
+        // Preserve the existing stopSelf-before-TUN-close requirement.
+        stopSelf()
+        closeOwnedTunDescriptors()
+        return tunCloseTracker.awaitClosed(3_000L)
     }
 
     private fun stopV2Ray(isForced: Boolean = true) {
@@ -300,37 +484,20 @@ class V2RayVpnService : VpnService(), ServiceControl {
 //        val emptyInfo = VpnNetworkInfo()
 //        val info = loadVpnNetworkInfo(configName, emptyInfo)!! + (lastNetworkInfo ?: emptyInfo)
 //        saveVpnNetworkInfo(configName, info)
-        isRunning = false;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            try {
-                connectivity.unregisterNetworkCallback(defaultNetworkCallback)
-            } catch (ignored: Exception) {
-                // ignored
-            }
-        }
+        stopOwnedTun2socks()
+        releaseUnderlyingNetworkCallback()
 
-        try {
-            Log.d(packageName, "tun2socks destroy")
-            process.destroy()
-        } catch (e: Exception) {
-            Log.d(packageName, e.toString())
-        }
-
-        V2RayServiceManager.stopV2rayPoint()
+        // Always release this instance's TUN/process resources, but atomically
+        // refuse global shutdown when a new service has taken ownership.
+        V2RayServiceManager.stopV2rayPointIfOwner(this)
 
         if (isForced) {
-            //stopSelf has to be called ahead of mInterface.close(). otherwise v2ray core cannot be stooped
-            //It's strage but true.
-            //This can be verified by putting stopself() behind and call stopLoop and startLoop
-            //in a row for several times. You will find that later created v2ray core report port in use
-            //which means the first v2ray core somehow failed to stop and release the port.
+            // Preserve stopSelf-before-TUN-close ordering. Closing the
+            // service-owned descriptor first previously left Xray's native
+            // listener port occupied during rapid stop/start cycles.
             stopSelf()
 
-            try {
-                mInterface.close()
-            } catch (ignored: Exception) {
-                // ignored
-            }
+            closeOwnedTunDescriptors()
         }
     }
 
