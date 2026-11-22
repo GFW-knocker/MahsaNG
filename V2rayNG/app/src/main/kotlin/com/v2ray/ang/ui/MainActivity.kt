@@ -274,6 +274,10 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             true
         }
 
+        R.id.protected_profile_files -> {
+            startActivity(Intent(this, ProtectedProfileFilesActivity::class.java))
+            true
+        }
         R.id.export_all -> {
             if (AngConfigManager.shareNonCustomConfigsToClipboard(this, mainViewModel.serverList) == 0) {
                 toast(R.string.toast_success)

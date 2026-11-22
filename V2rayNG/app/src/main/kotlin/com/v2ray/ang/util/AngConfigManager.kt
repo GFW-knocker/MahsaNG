@@ -885,6 +885,21 @@ object AngConfigManager {
     /**
      * share2Clipboard
      */
+    /** Portable link-only export; leaves subscriptions, custom JSON and app settings untouched. */
+    data class PortableLinkExport(val contents: String, val count: Int, val skipped: Int)
+
+    fun exportPortableProfileLinks(guids: List<String>): PortableLinkExport? {
+        val unique = guids.distinct()
+        if (unique.isEmpty() || unique.size > ProfileLinkBundle.MAX_LINKS) return null
+        val links = unique.mapNotNull { guid ->
+            runCatching { shareConfig(guid) }.getOrNull()?.takeIf(String::isNotBlank)
+        }
+        val normalized = ProfileLinkBundle.parse(links.joinToString("\n")) ?: return null
+        return PortableLinkExport(
+            normalized.joinToString("\n"), normalized.size, unique.size - normalized.size
+        )
+    }
+
     fun shareNonCustomConfigsToClipboard(context: Context, serverList: List<String>): Int {
         try {
             val sb = StringBuilder()

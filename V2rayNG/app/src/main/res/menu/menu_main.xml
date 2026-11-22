@@ -84,6 +84,10 @@
         android:title="@string/title_del_invalid_config"
         app:showAsAction="never" />
     <item
+        android:id="@+id/protected_profile_files"
+        android:title="@string/protected_profile_title"
+        app:showAsAction="never" />
+    <item
         android:id="@+id/export_all"
         android:icon="@drawable/ic_share_white_24dp"
         android:title="@string/title_export_all"
