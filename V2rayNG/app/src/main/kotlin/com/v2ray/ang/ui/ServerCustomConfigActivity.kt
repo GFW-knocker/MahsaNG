@@ -16,6 +16,7 @@ import com.v2ray.ang.dto.ServerConfig
 import com.v2ray.ang.dto.V2rayConfig
 import com.v2ray.ang.extension.toast
 import com.v2ray.ang.util.MmkvManager
+import com.v2ray.ang.util.TestRunTracker
 import com.v2ray.ang.util.Utils
 import me.drakeet.support.toast.ToastCompat
 
@@ -91,8 +92,18 @@ class ServerCustomConfigActivity : BaseActivity() {
         config.remarks = binding.etRemarks.text.toString().trim()
         config.fullConfig = v2rayConfig
 
-        MmkvManager.encodeServerConfig(editGuid, config)
-        serverRawStorage?.encode(editGuid, binding.editor.text.toString())
+        val savedGuid = MmkvManager.encodeServerConfig(editGuid, config)
+        if (savedGuid.isBlank()) {
+            toast(R.string.toast_failure)
+            return false
+        }
+        // This custom editor changes the endpoint under the same GUID too.
+        // Retire in-flight and persisted results before reporting success.
+        if (editGuid.isNotBlank()) {
+            TestRunTracker.forgetProfile(editGuid)
+            MmkvManager.clearTestDelayResults(listOf(editGuid))
+        }
+        serverRawStorage?.encode(savedGuid, binding.editor.text.toString())
         toast(R.string.toast_success)
         finish()
         return true
@@ -105,8 +116,11 @@ class ServerCustomConfigActivity : BaseActivity() {
         if (editGuid.isNotEmpty()) {
             AlertDialog.Builder(this).setMessage(R.string.del_config_comfirm)
                     .setPositiveButton(android.R.string.ok) { _, _ ->
-                        MmkvManager.removeServer(editGuid)
-                        finish()
+                        if (MmkvManager.removeServer(editGuid)) {
+                            finish()
+                        } else {
+                            toast(R.string.toast_failure)
+                        }
                     }
                     .show()
         }

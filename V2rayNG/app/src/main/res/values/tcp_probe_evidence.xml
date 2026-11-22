@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tcp_evidence_hint">Tap for TCP socket evidence</string>
+    <string name="tcp_evidence_title">TCP connection attempt details</string>
+    <string name="tcp_evidence_summary">Total probe time: %1$d ms. Attempts: %2$d. This is a direct TCP socket test, not an HTTP or full proxy test.</string>
+    <string name="tcp_evidence_attempt">Attempt %1$d: %2$d ms — %3$s</string>
+    <string name="tcp_evidence_connected">TCP connection established</string>
+</resources>

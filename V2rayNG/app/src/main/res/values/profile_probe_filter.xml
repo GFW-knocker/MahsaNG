@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="profile_probe_status_label">Saved test result (TCP or proxy test, method not interchangeable)</string>
+    <string name="profile_probe_max_latency_label">Maximum measured latency in ms (optional, 1–60000)</string>
+    <string name="profile_probe_invalid_latency">Invalid latency limit. Use a value from 1 to 60000 ms, or leave blank.</string>
+    <string-array name="profile_probe_statuses">
+        <item>All profiles</item>
+        <item>Measured success (positive delay)</item>
+        <item>Measured failure (negative delay)</item>
+        <item>Untested or unknown (zero or absent)</item>
+    </string-array>
+</resources>

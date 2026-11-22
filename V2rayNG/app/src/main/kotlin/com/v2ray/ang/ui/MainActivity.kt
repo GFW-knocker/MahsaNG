@@ -292,6 +292,56 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             mainViewModel.testAllRealPing()
             true
         }
+        R.id.recommend_tested_server -> {
+            if (mainViewModel.isRunning.value == true) {
+                toast(R.string.smart_recommend_running)
+            } else {
+                val visibleGuids = mainViewModel.serversCache.map { it.guid }.toList()
+                lifecycleScope.launch {
+                    val preview = withContext(Dispatchers.IO) {
+                        MmkvManager.recommendSmartProfile(visibleGuids)
+                    }
+                    if (mainViewModel.isRunning.value == true) {
+                        toast(R.string.smart_recommend_running)
+                    } else if (preview == null) {
+                        toast(R.string.smart_recommend_no_results)
+                    } else {
+                        val remark = withContext(Dispatchers.IO) {
+                            MmkvManager.decodeServerConfig(preview.guid)?.remarks
+                        }
+                        if (remark == null) {
+                            toast(R.string.smart_recommend_changed)
+                        } else {
+                            val minutesOld = ((System.currentTimeMillis() -
+                                preview.observedAtMillis) / 60_000L).coerceAtLeast(0L)
+                            AlertDialog.Builder(this@MainActivity)
+                                .setTitle(R.string.title_recommend_tested_server)
+                                .setMessage(getString(
+                                    R.string.smart_recommend_preview,
+                                    remark.take(120), preview.delayMillis,
+                                    preview.successes, preview.samples, minutesOld,
+                                ))
+                                .setPositiveButton(R.string.smart_recommend_select) { _, _ ->
+                                    if (mainViewModel.isRunning.value == true) {
+                                        toast(R.string.smart_recommend_running)
+                                    } else {
+                                        val stillVisible = mainViewModel.serversCache.map { it.guid }
+                                        if (MmkvManager.confirmSmartRecommendation(preview, stillVisible)) {
+                                            mainViewModel.reloadServerList()
+                                            toast(R.string.smart_recommend_selected)
+                                        } else {
+                                            toast(R.string.smart_recommend_changed)
+                                        }
+                                    }
+                                }
+                                .setNegativeButton(android.R.string.cancel, null)
+                                .show()
+                        }
+                    }
+                }
+            }
+            true
+        }
 
         R.id.service_restart -> {
             restartV2Ray()
@@ -301,32 +351,73 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         R.id.del_all_config -> {
             AlertDialog.Builder(this).setMessage(R.string.del_config_comfirm)
                     .setPositiveButton(android.R.string.ok) { _, _ ->
-                        MmkvManager.removeAllServer()
-                        mainViewModel.reloadServerList()
+                        lifecycleScope.launch {
+                            val completed = withContext(Dispatchers.IO) { MmkvManager.removeAllServer() }
+                            if (completed) mainViewModel.reloadServerList()
+                            else toast(R.string.toast_failure)
+                        }
                     }
+                    .setNegativeButton(android.R.string.cancel, null)
                     .show()
             true
         }
-        R.id.del_duplicate_config-> {
-            AlertDialog.Builder(this).setMessage(R.string.del_config_comfirm)
-                .setPositiveButton(android.R.string.ok) { _, _ ->
-                    mainViewModel.removeDuplicateServer()
+        R.id.del_duplicate_config -> {
+            val visibleGuids = mainViewModel.serversCache.map { it.guid }.toList()
+            lifecycleScope.launch {
+                val candidates = withContext(Dispatchers.IO) {
+                    MmkvManager.findDuplicateServerGuids(visibleGuids)
                 }
-                .show()
+                if (candidates.isEmpty()) {
+                    toast(R.string.toast_none_data)
+                } else {
+                    AlertDialog.Builder(this@MainActivity)
+                        .setMessage(getString(R.string.del_duplicate_config_confirmation, candidates.size))
+                        .setPositiveButton(android.R.string.ok) { _, _ ->
+                            lifecycleScope.launch {
+                                val removed = withContext(Dispatchers.IO) {
+                                    MmkvManager.removeDuplicateServers(candidates, visibleGuids)
+                                }
+                                mainViewModel.reloadServerList()
+                                if (removed > 0) toast(getString(R.string.title_del_duplicate_config_count, removed))
+                                else toast(R.string.toast_none_data)
+                            }
+                        }
+                        .setNegativeButton(android.R.string.cancel, null)
+                        .show()
+                }
+            }
             true
         }
         R.id.del_invalid_config -> {
-            AlertDialog.Builder(this).setMessage(R.string.del_config_comfirm)
-                .setPositiveButton(android.R.string.ok) { _, _ ->
-                    MmkvManager.removeInvalidServer()
-                    mainViewModel.reloadServerList()
+            val visibleGuids = mainViewModel.serversCache.map { it.guid }.toList()
+            lifecycleScope.launch {
+                val candidates = withContext(Dispatchers.IO) {
+                    MmkvManager.findConfirmedFailedServerCandidates(visibleGuids)
                 }
-                .show()
+                if (candidates.isEmpty()) {
+                    toast(R.string.toast_none_data)
+                } else {
+                    AlertDialog.Builder(this@MainActivity)
+                        .setMessage(getString(R.string.del_failed_config_confirmation, candidates.size))
+                        .setPositiveButton(android.R.string.ok) { _, _ ->
+                            lifecycleScope.launch {
+                                withContext(Dispatchers.IO) {
+                                    MmkvManager.removeConfirmedFailedServers(candidates)
+                                }
+                                mainViewModel.reloadServerList()
+                            }
+                        }
+                        .setNegativeButton(android.R.string.cancel, null)
+                        .show()
+                }
+            }
             true
         }
         R.id.sort_by_test_results -> {
-            MmkvManager.sortByTestResults()
-            mainViewModel.reloadServerList()
+            lifecycleScope.launch {
+                withContext(Dispatchers.IO) { MmkvManager.sortByTestResults() }
+                mainViewModel.reloadServerList()
+            }
             true
         }
         R.id.filter_config -> {

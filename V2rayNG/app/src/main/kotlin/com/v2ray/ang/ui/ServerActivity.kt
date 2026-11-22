@@ -29,6 +29,7 @@ import com.v2ray.ang.dto.V2rayConfig.Companion.TLS
 import com.v2ray.ang.extension.removeWhiteSpace
 import com.v2ray.ang.extension.toast
 import com.v2ray.ang.util.MmkvManager
+import com.v2ray.ang.util.TestRunTracker
 import com.v2ray.ang.util.MmkvManager.ID_MAIN
 import com.v2ray.ang.util.MmkvManager.KEY_SELECTED_SERVER
 import com.v2ray.ang.util.Utils
@@ -754,7 +755,15 @@ class ServerActivity : BaseActivity() {
 
         }
 
-        MmkvManager.encodeServerConfig(editGuid, config)
+        val savedGuid = MmkvManager.encodeServerConfig(editGuid, config)
+        if (savedGuid.isBlank()) {
+            toast(R.string.toast_failure)
+            return false
+        }
+        if (editGuid.isNotBlank()) {
+            TestRunTracker.forgetProfile(editGuid)
+            MmkvManager.clearTestDelayResults(listOf(editGuid))
+        }
         toast(R.string.toast_success)
         finish()
         return true
@@ -919,13 +928,11 @@ class ServerActivity : BaseActivity() {
                 if (settingsStorage?.decodeBool(AppConfig.PREF_CONFIRM_REMOVE) == true) {
                     AlertDialog.Builder(this).setMessage(R.string.del_config_comfirm)
                         .setPositiveButton(android.R.string.ok) { _, _ ->
-                            MmkvManager.removeServer(editGuid)
-                            finish()
+                            if (MmkvManager.removeServer(editGuid)) finish() else toast(R.string.toast_failure)
                         }
                         .show()
                 } else {
-                    MmkvManager.removeServer(editGuid)
-                    finish()
+                    if (MmkvManager.removeServer(editGuid)) finish() else toast(R.string.toast_failure)
                 }
             }
         }

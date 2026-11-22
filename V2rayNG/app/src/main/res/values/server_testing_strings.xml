@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="del_duplicate_config_confirmation">Delete %1$d duplicate profiles from the displayed list? The selected profile will be kept.</string>
+    <string name="del_failed_config_confirmation">Delete %1$d failed profiles from the displayed list?</string>
+    <string name="smart_recommend_changed">The selected profile or its test evidence changed. Retry the recommendation.</string>
+    <string name="smart_recommend_no_results">No recent successful real-ping measurements. Run Real ping all, then try again.</string>
+    <string name="smart_recommend_preview">Server: %1$s\nOutbound HTTP probe: %2$d ms\nRecent successes: %3$d/%4$d tests\nMeasured: %5$d minutes ago\n\nThis does not prove VPN-wide traffic, throughput or DNS leak safety. Selecting will not connect automatically.</string>
+    <string name="smart_recommend_running">Disconnect the VPN before selecting a recommendation.</string>
+    <string name="smart_recommend_select">Select profile</string>
+    <string name="smart_recommend_selected">Profile selected; VPN not started.</string>
+    <string name="tcp_probe_balanced">Balanced: up to 2 attempts, 3 s each; stop on success</string>
+    <string name="tcp_probe_concurrency_12">12 simultaneous TCP tests</string>
+    <string name="tcp_probe_concurrency_16">16 simultaneous TCP tests (maximum)</string>
+    <string name="tcp_probe_concurrency_4">4 simultaneous TCP tests</string>
+    <string name="tcp_probe_concurrency_8">8 simultaneous TCP tests (default)</string>
+    <string name="tcp_probe_diagnostic">Diagnostic: up to 3 attempts, 5 s each; stop on success</string>
+    <string name="tcp_probe_quick">Quick: 1 attempt, 1.5 s connect timeout</string>
+    <string name="title_recommend_tested_server">Recommend from recent real ping</string>
+    <string name="title_tcp_probe_concurrency">Parallel TCP connect tests (not proxy traffic)</string>
+    <string name="title_tcp_probe_preset">TCP reachability test (not proxy verification)</string>
+</resources>

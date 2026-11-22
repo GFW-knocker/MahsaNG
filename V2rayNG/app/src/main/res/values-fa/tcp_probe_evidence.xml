@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tcp_evidence_hint">برای مشاهدهٔ جزئیات اتصال TCP لمس کنید</string>
+    <string name="tcp_evidence_title">جزئیات تلاش اتصال TCP</string>
+    <string name="tcp_evidence_summary">زمان کل بررسی: %1$d میلی‌ثانیه. تعداد تلاش: %2$d. این فقط آزمایش مستقیم سوکت TCP است، نه آزمایش HTTP یا پراکسی کامل.</string>
+    <string name="tcp_evidence_attempt">تلاش %1$d: %2$d میلی‌ثانیه — %3$s</string>
+    <string name="tcp_evidence_connected">اتصال TCP برقرار شد</string>
+</resources>

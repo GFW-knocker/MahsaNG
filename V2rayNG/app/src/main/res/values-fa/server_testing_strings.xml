@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="del_duplicate_config_confirmation">آیا %1$d پیکربندی تکراری از فهرست نمایش‌داده‌شده حذف شوند؟ پیکربندی انتخاب‌شده حفظ می‌شود.</string>
+    <string name="del_failed_config_confirmation">آیا %1$d پروفایل ناموفق از فهرست نمایش‌داده‌شده حذف شوند؟</string>
+    <string name="smart_recommend_changed">سرور یا نتیجهٔ آزمایش آن تغییر کرده است. پیشنهاد را دوباره اجرا کنید.</string>
+    <string name="smart_recommend_no_results">نتیجهٔ موفق و تازه‌ای از پینگ واقعی وجود ندارد. ابتدا «پینگ واقعی همه» را اجرا کنید.</string>
+    <string name="smart_recommend_preview">سرور: %1$s\nآزمایش HTTP خروجی: %2$d میلی‌ثانیه\nموفقیت‌های اخیر: %3$d از %4$d آزمایش\nزمان اندازه‌گیری: %5$d دقیقه پیش\n\nاین نتیجه، عبور تمام ترافیک وی‌پی‌ان، سرعت دانلود یا نبود نشت DNS را ثابت نمی‌کند. انتخاب سرور اتصال را خودکار آغاز نمی‌کند.</string>
+    <string name="smart_recommend_running">برای انتخاب پیشنهاد، ابتدا وی‌پی‌ان را قطع کنید.</string>
+    <string name="smart_recommend_select">انتخاب سرور</string>
+    <string name="smart_recommend_selected">سرور انتخاب شد؛ وی‌پی‌ان روشن نشده است.</string>
+    <string name="tcp_probe_balanced">متعادل: حداکثر ۲ تلاش، هرکدام ۳ ثانیه؛ توقف پس از موفقیت</string>
+    <string name="tcp_probe_concurrency_12">۱۲ آزمون هم‌زمان TCP</string>
+    <string name="tcp_probe_concurrency_16">۱۶ آزمون هم‌زمان TCP (بیشینه)</string>
+    <string name="tcp_probe_concurrency_4">۴ آزمون هم‌زمان TCP</string>
+    <string name="tcp_probe_concurrency_8">۸ آزمون هم‌زمان TCP (پیش‌فرض)</string>
+    <string name="tcp_probe_diagnostic">تشخیصی: حداکثر ۳ تلاش، هرکدام ۵ ثانیه؛ توقف پس از موفقیت</string>
+    <string name="tcp_probe_quick">سریع: ۱ تلاش با مهلت اتصال ۱٫۵ ثانیه</string>
+    <string name="title_recommend_tested_server">پیشنهاد سرور بر اساس پینگ واقعی اخیر</string>
+    <string name="title_tcp_probe_concurrency">تعداد آزمون‌های هم‌زمان TCP (نه ترافیک پروکسی)</string>
+    <string name="title_tcp_probe_preset">آزمون دسترسی TCP (نه تأیید عملکرد پروکسی)</string>
+</resources>

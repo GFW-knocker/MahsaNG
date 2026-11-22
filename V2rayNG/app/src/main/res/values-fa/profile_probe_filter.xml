@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="profile_probe_status_label">نتیجهٔ ذخیره‌شدهٔ آزمایش (TCP یا پراکسی؛ روش‌ها یکسان نیستند)</string>
+    <string name="profile_probe_max_latency_label">بیشترین تأخیر اندازه‌گیری‌شده به میلی‌ثانیه (اختیاری، ۱ تا ۶۰۰۰۰)</string>
+    <string name="profile_probe_invalid_latency">محدودهٔ تأخیر نامعتبر است؛ عددی بین ۱ تا ۶۰۰۰۰ وارد کنید یا خالی بگذارید.</string>
+    <string-array name="profile_probe_statuses">
+        <item>همهٔ پروفایل‌ها</item>
+        <item>موفق (تأخیر مثبت)</item>
+        <item>ناموفق (تأخیر منفی)</item>
+        <item>آزمایش‌نشده یا نامشخص (صفر یا خالی)</item>
+    </string-array>
+</resources>
