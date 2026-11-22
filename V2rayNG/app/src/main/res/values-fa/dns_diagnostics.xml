@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="dns_diagnostics_title">عیب‌یابی و اسکن DNS</string>
+    <string name="dns_diagnostics_route_warning">پرس‌وجوهای DNS فقط برای بررسی و از داخل برنامه ارسال می‌شوند. ممکن است از VPN فعال یا شبکه دستگاه عبور کنند؛ این نتایج نه مسیر واقعی Xray را ثابت می‌کنند و نه به‌تنهایی نشت DNS را نشان می‌دهند. هیچ کانفیگ یا تنظیم DNS تغییر نمی‌کند.</string>
+    <string name="dns_diagnostics_domains">دامنه‌ها (با ویرگول یا خط جدید، حداکثر ۱۲ دامنه)</string>
+    <string name="dns_diagnostics_resolvers">IP سرورهای DNS و در صورت نیاز پورت (حداکثر ۴، مانند 1.1.1.1)</string>
+    <string name="dns_diagnostics_types">نوع رکورد (A, AAAA, CNAME, MX, TXT, NS, SOA)</string>
+    <string name="dns_diagnostics_timeout">مهلت هر تلاش UDP/TCP برحسب میلی‌ثانیه (۳۰۰ تا ۱۰۰۰۰)</string>
+    <string name="dns_diagnostics_one">بررسی اولین دامنه و DNS</string>
+    <string name="dns_diagnostics_scan">اسکن دامنه‌ها و DNSهای انتخاب‌شده</string>
+    <string name="dns_diagnostics_stop">توقف اسکن</string>
+    <string name="dns_diagnostics_filter_all">نمایش: همه نتایج</string>
+    <string name="dns_diagnostics_filter_ok">نمایش: پاسخ‌های موفق</string>
+    <string name="dns_diagnostics_filter_errors">نمایش: خطاها و پاسخ‌های خالی</string>
+    <string name="dns_diagnostics_sort_original">ترتیب: زمان تکمیل</string>
+    <string name="dns_diagnostics_sort_fastest">ترتیب: موفق و سریع‌تر</string>
+    <string name="dns_diagnostics_progress">تکمیل شده: %1$d از %2$d پرس‌وجو</string>
+    <string name="dns_diagnostics_empty">نتیجه‌ای برای نمایش وجود ندارد.</string>
+    <string name="dns_diagnostics_invalid">دامنه، IP عددی سرور DNS، نوع رکورد، مهلت و محدودیت‌ها را بررسی کنید (حداکثر ۱۴۴ پرس‌وجو). چیزی ارسال نشده است.</string>
+    <string name="dns_diagnostics_confirm_title">تأیید تعداد پرس‌وجوهای DNS</string>
+    <string name="dns_diagnostics_budget">حداکثر %1$d پرس‌وجوی DNS در مسیر شبکه برنامه ارسال شود؟ این کار داده مصرف می‌کند و دامنه‌های بررسی‌شده را به DNSهای انتخابی نشان می‌دهد. پاسخ کوتاه‌شده UDP ممکن است یک پرس‌وجوی TCP دیگر لازم داشته باشد.</string>
+    <string name="dns_diagnostics_run">شروع پرس‌وجو</string>
+    <string name="dns_diagnostics_stopped">متوقف شد. نتایج دیررس پذیرفته نمی‌شوند و نتیجه‌های تکمیل‌شده قابل مشاهده‌اند.</string>
+    <string name="dns_diagnostics_no_plain_resolver">سرور DNS با IP عددی در تنظیمات یافت نشد؛ IP را دستی وارد کنید</string>
+    <string name="dns_diagnostics_configured">DNS تنظیم‌شدهٔ Xray (بدون تأیید پروفایل فعال): %1$s. تعداد %2$d ورودی دیگر، از جمله آدرس‌های غیر IP، نمایش داده نشده است. نشانی‌های URL نمایش داده نمی‌شوند.</string>
+    <string name="dns_diagnostics_test_route">مسیر آزمایش: UDP/TCP از داخل برنامه به DNS انتخابی. شبکه پیش‌فرض گزارش‌شدهٔ اندروید در آغاز آزمایش: %1$s. مسیر واقعی DNS از درون پراکسی Xray آزمایش نشده است.</string>
+    <string name="dns_diagnostics_route_vpn_reported">حمل‌ونقل VPN گزارش شده</string>
+    <string name="dns_diagnostics_route_vpn_not_reported">حمل‌ونقل VPN گزارش نشده</string>
+    <string name="dns_diagnostics_route_unknown">نامشخص</string>
+    <string name="dns_diagnostics_route_changed">تغییر شبکه پیش‌فرض در طول آزمایش مشاهده شد؛ نتایج را با احتیاط مقایسه کنید.</string>
+    <string name="dns_diagnostics_route_select_app">مسیر آزمایش بعدی: شبکه برنامه (UDP و در صورت نیاز TCP). برای تغییر لمس کنید</string>
+    <string name="dns_diagnostics_route_select_socks">مسیر آزمایش بعدی: SOCKS5 محلی (DNS روی TCP). برای تغییر لمس کنید</string>
+    <string name="dns_diagnostics_invalid_socks_port">پورت SOCKS5 محلی تنظیم‌شده معتبر نیست. هیچ درخواستی ارسال نشد.</string>
+    <string name="dns_diagnostics_budget_socks">حداکثر %1$d پرس‌وجوی DNS روی TCP از مسیر SOCKS5 محلی در 127.0.0.1:%2$d ارسال شود؟ این فقط مسیر رلهٔ محلی را آزمایش می‌کند؛ نه DNS داخلی Xray یا خروجی انتخاب‌شده را. هیچ مسیر جایگزین مستقیم استفاده نمی‌شود.</string>
+    <string name="dns_diagnostics_test_route_socks">مسیر آزمایش: SOCKS5 محلی در 127.0.0.1:%1$d که DNS را روی TCP به سرور انتخابی می‌فرستد. این آزمایش پروفایل فعال، خروجی راه‌دور یا مسیر DNS داخلی Xray را تأیید نمی‌کند و نشتی DNS را ثابت نمی‌کند.</string>
+    <string name="dns_diagnostics_result_socks">SOCKS5 محلی / TCP</string>
+    <string name="dns_diagnostics_result_app">شبکه برنامه UDP/TCP</string>
+    <string name="dns_diagnostics_filter_mismatches">نمایش: اختلاف پاسخ‌های مشاهده‌شده</string>
+    <string name="dns_diagnostics_filter_timeouts">نمایش: پایان مهلت پاسخ</string>
+    <string name="dns_diagnostics_scan_summary">پاسخ DNS: %1$d | پایان مهلت: %2$d | تغییر UDP به TCP: %3$d | گروه‌های با پاسخ متفاوت: %4$d</string>
+    <string name="dns_diagnostics_mismatch_notice">پاسخ‌های متفاوتی از DNSهای مختلف دریافت شد؛ این به‌تنهایی نشانهٔ نشت DNS نیست.</string>
+</resources>

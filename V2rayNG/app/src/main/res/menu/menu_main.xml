@@ -89,6 +89,10 @@
         android:title="@string/title_export_all"
         app:showAsAction="never" />
     <item
+        android:id="@+id/dns_diagnostics"
+        android:title="@string/dns_diagnostics_title"
+        app:showAsAction="never" />
+    <item
         android:id="@+id/ping_all"
         android:title="@string/title_ping_all_server"
         app:showAsAction="never" />

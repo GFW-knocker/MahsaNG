@@ -73,6 +73,9 @@
             android:name=".ui.PerAppProxyActivity" />
         <activity
             android:exported="false"
+            android:name=".ui.DnsDiagnosticsActivity" />
+        <activity
+            android:exported="false"
             android:name=".ui.ScannerActivity" />
         <activity
             android:exported="false"
