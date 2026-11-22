@@ -17,13 +17,17 @@ class V2RayProxyOnlyService : Service(), ServiceControl {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        // Satisfy Android O+ startForegroundService() contract before any early return.
+        V2RayServiceManager.ensureForeground(this)
         V2RayServiceManager.startV2rayPoint()
         return START_STICKY
     }
 
     override fun onDestroy() {
+        // Atomic owner check prevents a stale proxy service from stopping
+        // a newer VPN or proxy session during Android service handoff.
+        V2RayServiceManager.stopV2rayPointIfOwner(this)
         super.onDestroy()
-        V2RayServiceManager.stopV2rayPoint()
     }
 
     override fun getService(): Service {

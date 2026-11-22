@@ -2,9 +2,7 @@ package com.v2ray.ang.gfwknocker
 
 import android.app.Service
 import android.content.Context
-import com.v2ray.ang.AppConfig
-import com.v2ray.ang.R
-import com.v2ray.ang.util.MessageUtil
+import com.v2ray.ang.service.FragmentorListenerExit
 
 
 class backServ(ctx1 : Context , svc1 : Service , target_ip : String , target_port : Int , nfrag : Int , sleepfrag : Double , is_youtube : Boolean ){
@@ -17,9 +15,9 @@ class backServ(ctx1 : Context , svc1 : Service , target_ip : String , target_por
     // constructor
     init {
 
-        var mystrg = my_preference_storage(ctx);
-        var isp = mystrg.get_value("isp","mci")
-
+        // The public source does not contain config_pkg_reader or its DNS rules.
+        // Do not guess DoH targets or silently start a partially configured proxy.
+        require(!is_youtube) { "YouTube/DoH mode has no published config parser" }
 
         TLS_serv = TLS_Fragmentor(
             "127.0.0.1", 2500,
@@ -29,45 +27,7 @@ class backServ(ctx1 : Context , svc1 : Service , target_ip : String , target_por
 
 
 
-        // --------------------- HTTPS and DOH --------------------
-        if( is_youtube ) {
-            val url_remote_config = mystrg.get_value(
-                "url_remote_config",
-                ctx.getResources().getString(R.string.remote_config_url)
-            )
-            var cpr = config_pkg_reader(url_remote_config, "mahsa_config.json", ctx)
-            cpr.fetch_json_config(true)  // fetch mahsa config from shared preference or local asset
-
-
-            var offline_dns = cpr.get_offline_DNS(isp)
-            var doh_url = cpr.get_doh_url(isp)
-            var doh_ip = cpr.get_doh_ip(isp)
-            var doh_CF_flag = cpr.get_doh_CF_flag(isp)
-
-            if (doh_url.isEmpty()) {
-                doh_url = "cloudflare"
-            }
-
-            if (doh_CF_flag) {
-                doh_ip = target_ip
-            }
-
-            // DoH service to be used inside code for DNS
-            DoH_service = DoH_over_Fragment(
-                doh_url, doh_ip, 443,
-                true, nfrag, sleepfrag,
-                offline_dns
-            )
-
-            // HTTPS proxy listening on 127.0.0.1:4500
-            HTTPS_serv = HTTPS_Fragmentor(
-                "127.0.0.1", 4500,
-                "", -1,
-                DoH_service, true,
-                nfrag, sleepfrag
-            )
-        }
-
+        // No optional DoH listener is constructed until its source and rules are restored.
 
 //        DoH_service!!.query("instagram.com")
 //        DoH_service!!.query("youtube.com")
@@ -83,21 +43,53 @@ class backServ(ctx1 : Context , svc1 : Service , target_ip : String , target_por
 
 
     fun start_HTTPS_service() {
-        HTTPS_serv!!.start()
+        // YouTube/DoH forwarding is optional; it is not created for normal profiles.
+        HTTPS_serv?.let { if (it.state == Thread.State.NEW) it.start() }
     }
 
     fun stop_HTTPS_service() {
-        HTTPS_serv!!.safely_stop_server()
-        DoH_service!!.safely_stop_DoH()
+        runCatching { HTTPS_serv?.safely_stop_server() }
+        runCatching { DoH_service?.safely_stop_DoH() }
     }
 
     fun start_TLS_service() {
-        TLS_serv!!.start()
+        TLS_serv?.let { if (it.state == Thread.State.NEW) it.start() }
     }
 
     fun stop_TLS_service() {
-        TLS_serv!!.safely_stop_server()
+        runCatching { TLS_serv?.safely_stop_server() }
     }
 
+    /**
+     * Stop optional listeners AND every accepted-client up/downstream worker.
+     * Socket closes are requests, not worker-exit evidence. One bounded
+     * deadline applies to all observed listener/forwarder Java Threads.
+     * This does not certify native TUN, Xray or Psiphon resources.
+     */
+    fun stopAndAwaitListeners(timeoutMillis: Long = 3_000L): Boolean {
+        // Always request both shutdown paths, even if either throws.
+        val startedNs = System.nanoTime()
+        val httpsStopReturned = runCatching { stop_HTTPS_service() }.isSuccess
+        val tlsStopReturned = runCatching { stop_TLS_service() }.isSuccess
+        if (timeoutMillis !in 1L..10_000L) return false
+
+        fun remainingMillis(): Long {
+            val elapsed = System.nanoTime() - startedNs
+            val remainingNs = timeoutMillis * 1_000_000L - elapsed
+            return if (remainingNs <= 0L) 0L else
+                minOf(timeoutMillis, remainingNs / 1_000_000L + if (remainingNs % 1_000_000L == 0L) 0L else 1L)
+        }
+
+        val listenersExited = FragmentorListenerExit.allExitedWithin(
+            remainingMillis(), HTTPS_serv, TLS_serv, DoH_service?.fragment_serv
+        )
+        // Do not short-circuit: still attempt to observe all worker groups.
+        val httpsForwardersExited = HTTPS_serv?.awaitForwardersExited(remainingMillis()) ?: true
+        val tlsForwardersExited = TLS_serv?.awaitForwardersExited(remainingMillis()) ?: true
+        val dohForwardersExited = DoH_service?.fragment_serv?.awaitForwardersExited(remainingMillis()) ?: true
+        val allExited = listenersExited && httpsForwardersExited && tlsForwardersExited &&
+            dohForwardersExited
+        return httpsStopReturned && tlsStopReturned && allExited
+    }
 }
 

@@ -3,11 +3,15 @@ package com.v2ray.ang.gfwknocker
 //import android.util.Log
 //import android.net.VpnService
 
+import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
+import java.net.InetAddress
+import java.net.InetSocketAddress
 import java.net.ServerSocket
 import java.net.Socket
 import java.util.Collections
+import com.v2ray.ang.service.FragmentorForwardingWorkers
 
 const val myT_socket_timeout = 8000  // Set socket timeout to 8 seconds
 
@@ -20,33 +24,55 @@ class TLS_Fragmentor(
     var num_fragment: Int,
     var fragment_sleep: Double // in second
 ) : Thread() {
-    var ss: ServerSocket? = null
+    @Volatile var ss: ServerSocket? = null
+    @Volatile private var stopRequested = false
+    private val listenerLock = Any()
+    private val forwarders = FragmentorForwardingWorkers()
     var client_sock: Socket? = null
-    var is_ready = false
+    @Volatile var is_ready = false
 
 
 
     override fun run() {
         try {
-            ss = ServerSocket(listen_port, 128) // up to 128 concurrent connection queued
-            listen_port = ss!!.localPort
+            val bound = FragmentorSocketBinding.bind(listen_ip, listen_port) // configured address; normally loopback
+            // Publish or close under the same lock as shutdown, so stop during bind
+            // cannot leave a listener alive even if it was not yet assigned.
+            synchronized(listenerLock) {
+                if (stopRequested) {
+                    FragmentorSocketBinding.closeQuietly(bound)
+                    return
+                }
+                ss = bound
+                listen_port = bound.localPort
+            }
             println("TLS Listening at $listen_ip:$listen_port")
             println("target $target_ip:$target_port\r\nnum_fragment:$num_fragment\r\nfragment_sleep:$fragment_sleep\r\nuse_fragment:$isFragment")
 
+            if (stopRequested) return
             is_ready = true
-            while (true) {
+            while (!stopRequested) {
 //                println("TLS waiting for input socket ...")
-                client_sock = ss!!.accept()
-
-                val up_thread = My_upstream(
-                    client_sock,
-                    target_ip,
-                    target_port,
-                    isFragment,
-                    num_fragment,
-                    fragment_sleep
-                )
-                up_thread.start()
+                val accepted = ss!!.accept()
+                client_sock = accepted
+                try {
+                    val up_thread = My_upstream(
+                        accepted,
+                        target_ip,
+                        target_port,
+                        isFragment,
+                        num_fragment,
+                        fragment_sleep,
+                        forwarders
+                    )
+                    if (!forwarders.start(up_thread, accepted)) {
+                        // Stop won after accept but before registration.
+                        runCatching { accepted.close() }
+                    }
+                } catch (failure: Exception) {
+                    runCatching { accepted.close() }
+                    throw failure
+                }
             }
         } catch (e: Exception) {
 //            println("TLS Server ERR: " + e.message)
@@ -54,6 +80,8 @@ class TLS_Fragmentor(
         } finally {
 //            println("TLS Server Stopped. Listening Finished.")
             is_ready = false
+            FragmentorSocketBinding.closeQuietly(ss)
+            forwarders.stop()
         }
 //        println("TLS Server Thread Finished")
     } // run
@@ -76,14 +104,17 @@ class TLS_Fragmentor(
     }
 
     fun safely_stop_server() {
-        try {
-            ss!!.close()
-        } catch (e: Exception) {
-//            println("Safe Stop ERR: " + e.message)
-            return
+        synchronized(listenerLock) {
+            stopRequested = true
+            FragmentorSocketBinding.closeQuietly(ss)
+            is_ready = false
         }
-//        println("TLS server socket safely stopped")
+        // Request all client/backend socket closures, not just the listener.
+        forwarders.stop()
     }
+
+    fun awaitForwardersExited(timeoutMillis: Long): Boolean =
+        forwarders.awaitExited(timeoutMillis)
 } //class Server
 
 
@@ -95,7 +126,8 @@ internal class My_upstream(
     var target_port: Int,
     var isFragment1: Boolean,
     var num_fragment1: Int,
-    var fragment_sleep1: Double ) : Thread() {
+    var fragment_sleep1: Double,
+    private val forwarders: FragmentorForwardingWorkers ) : Thread() {
 
     var ips: InputStream
     var ops: OutputStream? = null
@@ -117,13 +149,34 @@ internal class My_upstream(
 
     override fun run() {
         try {
-            backend_sock = Socket(target_ip, target_port)
+            val addresses = InetAddress.getAllByName(target_ip)
+            var connected: Socket? = null
+            var lastError: Exception? = null
+            for (address in addresses) {
+                val remote = Socket()
+                backend_sock = remote
+                // Track before connect() so stop() unblocks even a stalled TCP SYN.
+                if (!forwarders.track(this, backend_sock!!)) {
+                    throw IllegalStateException("Fragmentor stopped during backend connection")
+                }
+                try {
+                    remote.connect(InetSocketAddress(address, target_port), myT_socket_timeout)
+                    connected = remote
+                    break
+                } catch (connectError: Exception) {
+                    lastError = connectError
+                    runCatching { remote.close() }
+                }
+            }
+            backend_sock = connected ?: throw (lastError ?: IOException("Unable to connect to $target_ip:$target_port"))
             backend_sock!!.soTimeout = myT_socket_timeout
             backend_sock!!.tcpNoDelay = true
             ops = backend_sock!!.getOutputStream()
 
             val down_thread = My_downstream(backend_sock!!.getInputStream(), client_sock!!.getOutputStream())
-            down_thread.start()
+            if (!forwarders.start(down_thread, backend_sock!!, client_sock!!)) {
+                throw IllegalStateException("Fragmentor stopped before downstream start")
+            }
 
 //            println("up-stream started")
             sleep(first_time_sleep) // wait n millisec for first packet to fully receive
@@ -148,9 +201,9 @@ internal class My_upstream(
         safely_close_socket(client_sock)
         safely_close_socket(backend_sock)
         try {
-            ops!!.flush()
-            ops!!.close()
-            ips!!.close()
+            ops?.flush()
+            ops?.close()
+            ips.close()
         } catch (e: Exception) {
 //            println("up-stream Close ERR: " + e.message)
         }

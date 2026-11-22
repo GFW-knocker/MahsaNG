@@ -44,9 +44,14 @@ public class GFW_youtube_config_Activity extends AppCompatActivity {
 
                 String server = "vmess://ew0KICAidiI6ICIyIiwNCiAgInBzIjogIllvdXR1YmUgJiBUd2l0dGVyIiwNCiAgImFkZCI6ICJnZncueW91dHViZS5jb20iLA0KICAicG9ydCI6ICI0NDMiLA0KICAiaWQiOiAiZTA4NTUxMTktNGIxOC00MDQ1LWI5MDMtOGY2OTliMGM1NDE0IiwNCiAgImFpZCI6ICIwIiwNCiAgInNjeSI6ICJhdXRvIiwNCiAgIm5ldCI6ICJ0Y3AiLA0KICAidHlwZSI6ICJub25lIiwNCiAgImhvc3QiOiAiIiwNCiAgInBhdGgiOiAiIiwNCiAgInRscyI6ICIiLA0KICAic25pIjogIiIsDQogICJhbHBuIjogIiIsDQogICJmcCI6ICIiDQp9";
                 String mahsa_subid = MmkvManager.INSTANCE.import_Mahsa_Subscription("GFW-knocker");
-                AngConfigManager.INSTANCE.importBatchConfig(server, mahsa_subid , false);
-
-                Toast.makeText(GFW_youtube_config_Activity.this,"enjoy direct Youtube & Twitter",Toast.LENGTH_LONG).show();
+                int imported = mahsa_subid.isEmpty()
+                        ? 0
+                        : AngConfigManager.INSTANCE.importBatchConfig(server, mahsa_subid, true);
+                Toast.makeText(
+                        GFW_youtube_config_Activity.this,
+                        imported > 0 ? R.string.import_subscription_success : R.string.import_subscription_failure,
+                        Toast.LENGTH_LONG
+                ).show();
             }
         });
 

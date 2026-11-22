@@ -1,11 +1,15 @@
 package com.v2ray.ang.gfwknocker
 
+import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
 import java.io.OutputStreamWriter
+import java.net.InetAddress
+import java.net.InetSocketAddress
 import java.net.ServerSocket
 import java.net.Socket
 import java.util.Collections
+import com.v2ray.ang.service.FragmentorForwardingWorkers
 import java.util.regex.Pattern
 
 const val myH_socket_timeout = 8000  // Set socket timeout to 8 seconds
@@ -17,28 +21,50 @@ class HTTPS_Fragmentor(
     var num_fragment: Int, // in second
     var fragment_sleep: Double
 ) : Thread() {
-    var ss: ServerSocket? = null
+    @Volatile var ss: ServerSocket? = null
+    @Volatile private var stopRequested = false
+    private val listenerLock = Any()
+    private val forwarders = FragmentorForwardingWorkers()
     var client_sock: Socket? = null
-    var is_ready = false
+    @Volatile var is_ready = false
     override fun run() {
         try {
-            ss = ServerSocket(listen_port, 128) // up to 128 concurrent connection queued
-            listen_port = ss!!.localPort
+            val bound = FragmentorSocketBinding.bind(listen_ip, listen_port) // configured address; normally loopback
+            // Publish or close under the same lock as shutdown, so stop during bind
+            // cannot leave a listener alive even if it was not yet assigned.
+            synchronized(listenerLock) {
+                if (stopRequested) {
+                    FragmentorSocketBinding.closeQuietly(bound)
+                    return
+                }
+                ss = bound
+                listen_port = bound.localPort
+            }
             println("HTTPS Listening at $listen_ip:$listen_port")
+            if (stopRequested) return
             is_ready = true
-            while (true) {
+            while (!stopRequested) {
 //                println("HTTPS waiting for input socket ...")
-                client_sock = ss!!.accept()
-                val up_thread = My_upstream_H(
-                    client_sock,
-                    target_ip,
-                    target_port,
-                    DoH_obj,
-                    isFragment,
-                    num_fragment,
-                    fragment_sleep
-                )
-                up_thread.start()
+                val accepted = ss!!.accept()
+                client_sock = accepted
+                try {
+                    val up_thread = My_upstream_H(
+                        accepted,
+                        target_ip,
+                        target_port,
+                        DoH_obj,
+                        isFragment,
+                        num_fragment,
+                        fragment_sleep,
+                        forwarders
+                    )
+                    if (!forwarders.start(up_thread, accepted)) {
+                        runCatching { accepted.close() }
+                    }
+                } catch (failure: Exception) {
+                    runCatching { accepted.close() }
+                    throw failure
+                }
             }
         } catch (e: Exception) {
 //            println("HTTPS Server ERR: " + e.message)
@@ -46,6 +72,8 @@ class HTTPS_Fragmentor(
         } finally {
 //            println("HTTPS Server Stopped. Listening Finished.")
             is_ready = false
+            FragmentorSocketBinding.closeQuietly(ss)
+            forwarders.stop()
         }
         println("HTTPS Server Thread Finished")
     } // run
@@ -72,14 +100,16 @@ class HTTPS_Fragmentor(
     }
 
     fun safely_stop_server() {
-        try {
-            ss!!.close()
-        } catch (e: Exception) {
-            println("Safe Stop ERR: " + e.message)
-            return
+        synchronized(listenerLock) {
+            stopRequested = true
+            FragmentorSocketBinding.closeQuietly(ss)
+            is_ready = false
         }
-        println("server socket safely stopped")
+        forwarders.stop()
     }
+
+    fun awaitForwardersExited(timeoutMillis: Long): Boolean =
+        forwarders.awaitExited(timeoutMillis)
 } //class Server
 
 internal class My_upstream_H(
@@ -87,7 +117,8 @@ internal class My_upstream_H(
     var target_ip: String,
     var target_port: Int,
     var DoH_obj: DoH_over_Fragment?, isFragment1: Boolean,
-    num_fragment1: Int, fragment_sleep1: Double
+    num_fragment1: Int, fragment_sleep1: Double,
+    private val forwarders: FragmentorForwardingWorkers
 ) : Thread() {
     var ips: InputStream
     var ops: OutputStream? = null
@@ -114,12 +145,18 @@ internal class My_upstream_H(
                 client_sock!!.close()
                 return
             }
+            // A blocking request/connect can complete after shutdown.
+            if (!forwarders.track(this, backend_sock!!)) {
+                throw IllegalStateException("HTTPS fragmentor stopped during backend connection")
+            }
 
             ops = backend_sock!!.getOutputStream()
 
             val down_thread =
                 My_downstream_H(backend_sock!!.getInputStream(), client_sock!!.getOutputStream())
-            down_thread.start()
+            if (!forwarders.start(down_thread, backend_sock!!, client_sock!!)) {
+                throw IllegalStateException("HTTPS fragmentor stopped before downstream start")
+            }
 //            println("up-stream started")
             sleep(first_time_sleep) // wait n millisec for first packet to fully receive
             while (true) {
@@ -143,8 +180,8 @@ internal class My_upstream_H(
         safely_close_socket(client_sock)
         safely_close_socket(backend_sock)
         try {
-            ops!!.flush()
-            ops!!.close()
+            ops?.flush()
+            ops?.close()
             ips.close()
         } catch (e: Exception) {
 //            println("up-stream Close ERR: " + e.message)
@@ -203,7 +240,26 @@ internal class My_upstream_H(
                 }
             }
 //            println("$remote_host --> $remote_port")
-            backend_sock = Socket(remote_host, remote_port)
+            val host = remote_host?.takeIf { it.isNotBlank() }
+                ?: throw IOException("Missing remote host")
+            val addresses = InetAddress.getAllByName(host)
+            var connected: Socket? = null
+            var lastError: Exception? = null
+            for (address in addresses) {
+                val candidate = Socket()
+                if (!forwarders.track(this, candidate)) {
+                    return null
+                }
+                try {
+                    candidate.connect(InetSocketAddress(address, remote_port), myH_socket_timeout)
+                    connected = candidate
+                    break
+                } catch (connectError: Exception) {
+                    lastError = connectError
+                    runCatching { candidate.close() }
+                }
+            }
+            backend_sock = connected ?: throw (lastError ?: IOException("Unable to connect to $host:$remote_port"))
             backend_sock.soTimeout = myH_socket_timeout
             backend_sock.tcpNoDelay = true
             response_data =
