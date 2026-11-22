@@ -16,7 +16,7 @@ object WireguardFmt {
             config.remarks = Utils.urlDecode(uri.fragment ?: "")
 
             val queryParam = uri.rawQuery.split("&")
-                .associate { it.split("=").let { (k, v) -> k to Utils.urlDecode(v) } }
+                .associate { it.split("=", limit = 2).let { (k, v) -> k to Utils.urlDecode(v) } }
 
             config.outboundBean?.settings?.let { wireguard ->
                 wireguard.secretKey = uri.userInfo
@@ -45,6 +45,8 @@ object WireguardFmt {
 
     fun toUri(config: ServerConfig): String {
         val outbound = config.getProxyOutbound() ?: return ""
+        // Do not serialize invalid server links for malformed or removed profiles.
+        val address = outbound.getServerAddress()?.takeIf { it.isNotBlank() } ?: return ""
 
         val remark = "#" + Utils.urlEncode(config.remarks)
         val dicQuery = HashMap<String, String>()
@@ -88,7 +90,7 @@ object WireguardFmt {
         val url = String.format(
             "%s@%s:%s",
             Utils.urlEncode(outbound.getPassword().toString()),
-            Utils.getIpv6Address(outbound.getServerAddress()),
+            Utils.getIpv6Address(address),
             outbound.getServerPort()
         )
         return url + query + remark

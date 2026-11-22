@@ -52,6 +52,8 @@ object SocksFmt {
 
     fun toUri(config: ServerConfig): String {
         val outbound = config.getProxyOutbound() ?: return ""
+        // Do not serialize invalid server links for malformed or removed profiles.
+        val address = outbound.getServerAddress()?.takeIf { it.isNotBlank() } ?: return ""
         val remark = "#" + Utils.urlEncode(config.remarks)
         val pw =
             if (outbound.settings?.servers?.get(0)?.users?.get(0)?.user != null)
@@ -61,7 +63,7 @@ object SocksFmt {
         val url = String.format(
             "%s@%s:%s",
             Utils.encode(pw),
-            Utils.getIpv6Address(outbound.getServerAddress()),
+            Utils.getIpv6Address(address),
             outbound.getServerPort()
         )
         return url + remark
