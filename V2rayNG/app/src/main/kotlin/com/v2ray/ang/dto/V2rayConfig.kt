@@ -106,6 +106,14 @@ data class V2rayConfig(
             var reserved: List<Int>? = null,
             var mtu: Int? = null,
             var obfsPassword: String? = null,
+            // Source-backed MahsaNG extensions retained in saved profile JSON.
+            var portHopping: String? = null,
+            var portHoppingInterval: String? = null,
+            var pinSHA256: String? = null,
+            var wnoise: String? = null,
+            var wnoisecount: String? = null,
+            var wnoisedelay: String? = null,
+            var wpayloadsize: String? = null,
         ) {
 
             data class VnextBean(
@@ -127,7 +135,9 @@ data class V2rayConfig(
             data class FragmentBean(
                 var packets: String? = null,
                 var length: String? = null,
-                var interval: String? = null
+                var interval: String? = null,
+                var status: String? = null,
+                var host1_domain: String? = null
             )
 
             data class NoiseBean(
@@ -159,8 +169,24 @@ data class V2rayConfig(
 
             data class WireGuardBean(
                 var publicKey: String = "",
-                var endpoint: String = ""
+                var endpoint: String = "",
+                var preSharedKey: String? = null,
+                var keepAlive: Int? = null
             )
+
+            fun populateFragment(
+                packets: String,
+                length: String? = null,
+                interval: String? = null,
+                fakehost_domain: String? = null
+            ) {
+                val status = when (packets) {
+                    "tlshello" -> "ON for TLS"
+                    "fakehost" -> "ON for non-TLS"
+                    else -> "ON for generic"
+                }
+                fragment = FragmentBean(packets, length, interval, status, fakehost_domain)
+            }
         }
 
         data class StreamSettingsBean(
@@ -276,7 +302,10 @@ data class V2rayConfig(
                 val show: Boolean = false,
                 var publicKey: String? = null,
                 var shortId: String? = null,
-                var spiderX: String? = null
+                var spiderX: String? = null,
+                var echConfigList: String? = null,
+                var echServerKeys: String? = null,
+                var echForceQuery: String? = null
             )
 
             data class QuicSettingBean(
@@ -401,7 +430,9 @@ data class V2rayConfig(
 
             fun populateTlsSettings(
                 streamSecurity: String, allowInsecure: Boolean, sni: String, fingerprint: String?, alpns: String?,
-                publicKey: String?, shortId: String?, spiderX: String?
+                publicKey: String?, shortId: String?, spiderX: String?,
+                echConfigList: String? = null, echServerKeys: String? = null,
+                echForceQuery: String? = null
             ) {
                 security = streamSecurity
                 val tlsSetting = TlsSettingsBean(
@@ -411,7 +442,10 @@ data class V2rayConfig(
                     alpn = if (alpns.isNullOrEmpty()) null else alpns.split(",").map { it.trim() }.filter { it.isNotEmpty() },
                     publicKey = publicKey,
                     shortId = shortId,
-                    spiderX = spiderX
+                    spiderX = spiderX,
+                    echConfigList = if (streamSecurity == TLS) echConfigList else null,
+                    echServerKeys = if (streamSecurity == TLS) echServerKeys else null,
+                    echForceQuery = if (streamSecurity == TLS) echForceQuery else null
                 )
                 if (security == TLS) {
                     tlsSettings = tlsSetting
@@ -428,7 +462,20 @@ data class V2rayConfig(
             var concurrency: Int = 8,
             var xudpConcurrency: Int = 8,
             var xudpProxyUDP443: String = "",
+            var status: String? = if (enabled) "ON" else "OFF"
         )
+
+        fun populateMux(stat: String, concr: Int = 8) {
+            mux = when (stat) {
+                "" -> null
+                "OFF" -> MuxBean(enabled = false, status = "OFF")
+                "ON" -> {
+                    require(concr > 0) { "Mux concurrency must be positive" }
+                    MuxBean(enabled = true, concurrency = concr, status = "ON")
+                }
+                else -> throw IllegalArgumentException("Unknown mux mode")
+            }
+        }
 
         fun getServerAddress(): String? {
             if (protocol.equals(EConfigType.VMESS.name, true)

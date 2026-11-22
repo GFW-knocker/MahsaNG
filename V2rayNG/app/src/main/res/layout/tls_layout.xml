@@ -164,4 +164,7 @@
             android:nextFocusDown="@+id/sp_stream_fingerprint" />
 
     </LinearLayout>
+    <!-- These controls are TLS-only; ServerActivity reveals them when TLS is selected. -->
+    <include layout="@layout/gfw_ech_layout" />
+
 </LinearLayout>

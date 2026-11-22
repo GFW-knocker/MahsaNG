@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Established Hysteria2 bandwidth labels, consistent with upstream v2rayNG. -->
+    <string name="server_lab_bandwidth_down">Download bandwidth (supported units: k/m/g/t)</string>
+    <string name="server_lab_bandwidth_up">Upload bandwidth (supported units: k/m/g/t)</string>
+    <string name="server_lab_finalmask_hysteria2">Final mask (advanced)</string>
+    <!-- Reuse an existing theme color instead of fabricating an original asset. -->
+    <color name="color_btn_light_blue2">@color/color_btn_subfilter_manage</color>
+</resources>

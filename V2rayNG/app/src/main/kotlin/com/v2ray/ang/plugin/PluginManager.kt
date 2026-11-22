@@ -48,7 +48,7 @@ object PluginManager {
     fun fetchPlugins() = synchronized(this) {
         if (receiver == null) receiver = AngApplication.application.listenForPackageChanges {
             synchronized(this) {
-                receiver = null
+                // Keep one process-wide registered receiver and invalidate only the cache.
                 cachedPlugins = null
             }
         }

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Build-recovery aliases to original checked-in palette. Verify visual design before release. -->
+    <color name="colorBackground">@color/colorBg</color>
+    <color name="colorAccentTheme">@color/colorAccent</color>
+    <color name="snackbar_border">@color/colorPrimaryDark</color>
+    <color name="donor_grad_start">@color/color_btn_get_config_light1</color>
+    <color name="donor_stroke">@color/colorAccent</color>
+    <color name="cardview_background">@color/colorBg</color>
+
+    <!-- The About layout was checked in without these companion strings. -->
+    <string name="about_version">Version</string>
+    <string name="about_description">MahsaNG is a VPN client based on the v2rayNG project.</string>
+    <string name="about_section_links">Project links</string>
+    <string name="about_github">Source code</string>
+    <string name="about_github_subtitle">Project repository on GitHub</string>
+    <string name="about_section_legal">Legal information</string>
+    <string name="about_privacy">Privacy policy</string>
+    <string name="about_privacy_subtitle">Read the published privacy policy</string>
+    <string name="about_terms">Terms of service</string>
+    <string name="about_terms_subtitle">Read the published terms</string>
+    <string name="about_section_plugins">Acknowledgments</string>
+    <string name="about_footer">MahsaNG</string>
+
+    <!-- Reuse the checked-in Material document icon rather than duplicating source. -->
+    <item name="ic_description" type="drawable">@drawable/ic_description_black_24dp</item>
+</resources>

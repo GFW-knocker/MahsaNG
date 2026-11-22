@@ -29,6 +29,7 @@ object AppConfig {
     const val PREF_HTTP_PORT = "pref_http_port"
     const val PREF_LOGLEVEL = "pref_core_loglevel"
     const val PREF_LANGUAGE = "pref_language"
+    const val PREF_UI_MODE_NIGHT = "pref_ui_mode_night"
     const val PREF_PREFER_IPV6 = "pref_prefer_ipv6"
     const val PREF_ROUTING_DOMAIN_STRATEGY = "pref_routing_domain_strategy"
     const val PREF_ROUTING_MODE = "pref_routing_mode"
@@ -41,8 +42,22 @@ object AppConfig {
     const val PREF_CONFIRM_REMOVE = "pref_confirm_remove"
     const val PREF_START_SCAN_IMMEDIATE = "pref_start_scan_immediate"
 
+    const val DelayTestUrl = "https://www.gstatic.com/generate_204"
+    const val DelayTestUrl2 = "https://www.google.com/generate_204"
+
     const val HTTP_PROTOCOL: String = "http://"
     const val HTTPS_PROTOCOL: String = "https://"
+    const val PROTOCOL_HTTP = HTTP_PROTOCOL
+    const val PROTOCOL_HTTPS = HTTPS_PROTOCOL
+
+    const val WIREGUARD_LOCAL_ADDRESS_V4 = "172.16.0.2/32"
+    const val WIREGUARD_LOCAL_ADDRESS_V6 = "2606:4700:110:8f81:d551:a0:532e:a2b3/128"
+    const val WIREGUARD_LOCAL_MTU = "1420"
+    const val WIREGUARD_keep_alive = "0"
+    const val WIREGUARD_wnoise = ""
+    const val WIREGUARD_wnoisecount = ""
+    const val WIREGUARD_wnoisedelay = ""
+    const val WIREGUARD_wpayloadsize = ""
 
     const val BROADCAST_ACTION_SERVICE = "com.v2ray.ang.action.service"
     const val BROADCAST_ACTION_ACTIVITY = "com.v2ray.ang.action.activity"
@@ -71,6 +86,8 @@ object AppConfig {
     const val PORT_LOCAL_DNS = "10853"
     const val PORT_SOCKS = "10808"
     const val PORT_HTTP = "10809"
+    const val PSIPHON_SOCKS = "0"
+    const val PSIPHON_HTTP = "0"
 
     const val MSG_REGISTER_CLIENT = 1
     const val MSG_STATE_RUNNING = 11

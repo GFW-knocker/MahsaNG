@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generic source-code symbol. Original GitHub artwork is not checked into this fork. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp" android:height="24dp"
+    android:viewportWidth="24" android:viewportHeight="24">
+    <path android:fillColor="#00000000" android:strokeColor="#FF000000"
+        android:strokeWidth="2" android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M8,7 L3,12 L8,17 M16,7 L21,12 L16,17 M14,4 L10,20"/>
+</vector>

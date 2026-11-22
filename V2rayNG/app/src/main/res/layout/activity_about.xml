@@ -28,7 +28,7 @@
                 android:scaleType="centerCrop"
                 android:layout_gravity="center_horizontal"
                 android:contentDescription="@null"
-                android:src="@drawable/mahsa_banner" />
+                android:src="@mipmap/ic_banner" />
 
             <TextView
                 android:layout_width="wrap_content"

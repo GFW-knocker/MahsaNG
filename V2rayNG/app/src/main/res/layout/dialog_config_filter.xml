@@ -40,5 +40,30 @@
                 android:inputType="text" />
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/layout_margin_top_height"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/profile_probe_status_label" />
+            <Spinner
+                android:id="@+id/sp_test_status"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/edit_height" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/profile_probe_max_latency_label" />
+            <EditText
+                android:id="@+id/et_max_latency"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/edit_height"
+                android:inputType="number"
+                android:contentDescription="@string/profile_probe_max_latency_label" />
+        </LinearLayout>
+
     </LinearLayout>
 </ScrollView>

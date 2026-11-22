@@ -208,7 +208,7 @@
 
     <string name="connection_test_pending">Проверить подключение</string>
     <string name="connection_test_testing">Проверка…</string>
-    <string name="connection_test_available">Успешно: ping [ %d , %d ] мс</string>
+    <string name="connection_test_available">Успешно: ping [ %1$d , %2$d ] мс</string>
     <string name="connection_test_error">Сбой проверки интернет-соединения: %s</string>
     <string name="connection_test_fail">Интернет недоступен</string>
     <string name="connection_test_error_status_code">Код ошибки: #%d</string>

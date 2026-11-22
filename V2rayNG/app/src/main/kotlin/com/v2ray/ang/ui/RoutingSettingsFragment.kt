@@ -10,7 +10,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceManager
-import com.tbruyelle.rxpermissions.RxPermissions
 import com.v2ray.ang.AppConfig
 import com.v2ray.ang.R
 import com.v2ray.ang.databinding.FragmentRoutingSettingsBinding
@@ -88,24 +87,34 @@ class RoutingSettingsFragment : Fragment() {
         activity?.toast(R.string.toast_success)
     }
 
+    // Separate launchers retain their distinct registry keys across Fragment
+    // recreation, including while the runtime permission request is pending.
+    private val replaceCameraPermission = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { granted ->
+        if (granted) {
+            scanQRCodeForReplace.launch(Intent(requireContext(), ScannerActivity::class.java))
+        } else {
+            activity?.toast(R.string.toast_permission_denied)
+        }
+    }
+
+    private val appendCameraPermission = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { granted ->
+        if (granted) {
+            scanQRCodeForAppend.launch(Intent(requireContext(), ScannerActivity::class.java))
+        } else {
+            activity?.toast(R.string.toast_permission_denied)
+        }
+    }
+
     fun scanQRcode(forReplace: Boolean): Boolean {
-//        try {
-//            startActivityForResult(Intent("com.google.zxing.client.android.SCAN")
-//                    .addCategory(Intent.CATEGORY_DEFAULT)
-//                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP), requestCode)
-//        } catch (e: Exception) {
-        RxPermissions(requireActivity())
-                .request(Manifest.permission.CAMERA)
-                .subscribe {
-                    if (it)
-                        if (forReplace)
-                            scanQRCodeForReplace.launch(Intent(activity, ScannerActivity::class.java))
-                        else
-                            scanQRCodeForAppend.launch(Intent(activity, ScannerActivity::class.java))
-                    else
-                        activity?.toast(R.string.toast_permission_denied)
-                }
-//        }
+        if (forReplace) {
+            replaceCameraPermission.launch(Manifest.permission.CAMERA)
+        } else {
+            appendCameraPermission.launch(Manifest.permission.CAMERA)
+        }
         return true
     }
 

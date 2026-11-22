@@ -79,6 +79,10 @@ object Utils {
         }
     }
 
+    fun validate_port(port: Int): Int = ServerEditorInputRules.requirePort(port)
+
+    fun fragment_param_check(value: String?): Boolean = ServerEditorInputRules.validPositiveRange(value)
+
     /**
      * get text from clipboard
      */
