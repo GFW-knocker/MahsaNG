@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="advanced_retry_title">Advanced TCP retry (diagnostic)</string>
+    <string name="advanced_retry_explanation">This is a TCP socket-connect test, not a request verified through the selected proxy. UDP/QUIC profiles are excluded. No profiles are deleted and saved test delays are not changed. Leaving this screen stops the run. A socket timeout does not guarantee a DNS lookup deadline.</string>
+    <string name="advanced_retry_attempts">Maximum attempts per profile per pass (1–5)</string>
+    <string name="advanced_retry_passes">Whole-list passes (1–10)</string>
+    <string name="advanced_retry_concurrency">Simultaneous TCP sockets (1–16)</string>
+    <string name="advanced_retry_timeout">Socket connect timeout in milliseconds (500–10000)</string>
+    <string name="advanced_retry_mode">Pass mode</string>
+    <string name="advanced_retry_all">All eligible profiles on each pass</string>
+    <string name="advanced_retry_unresolved">Only profiles without an accepted earlier success</string>
+    <string name="advanced_retry_prepare">Preview scope and budget</string>
+    <string name="advanced_retry_start">Start diagnostic</string>
+    <string name="advanced_retry_stop">Stop</string>
+    <string name="advanced_retry_pause">Pause new attempts</string>
+    <string name="advanced_retry_continue">Continue</string>
+    <string name="advanced_retry_budget_title">Confirm diagnostic budget</string>
+    <string name="advanced_retry_budget">Up to %1$d TCP socket attempts across %2$d eligible visible profiles. Some profiles are excluded because TCP is not their transport. A network change or edited profile becomes UNKNOWN, not a failed result. Running the test consumes data and battery; no profiles are removed.</string>
+    <string name="advanced_retry_invalid">Use 1–5 attempts, 1–10 passes, 1–16 sockets, and 500–10000 ms socket timeout.</string>
+    <string name="advanced_retry_ready">Choose the limits, then preview the selected scope before starting.</string>
+    <string name="advanced_retry_preparing">Checking eligible profiles and their saved revisions…</string>
+    <string name="advanced_retry_error">Could not start the diagnostic. Check the selected profiles and active network (Android 7 or later is required for default-network identity checks). Nothing was tested or deleted.</string>
+    <string name="advanced_retry_stopped">Stopped. Late socket responses are ignored. No profiles were deleted.</string>
+    <string name="advanced_retry_progress">Phase: %1$s\nPass: %2$d / %3$d\nEligible profiles: %4$d\nCompleted attempts: %5$d\nProfiles with TCP success: %6$d\nFailed TCP attempts: %7$d\nUnknown attempts: %8$d\nActive sockets: %9$d\nNo stored delays changed. Automatic deletion: disabled.</string>
+    <string name="advanced_retry_preview">Read-only failure-policy preview:\nLast 3 completed failed passes: %1$d\nAt least 3 of 5 fully observed failed passes: %2$d\nLast 3 comparable failed attempts: %3$d\nThese counts are not evidence of failed proxy routing and cannot trigger removal.</string>
+    <string name="advanced_retry_phase_running">Running</string>
+    <string name="advanced_retry_phase_paused">Paused</string>
+    <string name="advanced_retry_phase_stopped">Stopped</string>
+    <string name="advanced_retry_phase_finished">Finished</string>
+</resources>

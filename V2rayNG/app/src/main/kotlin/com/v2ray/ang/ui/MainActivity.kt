@@ -273,6 +273,16 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             importConfigViaSub()
             true
         }
+        R.id.target_discovery_scan -> {
+            startActivity(Intent(this, TargetDiscoveryActivity::class.java))
+            true
+        }
+        R.id.advanced_tcp_retry -> {
+            startActivity(Intent(this, AdvancedTcpRetryActivity::class.java)
+                .putExtra(AdvancedTcpRetryActivity.EXTRA_SUBSCRIPTION, mainViewModel.subscriptionId)
+                .putExtra(AdvancedTcpRetryActivity.EXTRA_KEYWORD, mainViewModel.keywordFilter))
+            true
+        }
 
         R.id.export_all -> {
             if (AngConfigManager.shareNonCustomConfigsToClipboard(this, mainViewModel.serverList) == 0) {

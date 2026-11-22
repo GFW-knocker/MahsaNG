@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="target_discovery_title">IP / SNI target discovery</string>
+    <string name="target_discovery_route_warning">Choose the app network (may traverse the device VPN) or the configured 127.0.0.1 HTTP proxy. Proxy mode sends HTTP CONNECT to the specified IP/host:port and NEVER retries directly. CONNECT 200 proves only proxy tunnel acceptance. Verified TLS requires a system-trusted certificate matching the selected SNI. Neither proves device-wide VPN or DNS-leak safety.</string>
+    <string name="target_discovery_targets">Targets (IP, hostname, IPv4 CIDR or inclusive range)</string>
+    <string name="target_discovery_targets_hint">198.51.100.5, example.org, 203.0.113.0/30</string>
+    <string name="target_discovery_port">Destination TCP port</string>
+    <string name="target_discovery_timeout">Timeout per target (300–10000 ms)</string>
+    <string name="target_discovery_tls">Validate TLS certificate and SNI hostname</string>
+    <string name="target_discovery_sni">Explicit SNI (required for IP TLS; blank uses hostname for domain targets)</string>
+    <string name="target_discovery_plan">Review scan budget</string>
+    <string name="target_discovery_stop">Stop scan</string>
+    <string name="target_discovery_share">Share report</string>
+    <string name="target_discovery_success_only">Show successful checks only</string>
+    <string name="target_discovery_confirm_title">Confirm target scan</string>
+    <string name="target_discovery_confirm">Scan %1$d targets with at most %2$d sockets, %3$d ms timeout per target, in %4$s mode? These app-network requests may traverse an active VPN. No VPN profile or tunnel state will be changed.</string>
+    <string name="target_discovery_tls_mode">verified TLS</string>
+    <string name="target_discovery_tcp_mode">TCP only</string>
+    <string name="target_discovery_run">Start scan</string>
+    <string name="target_discovery_invalid">Invalid targets, port, timeout, SNI or pass count. Use 1–3 passes, up to 128 unique IPv4/IPv6/hostname targets; oversized ranges are rejected. Literal IP TLS needs an explicit DNS SNI.</string>
+    <string name="target_discovery_network_unavailable">Cannot verify the current default-network session. No sockets were opened. This diagnostic needs Android 7 or later with an available default network.</string>
+    <string name="target_discovery_progress">Completed %1$d of %2$d attempts; %3$d successful observations.</string>
+    <string name="target_discovery_route_label">Route: app network; may traverse a device VPN. Not a proxy or DNS leak test.</string>
+    <string name="target_discovery_network_changed">Network changed during the scan; it was stopped. Measurements are historical, not current-route proof.</string>
+    <string name="target_discovery_stopped">Scan stopped. Unfinished targets are unknown, not failures.</string>
+    <string name="target_discovery_no_results">No matching completed observations.</string>
+    <string name="target_discovery_result">%1$s:%2$d [%3$s]\n%4$s | TCP %5$s ms | TLS %6$s ms | SNI: %7$s</string>
+    <string name="target_discovery_none">not provided</string>
+    <string name="target_discovery_share_warning">The report contains target IPs, hostnames, SNI values, proxy/app route, individual pass results, and timestamps. The selected app will receive these details. Share anyway?</string>
+    <string name="target_discovery_passes">Passes per target (1–3; stability requires 2+)</string>
+    <string name="target_discovery_use_local_proxy">Use configured local HTTP CONNECT proxy; never direct fallback</string>
+    <string name="target_discovery_proxy_unavailable">Configured local HTTP proxy port or listener unavailable. Probe stopped without direct fallback.</string>
+    <string name="target_discovery_proxy_route_label">Route: configured local HTTP CONNECT proxy on 127.0.0.1. CONNECT 200 alone is not verified TLS.</string>
+    <string name="target_discovery_candidate_confirm">Probe %1$d targets × %2$d passes = %3$d attempts; at most %4$d concurrent sockets; %5$d ms timeout each. Mode: %6$s. Route: %7$s. No automatic direct fallback, profile import or VPN switch. Continue?</string>
+    <string name="target_discovery_stable_summary">Verified repeatable proxy TLS: %1$d of %2$d observed candidate groups (requires at least 2 complete passes).</string>
+    <string name="target_discovery_candidate_summary_heading">Repeat observations (not VPN-wide validation):</string>
+    <string name="target_discovery_candidate_summary_row">%1$s:%2$d | %3$d successes / %4$d observed / %5$d planned | %6$d verified TLS | median %7$s ms | repeated proxy TLS: %8$s</string>
+    <string name="target_discovery_candidate_provenance">Pass %1$d | Route %2$s</string>
+    <string name="target_discovery_stable_yes">YES</string>
+    <string name="target_discovery_stable_no">NO</string>
+    <string name="target_discovery_observations_heading">Individual TCP/CONNECT/TLS evidence:</string>
+</resources>

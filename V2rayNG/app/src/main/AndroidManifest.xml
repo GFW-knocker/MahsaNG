@@ -87,6 +87,12 @@
         <activity
             android:exported="false"
             android:name=".ui.UserAssetActivity" />
+        <activity
+            android:exported="false"
+            android:name=".ui.TargetDiscoveryActivity" />
+        <activity
+            android:exported="false"
+            android:name=".ui.AdvancedTcpRetryActivity" />
 
         <activity
             android:exported="false"

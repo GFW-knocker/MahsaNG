@@ -104,4 +104,12 @@
         android:id="@+id/sub_update"
         android:title="@string/title_sub_update"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/target_discovery_scan"
+        android:title="@string/target_discovery_title"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/advanced_tcp_retry"
+        android:title="@string/advanced_retry_title"
+        app:showAsAction="never" />
 </menu>

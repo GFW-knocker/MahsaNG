@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="target_discovery_title">پویش هدف‌های IP و SNI</string>
+    <string name="target_discovery_route_warning">مسیر برنامه (احتمالاً از وی‌پی‌ان دستگاه) یا پراکسی HTTP محلی 127.0.0.1 را صریح انتخاب کنید. حالت پراکسی با HTTP CONNECT به IP یا دامنه و درگاه انتخابی وصل می‌شود و هرگز بی‌اجازه مستقیم تلاش نمی‌کند. پاسخ ۲۰۰ فقط پذیرش تونل توسط پراکسی را نشان می‌دهد. تأیید TLS به گواهی معتبر سیستم و تطابق نام SNI نیاز دارد؛ هیچ‌کدام سلامت کل وی‌پی‌ان یا نبود نشت DNS را ثابت نمی‌کند.</string>
+    <string name="target_discovery_targets">هدف‌ها (IP، دامنه، CIDR نسخه ۴ یا بازه کامل)</string>
+    <string name="target_discovery_targets_hint">198.51.100.5, example.org, 203.0.113.0/30</string>
+    <string name="target_discovery_port">درگاه TCP مقصد</string>
+    <string name="target_discovery_timeout">مهلت هر هدف (۳۰۰ تا ۱۰۰۰۰ میلی‌ثانیه)</string>
+    <string name="target_discovery_tls">تأیید گواهی TLS و نام میزبان SNI</string>
+    <string name="target_discovery_sni">نام SNI مشخص (برای IP الزامی؛ برای دامنه پیش‌فرض همان نام دامنه است)</string>
+    <string name="target_discovery_plan">بررسی بودجه پویش</string>
+    <string name="target_discovery_stop">توقف پویش</string>
+    <string name="target_discovery_share">اشتراک‌گذاری گزارش</string>
+    <string name="target_discovery_success_only">فقط بررسی‌های موفق</string>
+    <string name="target_discovery_confirm_title">تأیید پویش هدف‌ها</string>
+    <string name="target_discovery_confirm">بررسی %1$d هدف با حداکثر %2$d سوکت هم‌زمان و مهلت %3$d میلی‌ثانیه برای هر هدف، در حالت %4$s؟ درخواست‌ها ممکن است از وی‌پی‌ان فعال عبور کنند. کانفیگ یا وضعیت تونل تغییر نمی‌کند.</string>
+    <string name="target_discovery_tls_mode">TLS تأییدشده</string>
+    <string name="target_discovery_tcp_mode">فقط TCP</string>
+    <string name="target_discovery_run">شروع پویش</string>
+    <string name="target_discovery_invalid">هدف، درگاه، مهلت، SNI یا تعداد گذر معتبر نیست. از ۱ تا ۳ گذر و حداکثر ۱۲۸ هدف مجزا استفاده کنید؛ بازه‌های بزرگ رد می‌شوند. برای TLS روی IP، نام DNS در SNI لازم است.</string>
+    <string name="target_discovery_network_unavailable">نشست شبکه پیش‌فرض قابل بررسی نیست. هیچ سوکتی باز نشد. این ابزار به اندروید ۷ یا جدیدتر و شبکه پیش‌فرض فعال نیاز دارد.</string>
+    <string name="target_discovery_progress">%1$d تلاش از %2$d تکمیل شد؛ %3$d مشاهده موفق.</string>
+    <string name="target_discovery_route_label">مسیر: شبکه برنامه، احتمالاً از وی‌پی‌ان دستگاه؛ نه آزمایش پراکسی یا نشت DNS.</string>
+    <string name="target_discovery_network_changed">شبکه هنگام پویش تغییر کرد و پویش متوقف شد. مشاهده‌ها تاریخی‌اند و نشانه سلامت مسیر جدید نیستند.</string>
+    <string name="target_discovery_stopped">پویش متوقف شد؛ هدف‌های ناتمام نامعلوم‌اند، نه ناموفق.</string>
+    <string name="target_discovery_no_results">مشاهده تکمیل‌شده‌ای با این فیلتر وجود ندارد.</string>
+    <string name="target_discovery_result">%1$s:%2$d [%3$s]\n%4$s | TCP %5$s ms | TLS %6$s ms | SNI: %7$s</string>
+    <string name="target_discovery_none">وارد نشده</string>
+    <string name="target_discovery_share_warning">گزارش شامل IPها، دامنه‌ها، SNI، مسیر پراکسی یا برنامه، نتیجه هر گذر و زمان آن است. برنامه انتخابی به این اطلاعات دسترسی خواهد داشت. اشتراک‌گذاری انجام شود؟</string>
+    <string name="target_discovery_passes">تعداد گذر برای هر هدف (۱ تا ۳؛ پایداری نیازمند حداقل ۲ گذر)</string>
+    <string name="target_discovery_use_local_proxy">استفاده از پراکسی محلی HTTP CONNECT؛ بدون بازگشت خودکار به مسیر مستقیم</string>
+    <string name="target_discovery_proxy_unavailable">درگاه یا سرویس پراکسی HTTP محلی در دسترس نیست. پویش بدون تلاش مستقیم متوقف شد.</string>
+    <string name="target_discovery_proxy_route_label">مسیر: پراکسی HTTP CONNECT محلی در 127.0.0.1. پاسخ ۲۰۰ به‌تنهایی اعتبار TLS را ثابت نمی‌کند.</string>
+    <string name="target_discovery_candidate_confirm">بررسی %1$d هدف در %2$d گذر، یعنی %3$d تلاش؛ حداکثر %4$d سوکت هم‌زمان و %5$d میلی‌ثانیه مهلت هر تلاش. حالت: %6$s. مسیر: %7$s. بدون اتصال مستقیم خودکار، واردکردن کانفیگ یا تغییر وی‌پی‌ان. ادامه؟</string>
+    <string name="target_discovery_stable_summary">TLS تأییدشده و تکرارپذیر از پراکسی: %1$d از %2$d گروه هدف مشاهده‌شده (حداقل دو گذر کامل لازم است).</string>
+    <string name="target_discovery_candidate_summary_heading">نتایج تکرار (نه تأیید کل وی‌پی‌ان):</string>
+    <string name="target_discovery_candidate_summary_row">%1$s:%2$d | %3$d موفق از %4$d مشاهده و %5$d تلاش برنامه‌ریزی‌شده | %6$d TLS تأییدشده | میانه %7$s میلی‌ثانیه | TLS تکرارپذیر پراکسی: %8$s</string>
+    <string name="target_discovery_candidate_provenance">گذر %1$d | مسیر %2$s</string>
+    <string name="target_discovery_stable_yes">بله</string>
+    <string name="target_discovery_stable_no">خیر</string>
+    <string name="target_discovery_observations_heading">شواهد جداگانه TCP/CONNECT/TLS:</string>
+</resources>

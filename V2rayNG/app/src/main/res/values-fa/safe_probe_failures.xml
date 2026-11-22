@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="probe_failure_dns">جست‌وجوی DNS ناموفق بود</string>
+    <string name="probe_failure_refused">اتصال رد شد</string>
+    <string name="probe_failure_timeout">مهلت اتصال به پایان رسید</string>
+    <string name="probe_failure_tls">برقراری ارتباط امن TLS ناموفق بود</string>
+    <string name="probe_failure_network">درخواست شبکه ناموفق بود</string>
+    <string name="probe_failure_other">خطای غیرمنتظره اتصال</string>
+</resources>
