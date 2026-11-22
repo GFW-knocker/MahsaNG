@@ -26,6 +26,7 @@ import com.v2ray.ang.dto.ServerConfig
 import com.v2ray.ang.dto.V2rayConfig
 import com.v2ray.ang.dto.V2rayConfig.Companion.DEFAULT_PORT
 import com.v2ray.ang.dto.V2rayConfig.Companion.TLS
+import com.v2ray.ang.util.MuxModeRestoration
 import com.v2ray.ang.extension.removeWhiteSpace
 import com.v2ray.ang.extension.toast
 import com.v2ray.ang.util.MmkvManager
@@ -272,7 +273,7 @@ class ServerActivity : BaseActivity() {
                     container_sni?.visibility = View.VISIBLE
                     container_fingerprint?.visibility = View.VISIBLE
                     container_alpn?.visibility = View.VISIBLE
-                    container_ech?.visibility = View.VISIBLE
+                    container_ech?.visibility = if (streamSecuritys[position] == TLS) View.VISIBLE else View.GONE
                     if (streamSecuritys[position] == TLS) {
                         container_allow_insecure?.visibility = View.VISIBLE
                         container_public_key?.visibility = View.GONE
@@ -473,7 +474,8 @@ class ServerActivity : BaseActivity() {
             }
 
 
-            val g1 = Utils.arrayFind(mux_array, config.outboundBean?.mux?.status.orEmpty())
+            val mux = config.outboundBean?.mux
+            val g1 = Utils.arrayFind(mux_array, MuxModeRestoration.restore(mux?.status, mux?.enabled))
             if(g1>=0) {
                 sp_mux_array?.setSelection(g1)
                 if(g1==2){
@@ -610,11 +612,9 @@ class ServerActivity : BaseActivity() {
 
         val config = MmkvManager.decodeServerConfig(editGuid) ?: ServerConfig.create(createConfigType)
 
-        if (config.configType != EConfigType.HYSTERIA2) {
-            if ( (port <= 0) || (port >= 65536) ) {
-                toast(R.string.server_lab_port)
-                return false
-            }
+        if (port !in 1..65535) {
+            toast(R.string.server_lab_port)
+            return false
         }
 
         port = Utils.validate_port(port)
@@ -864,7 +864,7 @@ class ServerActivity : BaseActivity() {
         val echForceQuery = et_echForceQuery?.text?.toString()
 
         val allowInsecure = if (allowInsecureField == null || allowinsecures[allowInsecureField].isBlank()) {
-            !(settingsStorage?.decodeBool(PREF_ALLOW_INSECURE) ?: false)
+            settingsStorage?.decodeBool(PREF_ALLOW_INSECURE) ?: false
         } else {
             allowinsecures[allowInsecureField].toBoolean()
         }

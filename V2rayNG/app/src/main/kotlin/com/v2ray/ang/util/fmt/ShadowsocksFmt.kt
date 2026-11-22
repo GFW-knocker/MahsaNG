@@ -52,13 +52,15 @@ object ShadowsocksFmt {
 
     fun toUri(config: ServerConfig): String {
         val outbound = config.getProxyOutbound() ?: return ""
+        // Do not serialize invalid server links for malformed or removed profiles.
+        val address = outbound.getServerAddress()?.takeIf { it.isNotBlank() } ?: return ""
         val remark = "#" + Utils.urlEncode(config.remarks)
         val pw =
             Utils.encode("${outbound.getSecurityEncryption()}:${outbound.getPassword()}")
         val url = String.format(
             "%s@%s:%s",
             pw,
-            Utils.getIpv6Address(outbound.getServerAddress()),
+            Utils.getIpv6Address(address),
             outbound.getServerPort()
         )
         return url + remark
