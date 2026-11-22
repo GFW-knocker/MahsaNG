@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="protected_profile_title">Encrypted profile link files</string>
+    <string name="protected_profile_scope">Portable profile links only (VMess, VLESS, Shadowsocks, Trojan, SOCKS and WireGuard). Export may skip unsupported or custom profiles; this is not a complete settings or subscription backup. Use a unique password of at least 12 characters. The Android document picker controls file access; nothing is uploaded or copied to the clipboard.</string>
+    <string name="protected_profile_export">Save encrypted link file</string>
+    <string name="protected_profile_import">Import encrypted link file</string>
+    <string name="protected_profile_ready">Choose Save or Import. No files have been read yet.</string>
+    <string name="protected_profile_password">File password (12+ characters)</string>
+    <string name="protected_profile_confirm_password">Repeat file password</string>
+    <string name="protected_profile_export_warning">Selected profiles contain credentials. The file will be password-encrypted before being written to your chosen location. Unsupported/custom profiles are skipped and counted; the file does not include subscriptions or settings. Keep your password and file safe. If you cancel the password prompt, an empty document may remain at the chosen location.</string>
+    <string name="protected_profile_password_invalid">Password must be 12–256 characters. For export, both entries must match.</string>
+    <string name="protected_profile_working">Processing encrypted file…</string>
+    <string name="protected_profile_export_failed">Export failed or no supported profiles found. No plaintext profile file was written; a partial or empty encrypted file may remain at the selected destination.</string>
+    <string name="protected_profile_export_summary">Saved %1$d encrypted portable profile links. Skipped %2$d unsupported or invalid entries. Keep the file and its password together.</string>
+    <string name="protected_profile_import_warning">Choose the password used to create this file. Only allowlisted proxy links are eligible for import; subscriptions and settings are not restored. The existing importer may accept some profiles and reject others, so check the imported count and review your profiles before connecting. There is no automatic VPN restart.</string>
+    <string name="protected_profile_import_failed">Import failed: wrong password, damaged/oversized file, unsupported format, or invalid links. No links were submitted to the importer.</string>
+    <string name="protected_profile_import_summary">Imported %1$d of %2$d decrypted links. Any rejected links were not restored. Inspect profiles before connecting; VPN state was not changed.</string>
+</resources>

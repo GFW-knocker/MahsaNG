@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="protected_profile_title">فایل رمزگذاری‌شده پیوند کانفیگ‌ها</string>
+    <string name="protected_profile_scope">فقط پیوندهای قابل انتقال VMess، VLESS، Shadowsocks، Trojan، SOCKS و WireGuard. کانفیگ سفارشی یا ناسازگار ممکن است حذف شود؛ این فایل پشتیبان کامل تنظیمات و اشتراک‌ها نیست. رمز عبور یکتا با حداقل ۱۲ نویسه وارد کنید. دسترسی فایل با انتخابگر خود اندروید انجام می‌شود؛ چیزی بارگذاری یا در کلیپ‌بورد کپی نمی‌شود.</string>
+    <string name="protected_profile_export">ذخیره فایل پیوندها با رمزگذاری</string>
+    <string name="protected_profile_import">واردکردن فایل پیوندهای رمزگذاری‌شده</string>
+    <string name="protected_profile_ready">ذخیره یا واردکردن را انتخاب کنید. هنوز فایلی خوانده نشده است.</string>
+    <string name="protected_profile_password">رمز عبور فایل (حداقل ۱۲ نویسه)</string>
+    <string name="protected_profile_confirm_password">تکرار رمز عبور فایل</string>
+    <string name="protected_profile_export_warning">کانفیگ‌های انتخاب‌شده شامل اطلاعات محرمانه‌اند. فایل پیش از ذخیره در مقصد انتخابی رمزگذاری می‌شود. کانفیگ‌های سفارشی و ناسازگار حذف و شمارش می‌شوند؛ تنظیمات و اشتراک‌ها ذخیره نمی‌شوند. رمز و فایل را محفوظ نگه دارید. در صورت لغو ورود رمز، ممکن است سند خالی در مقصد باقی بماند.</string>
+    <string name="protected_profile_password_invalid">رمز عبور باید ۱۲ تا ۲۵۶ نویسه داشته باشد. در ذخیره‌سازی، دو رمز باید یکسان باشند.</string>
+    <string name="protected_profile_working">در حال پردازش فایل رمزگذاری‌شده…</string>
+    <string name="protected_profile_export_failed">ذخیره ناموفق بود یا کانفیگ سازگاری یافت نشد. فایل متن باز ذخیره نشده است؛ ممکن است سند رمزگذاری‌شده ناقص یا خالی در مقصد باقی بماند.</string>
+    <string name="protected_profile_export_summary">%1$d پیوند کانفیگ رمزگذاری و ذخیره شد. %2$d مورد ناسازگار یا نامعتبر کنار گذاشته شد. فایل و رمز عبور را محفوظ نگه دارید.</string>
+    <string name="protected_profile_import_warning">رمز عبور فایل را وارد کنید. تنها پیوندهای پراکسی مجاز وارد می‌شوند؛ اشتراک‌ها و تنظیمات بازیابی نمی‌شوند. ممکن است واردکننده بعضی پیوندها را بپذیرد و برخی را رد کند؛ تعداد را بررسی کنید و پیش از اتصال، کانفیگ‌ها را بازبینی کنید. وی‌پی‌ان خودکار راه‌اندازی نمی‌شود.</string>
+    <string name="protected_profile_import_failed">واردکردن ناموفق بود: رمز اشتباه، فایل مخدوش/بزرگ، قالب نامعتبر یا پیوند ناسازگار. هیچ پیوندی به واردکننده تحویل نشده است.</string>
+    <string name="protected_profile_import_summary">%1$d از %2$d پیوند رمزگشایی‌شده وارد شد. موارد ردشده بازیابی نشدند. پیش از اتصال کانفیگ‌ها را بررسی کنید؛ وضعیت وی‌پی‌ان تغییر نکرد.</string>
+</resources>
