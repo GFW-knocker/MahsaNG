@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_fetch_allow_direct">Use direct connection</string>
+    <string name="app_fetch_direct_title">Use direct connection?</string>
+    <string name="app_fetch_direct_warning">No active local proxy was detected. This download will use the device network directly and may reveal the requested URL. Continue?</string>
+    <string name="app_fetch_proxy_unavailable">Local proxy unavailable. Download blocked.</string>
+</resources>

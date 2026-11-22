@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Android 11 and earlier: exclude all sensitive app state, including MMKV. -->
+<full-backup-content>
+    <exclude domain="root" path="." />
+    <exclude domain="device_root" path="." />
+</full-backup-content>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_fetch_allow_direct">استفاده از اتصال مستقیم</string>
+    <string name="app_fetch_direct_title">اتصال مستقیم انجام شود؟</string>
+    <string name="app_fetch_direct_warning">پروکسی محلی فعالی پیدا نشد. این دریافت مستقیماً از شبکهٔ دستگاه انجام می‌شود و ممکن است نشانی درخواست را آشکار کند. ادامه می‌دهید؟</string>
+    <string name="app_fetch_proxy_unavailable">پروکسی محلی در دسترس نیست. دریافت مسدود شد.</string>
+    <string name="title_pref_allow_insecure">اجازهٔ گواهی TLS نامعتبر (ناامن)</string>
+    <string name="summary_pref_allow_insecure">این گزینه به پروفایل‌های واردشده و مدیریت‌شده اجازه می‌دهد بررسی گواهی TLS را غیرفعال کنند. برای بررسی گواهی‌های این پروفایل‌ها، گزینه را خاموش نگه دارید. پیکربندی JSON سفارشی تغییر نمی‌کند و حتی با خاموش بودن این گزینه ممکن است بررسی گواهی را غیرفعال کند.</string>
+</resources>

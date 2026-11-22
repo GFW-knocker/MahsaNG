@@ -155,6 +155,13 @@ object Utils {
         return ret
     }
 
+    /** Read-only configured local HTTP proxy listener. Invalid preferences fail closed. */
+    fun getConfiguredHttpPortOrNull(): Int? {
+        val configured = settingsStorage?.decodeString(AppConfig.PREF_HTTP_PORT)
+            ?: AppConfig.PORT_HTTP
+        return configured.toIntOrNull()?.takeIf { it in 1..65535 }
+    }
+
     fun getVpnDnsServers(): List<String> {
         val vpnDns = settingsStorage?.decodeString(AppConfig.PREF_VPN_DNS)
             ?: settingsStorage?.decodeString(AppConfig.PREF_REMOTE_DNS)
@@ -365,6 +372,68 @@ object Utils {
         conn.useCaches = false
         return conn.inputStream.use {
             it.bufferedReader().readText()
+        }
+    }
+
+
+    /**
+     * Fetch one user-requested config or subscription through the explicitly selected
+     * route. App-owned requests do not automatically traverse Android's VPN TUN.
+     * A failed proxy request must never fall back to a direct socket.
+     */
+    @Throws(IOException::class)
+    fun getUrlContentWithCustomUserAgent(
+        urlStr: String?,
+        route: AppFetchRoutePolicy.Route,
+    ): String {
+        val url = URL(urlStr)
+        if (url.protocol != "https" && url.protocol != "http") {
+            throw IOException("Unsupported subscription URL scheme")
+        }
+        return AppFetchRoutePolicy.dispatch(
+            route = route,
+            direct = { fetchUrlContent(url, Proxy.NO_PROXY) },
+            viaProxy = { port ->
+                fetchUrlContent(url, Proxy(Proxy.Type.HTTP, InetSocketAddress("127.0.0.1", port)))
+            },
+        )
+    }
+
+    private const val MAX_URL_CONTENT_BYTES = 16 * 1024 * 1024
+
+    private fun fetchUrlContent(url: URL, proxy: Proxy): String {
+        val conn = url.openConnection(proxy) as HttpURLConnection
+        try {
+            conn.connectTimeout = 15_000
+            conn.readTimeout = 30_000
+            conn.setRequestProperty("Connection", "close")
+            conn.setRequestProperty("User-agent", "v2rayNG/${BuildConfig.VERSION_NAME}")
+            url.userInfo?.let {
+                conn.setRequestProperty("Authorization",
+                    "Basic ${encode(urlDecode(it))}")
+            }
+            conn.useCaches = false
+            if (conn.contentLength > MAX_URL_CONTENT_BYTES) {
+                throw IOException("Remote content exceeds maximum allowed size")
+            }
+            return conn.inputStream.use { input ->
+                val out = java.io.ByteArrayOutputStream()
+                val buf = ByteArray(8192)
+                var total = 0
+                while (true) {
+                    val read = input.read(buf)
+                    if (read < 0) break
+                    if (read == 0) continue
+                    total += read
+                    if (total > MAX_URL_CONTENT_BYTES) {
+                        throw IOException("Remote content exceeds maximum allowed size")
+                    }
+                    out.write(buf, 0, read)
+                }
+                out.toString(Charsets.UTF_8.name())
+            }
+        } finally {
+            conn.disconnect()
         }
     }
 
