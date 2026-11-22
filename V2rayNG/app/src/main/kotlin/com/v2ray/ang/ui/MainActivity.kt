@@ -283,6 +283,10 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             true
         }
 
+        R.id.dns_diagnostics -> {
+            startActivity(Intent(this, DnsDiagnosticsActivity::class.java))
+            true
+        }
         R.id.ping_all -> {
             mainViewModel.testAllTcping()
             true

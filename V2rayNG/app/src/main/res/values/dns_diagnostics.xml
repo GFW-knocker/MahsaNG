@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="dns_diagnostics_title">DNS diagnostics and scan</string>
+    <string name="dns_diagnostics_route_warning">Read-only DNS queries from this app. Requests may use the active VPN or device network; these results do not prove an Xray through-proxy path or a DNS leak. No saved profiles or DNS settings are changed.</string>
+    <string name="dns_diagnostics_domains">Domains (comma or newline separated; up to 12)</string>
+    <string name="dns_diagnostics_resolvers">Resolver IPs, optional port (up to 4; e.g. 1.1.1.1, [2606:4700:4700::1111]:53)</string>
+    <string name="dns_diagnostics_types">DNS record types (A, AAAA, CNAME, MX, TXT, NS, SOA)</string>
+    <string name="dns_diagnostics_timeout">Per UDP/TCP attempt timeout, ms (300–10000)</string>
+    <string name="dns_diagnostics_one">Diagnose first domain and resolver</string>
+    <string name="dns_diagnostics_scan">Scan selected domains and resolvers</string>
+    <string name="dns_diagnostics_stop">Stop scan</string>
+    <string name="dns_diagnostics_filter_all">Show: all results</string>
+    <string name="dns_diagnostics_filter_ok">Show: successful answers</string>
+    <string name="dns_diagnostics_filter_errors">Show: failures and empty answers</string>
+    <string name="dns_diagnostics_sort_original">Order: completion</string>
+    <string name="dns_diagnostics_sort_fastest">Order: successful / fastest</string>
+    <string name="dns_diagnostics_progress">Completed %1$d / %2$d queries</string>
+    <string name="dns_diagnostics_empty">No matching results.</string>
+    <string name="dns_diagnostics_invalid">Check domain names, numeric resolver IPs, DNS record types, timeout and limits (maximum 144 queries). Nothing was sent.</string>
+    <string name="dns_diagnostics_confirm_title">Confirm DNS query budget</string>
+    <string name="dns_diagnostics_budget">Send up to %1$d explicit DNS queries on the app network route? DNS lookups use data and can reveal the queried domains to the selected resolvers. UDP-truncated replies may require another query over TCP.</string>
+    <string name="dns_diagnostics_run">Start queries</string>
+    <string name="dns_diagnostics_stopped">Stopped. Late socket results are ignored. Already completed observations remain visible.</string>
+    <string name="dns_diagnostics_no_plain_resolver">No configured plain-IP resolver; enter a numeric resolver manually</string>
+    <string name="dns_diagnostics_configured">Xray DNS settings (not proof of the active profile): %1$s. %2$d additional entries omitted, including non-IP endpoints. Resolver URLs are not displayed.</string>
+    <string name="dns_diagnostics_test_route">Test route: app-originated UDP/TCP to the selected resolver. OS-reported default network at run start: %1$s. Xray through-proxy DNS was NOT tested.</string>
+    <string name="dns_diagnostics_route_vpn_reported">VPN transport reported</string>
+    <string name="dns_diagnostics_route_vpn_not_reported">VPN transport not reported</string>
+    <string name="dns_diagnostics_route_unknown">unknown</string>
+    <string name="dns_diagnostics_route_changed">A default-network change was observed during this run; compare results cautiously.</string>
+    <string name="dns_diagnostics_route_select_app">Next test route: app network (UDP, TCP fallback). Tap to change</string>
+    <string name="dns_diagnostics_route_select_socks">Next test route: local SOCKS5 (DNS-over-TCP). Tap to change</string>
+    <string name="dns_diagnostics_invalid_socks_port">Configured local SOCKS5 port is invalid. No queries were sent.</string>
+    <string name="dns_diagnostics_budget_socks">Send up to %1$d DNS-over-TCP queries through the local SOCKS5 listener at 127.0.0.1:%2$d? This tests a local relay, not Xray internal DNS or the selected outbound. No direct DNS fallback is allowed.</string>
+    <string name="dns_diagnostics_test_route_socks">Test route: local SOCKS5 on 127.0.0.1:%1$d, relaying DNS-over-TCP to the chosen resolver. This does not establish the active profile, remote outbound, or Xray internal DNS route. It does not establish a DNS leak.</string>
+    <string name="dns_diagnostics_result_socks">Local SOCKS5/TCP</string>
+    <string name="dns_diagnostics_result_app">App network UDP/TCP</string>
+    <string name="dns_diagnostics_filter_mismatches">Show: observed answer differences</string>
+    <string name="dns_diagnostics_filter_timeouts">Show: timeouts</string>
+    <string name="dns_diagnostics_scan_summary">DNS responses: %1$d | Timeouts: %2$d | UDP to TCP fallbacks: %3$d | Different-answer groups: %4$d</string>
+    <string name="dns_diagnostics_mismatch_notice">Different DNS answers were observed across resolvers; not proof of a DNS leak.</string>
+</resources>
