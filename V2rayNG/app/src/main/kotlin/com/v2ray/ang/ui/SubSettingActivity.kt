@@ -39,6 +39,7 @@ class SubSettingActivity : BaseActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.action_sub_setting, menu)
+        menuInflater.inflate(R.menu.menu_contextual_help, menu)
         menu.findItem(R.id.del_config)?.isVisible = false
         menu.findItem(R.id.save_config)?.isVisible = false
 
@@ -46,6 +47,10 @@ class SubSettingActivity : BaseActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        R.id.action_contextual_help -> {
+            ContextualHelp.show(this, R.id.sub_setting)
+            true
+        }
         R.id.add_config -> {
             startActivity(Intent(this, SubEditActivity::class.java))
             true
