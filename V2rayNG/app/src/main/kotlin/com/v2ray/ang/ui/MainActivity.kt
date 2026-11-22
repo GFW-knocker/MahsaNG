@@ -7,7 +7,6 @@ import android.net.VpnService
 import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
-import com.tbruyelle.rxpermissions.RxPermissions
 import com.v2ray.ang.R
 import android.os.Bundle
 import android.text.TextUtils
@@ -37,6 +36,7 @@ import rx.android.schedulers.AndroidSchedulers
 import java.util.concurrent.TimeUnit
 import com.v2ray.ang.helper.SimpleItemTouchHelperCallback
 import com.v2ray.ang.service.V2RayServiceManager
+import com.v2ray.ang.service.VpnModeSelection
 import com.v2ray.ang.util.*
 import com.v2ray.ang.viewmodel.MainViewModel
 import kotlinx.coroutines.*
@@ -55,6 +55,26 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             startV2Ray()
         }
     }
+    private val requestNotificationPermission =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+            if (!granted) toast(R.string.toast_permission_denied)
+        }
+    private val requestCameraForConfig =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+            if (granted) {
+                scanQRCodeForConfig.launch(Intent(this, ScannerActivity::class.java))
+            } else {
+                toast(R.string.toast_permission_denied)
+            }
+        }
+    private val requestCameraForCustomUrl =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+            if (granted) {
+                scanQRCodeForUrlToCustomConfig.launch(Intent(this, ScannerActivity::class.java))
+            } else {
+                toast(R.string.toast_permission_denied)
+            }
+        }
     private var mItemTouchHelper: ItemTouchHelper? = null
     val mainViewModel: MainViewModel by viewModels()
 
@@ -69,7 +89,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         binding.fab.setOnClickListener {
             if (mainViewModel.isRunning.value == true) {
                 Utils.stopVService(this)
-            } else if (settingsStorage?.decodeString(AppConfig.PREF_MODE) ?: "VPN" == "VPN") {
+            } else if (VpnModeSelection.requiresVpnPermission(settingsStorage?.decodeString(AppConfig.PREF_MODE))) {
                 val intent = VpnService.prepare(this)
                 if (intent == null) {
                     startV2Ray()
@@ -110,12 +130,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         migrateLegacy()
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            RxPermissions(this)
-                .request(Manifest.permission.POST_NOTIFICATIONS)
-                .subscribe {
-                    if (!it)
-                        toast(R.string.toast_permission_denied)
-                }
+            requestNotificationPermission.launch(Manifest.permission.POST_NOTIFICATIONS)
         }
     }
 
@@ -350,23 +365,11 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
      * import config from qrcode
      */
     fun importQRcode(forConfig: Boolean): Boolean {
-//        try {
-//            startActivityForResult(Intent("com.google.zxing.client.android.SCAN")
-//                    .addCategory(Intent.CATEGORY_DEFAULT)
-//                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP), requestCode)
-//        } catch (e: Exception) {
-        RxPermissions(this)
-                .request(Manifest.permission.CAMERA)
-                .subscribe {
-                    if (it)
-                        if (forConfig)
-                            scanQRCodeForConfig.launch(Intent(this, ScannerActivity::class.java))
-                        else
-                            scanQRCodeForUrlToCustomConfig.launch(Intent(this, ScannerActivity::class.java))
-                    else
-                        toast(R.string.toast_permission_denied)
-                }
-//        }
+        if (forConfig) {
+            requestCameraForConfig.launch(Manifest.permission.CAMERA)
+        } else {
+            requestCameraForCustomUrl.launch(Manifest.permission.CAMERA)
+        }
         return true
     }
 
