@@ -215,10 +215,15 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
+        menuInflater.inflate(R.menu.menu_contextual_help, menu)
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        R.id.action_contextual_help -> {
+            ContextualHelp.showIndex(this)
+            true
+        }
         R.id.import_qrcode -> {
             importQRcode(true)
             true

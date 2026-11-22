@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="help_action">Help for this screen</string>
+    <string name="help_choose_topic">Choose a help topic</string>
+    <string-array name="help_subscriptions">
+        <item>Purpose: Manage groups and remote subscriptions without changing unrelated saved profiles.</item>
+        <item>Before you start: Treat subscription URLs as secrets and verify who maintains each feed.</item>
+        <item>How to use: Select a group, import or refresh it, then inspect the displayed count.</item>
+        <item>How to interpret: A rejected empty or malformed update must preserve the previous valid profiles; a failed test is not permanent invalidity.</item>
+        <item>Risks and recovery: Keep a private backup before replacing a feed; inspect the source and connection when refresh fails.</item>
+    </string-array>
+    <string-array name="help_settings">
+        <item>Purpose: Configure VPN or proxy mode, DNS, routing, ports and testing preferences.</item>
+        <item>Before you start: Some changes take effect only after service restart; review the active connection first.</item>
+        <item>How to use: Change one option at a time and verify the actual route instead of just direct DNS or TCP.</item>
+        <item>How to interpret: Keep TLS certificate checks on by default. The insecure option is an explicit exception; custom JSON may define its own TLS policy.</item>
+        <item>Risks and recovery: Restore recent changes if connectivity breaks; remove credentials before sharing logs.</item>
+    </string-array>
+    <string-array name="help_assets">
+        <item>Purpose: Manage GeoIP and Geosite files used by routing rules.</item>
+        <item>Before you start: Use trusted sources and keep a known-good version of each required file.</item>
+        <item>How to use: Import an asset and reload or restart the relevant routing state as needed.</item>
+        <item>How to interpret: A file being present does not prove the VPN is connected or correctly routed.</item>
+        <item>Risks and recovery: A corrupt or outdated file can misroute traffic; restore a known-good asset.</item>
+    </string-array>
+    <string-array name="help_logs">
+        <item>Purpose: Read app and native-core diagnostic messages for connection failures.</item>
+        <item>Before you start: Record the app version, approximate failure time and chosen test method.</item>
+        <item>How to use: Copy only relevant lines and remove sensitive data before requesting support.</item>
+        <item>How to interpret: DNS, TCP, core-start and tunneled HTTP errors describe different failures.</item>
+        <item>Risks and recovery: Logs can expose subscription URLs, passwords, tokens, IPs and private keys.</item>
+    </string-array>
+    <string-array name="help_import">
+        <item>Purpose: Add profiles by QR, clipboard, file, URL or manual entry.</item>
+        <item>Before you start: An imported profile can contain secrets and untrusted routing or transport details.</item>
+        <item>How to use: Check endpoint, protocol, SNI, TLS and transport before connecting.</item>
+        <item>How to interpret: Saving a profile does not prove connectivity; choose a suitable TCP or through-proxy test.</item>
+        <item>Risks and recovery: Never post raw profile links publicly; preserve existing working profiles after a bad import.</item>
+    </string-array>
+    <string-array name="help_filter">
+        <item>Purpose: Show only a chosen group or search result without deleting other profiles.</item>
+        <item>Before you start: Hidden groups still exist and may retain previous delay observations.</item>
+        <item>How to use: Select a group or filter, then act only on the visible targets.</item>
+        <item>How to interpret: Zero delay means no accepted measurement, not a failed or invalid server.</item>
+        <item>Risks and recovery: Clear the filter to see all profiles before broad operations.</item>
+    </string-array>
+    <string-array name="help_restart">
+        <item>Purpose: Restart the current VPN or proxy service to apply supported settings.</item>
+        <item>Before you start: Traffic is interrupted during restart and VPN permission may be requested.</item>
+        <item>How to use: Verify the selected profile and mode before restarting.</item>
+        <item>How to interpret: A running native core alone does not prove an HTTP request succeeds through the tunnel.</item>
+        <item>Risks and recovery: If restart fails, review service cleanup errors and try again after it finishes.</item>
+    </string-array>
+    <string-array name="help_delete_all">
+        <item>Purpose: Remove all locally saved configurations; this is not a connectivity test.</item>
+        <item>Before you start: This action is destructive and has no built-in recycle bin.</item>
+        <item>How to use: Export a private backup, read the confirmation, then delete only if intended.</item>
+        <item>How to interpret: Clearing saved selection does not necessarily stop the currently loaded tunnel immediately.</item>
+        <item>Risks and recovery: Backups may contain passwords and access tokens; store them privately.</item>
+    </string-array>
+    <string-array name="help_delete_duplicates">
+        <item>Purpose: Remove duplicate profiles in the displayed scope after confirming the candidate count.</item>
+        <item>Before you start: Hidden groups and the selected profile must not be affected.</item>
+        <item>How to use: Check your filter and the preview count before confirming.</item>
+        <item>How to interpret: Similar display names can represent different accounts or transport settings.</item>
+        <item>Risks and recovery: Removal is irreversible; export a private backup when needed.</item>
+    </string-array>
+    <string-array name="help_delete_failed">
+        <item>Purpose: Review and manually remove profiles with accepted negative test evidence in the displayed scope.</item>
+        <item>Before you start: Zero means untested; cancelled, unknown, stale, unsupported and hidden results are not eligible failure evidence.</item>
+        <item>How to use: Run a compatible test, review the scope and candidate count, and explicitly confirm.</item>
+        <item>How to interpret: A TCP failure cannot prove a UDP or QUIC route invalid; a transient outage can produce negative results.</item>
+        <item>Risks and recovery: Deleting stored profiles is irreversible; keep private backups and do not rely on old results.</item>
+    </string-array>
+    <string-array name="help_export">
+        <item>Purpose: Export non-custom profile entries to the clipboard for backup or transfer.</item>
+        <item>Before you start: Exported configurations may include passwords and subscription credentials.</item>
+        <item>How to use: Paste only into a secure destination and verify the backup before deleting originals.</item>
+        <item>How to interpret: Custom JSON profiles may require a separate backup; an export is not a connectivity check.</item>
+        <item>Risks and recovery: Clear the clipboard afterward and never publish configuration text in a public issue.</item>
+    </string-array>
+    <string-array name="help_tcp">
+        <item>Purpose: Measure TCP socket reachability to a target host and port.</item>
+        <item>Before you start: This test does not establish UDP, QUIC, TLS identity or complete proxy function.</item>
+        <item>How to use: Choose a visible group and an appropriate supported timeout and concurrency policy.</item>
+        <item>How to interpret: Positive means TCP connected; zero means untested; negative means that attempt failed.</item>
+        <item>Risks and recovery: Large parallel batches consume data and can trigger rate limits or transient failures.</item>
+    </string-array>
+    <string-array name="help_real_ping">
+        <item>Purpose: Run the supported native proxy request rather than a direct DNS or TCP probe.</item>
+        <item>Before you start: The native core and target network must be ready for this method.</item>
+        <item>How to use: Choose visible profiles, start the batch, and allow completion or cancel intentionally.</item>
+        <item>How to interpret: A positive result proves only the measured route and request at that moment; stale or cancelled results do not prove failure.</item>
+        <item>Risks and recovery: Long batches use battery and data; network changes and native delays can leave results unknown.</item>
+    </string-array>
+    <string-array name="help_sort">
+        <item>Purpose: Reorder saved profiles by comparable test observations without deleting them.</item>
+        <item>Before you start: Identify the method, scope and age of the result before comparing values.</item>
+        <item>How to use: Test appropriate targets when needed, then sort the current profile list.</item>
+        <item>How to interpret: Unknown and untested entries are not failures and historical values may be stale.</item>
+        <item>Risks and recovery: Sorting changes order only; reconnect or retest after changing networks.</item>
+    </string-array>
+    <string-array name="help_refresh">
+        <item>Purpose: Refresh enabled subscription groups from their remote sources.</item>
+        <item>Before you start: Verify source trust and protect subscription URLs containing credentials.</item>
+        <item>How to use: Refresh selected groups, then review the imported count and currently selected profile.</item>
+        <item>How to interpret: Empty or malformed feeds should retain known-good profiles; partial changes require review.</item>
+        <item>Risks and recovery: Remote updates may change credentials and routing, so keep private backups and verify account identity.</item>
+    </string-array>
+    <string-array name="help_advanced_tcp_retry">
+        <item>Purpose: Run a bounded, optional direct TCP socket diagnostic with multiple attempts and passes, not a verified proxy HTTP test.</item>
+        <item>Before you start: Choose eligible visible profiles, a timeout, and a limited socket concurrency. UDP and QUIC transports are not tested.</item>
+        <item>How to use: Preview the attempt budget, then start. Pause stops new attempts; Continue resumes; Stop invalidates the session.</item>
+        <item>How to interpret: Successful TCP connects prove only socket reachability. Cancellation, changed networks, and stale profiles are unknown.</item>
+        <item>Risks and recovery: More passes use battery and data. No profiles are deleted, and stored delay values are not modified.</item>
+    </string-array>
+    <string-array name="help_dns_diagnostics">
+        <item>Purpose: Diagnose DNS response codes, record answers and timings, or compare selected domains and resolvers on an explicitly chosen test route.</item>
+        <item>Before you start: Enter trusted numeric resolver addresses. App-network queries may traverse the active VPN; the local SOCKS5 option needs a running local proxy and does not automatically prove the selected profile DNS route.</item>
+        <item>How to use: Select domains, A/AAAA or other supported record types and resolvers, confirm the bounded query budget, then start. Stop and filter the completed observations as needed.</item>
+        <item>How to interpret: RCODE, TTL, UDP-to-TCP fallback, timeouts and answer differences describe the observed queries. Different resolver answers alone are not evidence of DNS leaks.</item>
+        <item>Risks and recovery: DNS queries disclose the requested names to the chosen resolver and consume data. This diagnostic never changes saved DNS settings or profiles; check the selected route and retry after network changes.</item>
+    </string-array>
+    <string-array name="help_https_evidence">
+        <item>Purpose: Inspect HTTP status and verified TLS certificate details through the app route or a configured local HTTP proxy, plus an optional TLS-only handshake.</item>
+        <item>Before you start: Use a valid hostname and timeout. The through-proxy option requires an active local proxy port; direct means no local proxy, not necessarily outside the device VPN.</item>
+        <item>How to use: Choose exactly one test method and inspect its response, TLS version, cipher, certificate and timing when available. Use Stop to discard late observations.</item>
+        <item>How to interpret: A successful local-proxy request verifies only that request and route at that moment, not general connectivity. An app-route response alone cannot prove a VPN bypass.</item>
+        <item>Risks and recovery: Tests consume network data and can reveal the target hostname to the chosen path; socket operations may last until timeout. TLS certificate and hostname validation remain enabled and saved profiles are unchanged.</item>
+    </string-array>
+    <string-array name="help_smart_recommend">
+        <item>Purpose: Suggest an eligible visible profile from recent native outbound HTTP-ping tests, not direct TCP reachability.</item>
+        <item>Before you start: Disconnect the VPN and run Real ping all for the profiles you want to compare. Old or edited-profile results are excluded.</item>
+        <item>How to use: Choose Recommend from recent real ping, inspect the delay, recent successes and age, and confirm the profile selection. It will not connect automatically.</item>
+        <item>How to interpret: The ranking balances successful tests, latency and freshness. Near-tied results prefer the already selected profile. This does not verify VPN-wide forwarding, download speed or DNS leak safety.</item>
+        <item>Risks and recovery: Measurements consume data and can change with the network. Re-run after network handover or configuration edits. You can always select a different profile manually.</item>
+    </string-array>
+    <string-array name="help_target_discovery">
+        <item>Purpose: Compare explicit IP/SNI candidates on the app route or through the configured local HTTP CONNECT proxy. The proxy option cannot silently fall back to a direct destination socket.</item>
+        <item>Before you start: Choose up to 128 targets, one port, 300–10000 ms timeout and 1–3 passes. For literal IP TLS, enter the intended DNS SNI. Use only targets you are allowed to test; the proxy must already be running.</item>
+        <item>How to use: Select the local proxy option for CONNECT-based validation, enable TLS to verify the certificate and SNI, review the complete socket-attempt budget, then start. Stop, screen exit, or network handover closes owned sockets and invalidates late results.</item>
+        <item>How to interpret: TCP_OPEN means app-route TCP reachability, PROXY_CONNECT_ESTABLISHED means only that a local HTTP proxy accepted CONNECT, and TLS_VERIFIED means platform certificate and hostname validation completed on that specific route. Repeatable proxy TLS needs at least two complete successful passes. Missing passes are unknown, not failures.</item>
+        <item>Risks and recovery: Tests consume data, may disclose the target/SNI through the chosen network path, and do not prove device-wide VPN routing, traffic-leak safety or throughput. No profiles change. Export only after reviewing the sharing warning; reset by running another explicit scan.</item>
+    </string-array>
+    <string-array name="help_protected_profile_files">
+        <item>Purpose: Save and restore link-exportable proxy profiles in a password-encrypted file. This portable link archive is NOT a full database, subscription, custom JSON or settings backup.</item>
+        <item>Before you start: Use a unique password with at least 12 characters and save it securely. The export screen counts excluded/custom profiles. Keep files in trusted Android document-provider storage.</item>
+        <item>How to use: Select Save, choose a file location, then enter and repeat your password. To restore, select Import, choose an encrypted file, and enter its password. The app validates the entire archive and allowlisted link format before invoking the normal profile importer.</item>
+        <item>How to interpret: The import result lists accepted versus total decrypted links; unsupported protocol fields may be rejected. The tool never auto-imports subscription URLs, changes VPN mode, connects to an endpoint, or makes a plaintext clipboard copy.</item>
+        <item>Risks and recovery: Forgetting the password makes recovery impossible. Damaged or wrong-password files are rejected. Partial import may happen if an individual supported-scheme link fails full protocol validation. Review imported profiles before connecting. Cancelled save may leave an empty file selected by the document provider.</item>
+    </string-array>
+</resources>
