@@ -22,6 +22,7 @@ import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
 
 import com.v2ray.ang.AppConfig;
+import com.v2ray.ang.service.PsiphonProxyPortRules;
 import com.v2ray.ang.R;
 import com.v2ray.ang.ui.BaseActivity;
 import com.v2ray.ang.util.Utils;
@@ -103,54 +104,27 @@ public class GFW_psiphonSettings_Activity extends BaseActivity {
 
                 String aggr1 = sp_aggr.getSelectedItem().toString();
 
-                int lsocks = socks_port.length();
-                int lhttp = http_port.length();
-
-                int n_socks = 0;
-                int n_http = 0;
-
                 if (country1.equalsIgnoreCase("Auto")) {
                     country1 = "";
                 }
-
-                if (lsocks > 0) {
-                    try {
-                        n_socks = Integer.parseInt(socks_port);
-                    } catch (java.lang.NumberFormatException e) {
-                        n_socks = 0;
-                    }
+                // Port 0 requests automatic allocation by Psiphon.
+                if (!PsiphonProxyPortRules.isValid(socks_port, http_port)) {
+                    Toast.makeText(GFW_psiphonSettings_Activity.this,
+                            "Psiphon ports must be 0 (automatic) or 1-65534, distinct when nonzero, and not 10808/10809",
+                            Toast.LENGTH_LONG).show();
+                    return;
                 }
-
-                if (lhttp > 0) {
-                    try {
-                        n_http = Integer.parseInt(http_port);
-                    } catch (java.lang.NumberFormatException e) {
-                        n_http = 0;
-                    }
-                }
-
-
-                if ((n_socks <= 0) || (n_socks >= 65535)) {
-                    Toast.makeText(GFW_psiphonSettings_Activity.this, "socks port must between 0 to 65534", Toast.LENGTH_LONG).show();
-                } else if ((n_http <= 0) || (n_http >= 65535)) {
-                    Toast.makeText(GFW_psiphonSettings_Activity.this, "http port must between 0 to 65534", Toast.LENGTH_LONG).show();
-                } else if ((n_http == n_socks)) {
-                    Toast.makeText(GFW_psiphonSettings_Activity.this, "http & socks port must not equal", Toast.LENGTH_LONG).show();
-                } else if ((n_http == 10808) || (n_http==10809) || (n_socks==10808) || (n_socks==10809) ) {
-                    Toast.makeText(GFW_psiphonSettings_Activity.this, "port 10808 & 10809 reserved for v2ray and must not be used", Toast.LENGTH_LONG).show();
-                } else {
-                    try {
-                        mystrg.put_value("psiphon_socks_port", socks_port);
-                        mystrg.put_value("psiphon_http_port", http_port);
-                        mystrg.put_value("psiphon_country_code", country1);
-                        mystrg.put_value("psiphon_protocol", proto1);
-                        mystrg.put_value("psiphon_aggressive", aggr1);
-
-                        Toast.makeText(GFW_psiphonSettings_Activity.this, "settings saved for psiphon", Toast.LENGTH_LONG).show();
-                    } catch (Exception e) {
-                        Toast.makeText(GFW_psiphonSettings_Activity.this, "ERR in saving psiphon setting", Toast.LENGTH_LONG).show();
-                    }
-
+                try {
+                    mystrg.put_value("psiphon_socks_port", socks_port.trim());
+                    mystrg.put_value("psiphon_http_port", http_port.trim());
+                    mystrg.put_value("psiphon_country_code", country1);
+                    mystrg.put_value("psiphon_protocol", proto1);
+                    mystrg.put_value("psiphon_aggressive", aggr1);
+                    Toast.makeText(GFW_psiphonSettings_Activity.this,
+                            "settings saved for psiphon", Toast.LENGTH_LONG).show();
+                } catch (Exception e) {
+                    Toast.makeText(GFW_psiphonSettings_Activity.this,
+                            "ERR in saving psiphon setting", Toast.LENGTH_LONG).show();
                 }
             }
         });

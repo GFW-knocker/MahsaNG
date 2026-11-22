@@ -4,11 +4,15 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
+import android.content.BroadcastReceiver
+import android.content.IntentFilter
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.*
 import android.os.Build
 import android.os.IBinder
+import android.os.Handler
+import android.os.Looper
 import android.os.ParcelFileDescriptor
 import android.os.StrictMode
 import android.util.Log
@@ -21,18 +25,18 @@ import com.v2ray.ang.AppConfig
 import com.v2ray.ang.BuildConfig
 import com.v2ray.ang.R
 import com.v2ray.ang.dto.ERoutingMode
-import com.v2ray.ang.gfwknocker.GFW_sutil
-import com.v2ray.ang.gfwknocker.GFW_txt_crypt
 import com.v2ray.ang.gfwknocker.my_preference_storage
 import com.v2ray.ang.util.MessageUtil
 import com.v2ray.ang.util.MmkvManager
 import com.v2ray.ang.util.MyContextWrapper
+import com.v2ray.ang.util.UnderlyingNetworkOwner
 import com.v2ray.ang.util.Utils
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
 import java.net.InetSocketAddress
 import java.net.Socket
+import java.util.UUID
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -80,6 +84,7 @@ class PsiphonVpnService : VpnService(), PsiphonTunnel.HostService {
         private const val NOTIFICATION_CHANNEL_ID = "PSIPHON_CH_ID"
 
         const val ACTION_STOP = "com.v2ray.ang.action.STOP_PSIPHON"
+        private const val NOTIFICATION_STOP_SCHEME = "mahsang-psiphon-notification-stop"
 
         val isPsiphonRunning = AtomicBoolean(false)
         val psiphon_http_port = AtomicInteger(0)
@@ -98,12 +103,41 @@ class PsiphonVpnService : VpnService(), PsiphonTunnel.HostService {
     }
 
     private val mystrg by lazy { my_preference_storage() }
-
+    private val usesUpstreamProxy by lazy {
+        VpnModeSelection.usesPsiphon(settingsStorage?.decodeString(AppConfig.PREF_MODE)) ||
+            mystrg.get_value("sw_psiphon_after", "") == "true"
+    }
+    private val stopReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            if (intent?.action != AppConfig.BROADCAST_ACTION_SERVICE) return
+            if (intent.getIntExtra("key", 0) == AppConfig.MSG_STATE_STOP) {
+                Thread { stopAll() }.start()
+            } else if (intent.getIntExtra("key", 0) == AppConfig.MSG_REGISTER_CLIENT &&
+                isRunning.get() && !teardownStarted.get()
+            ) {
+                // Keep UI aware if Psiphon still owns the VPN TUN even when Xray died.
+                MessageUtil.sendMsg2UI(this@PsiphonVpnService, AppConfig.MSG_STATE_RUNNING, "")
+            }
+        }
+    }
+    private var stopReceiverRegistered = false
 
     private var psiphonTunnel: PsiphonTunnel? = null
     private var mInterface: ParcelFileDescriptor? = null
-    private var tun2socksThread: Thread? = null
+    // Exact Java TUN PFD ownership persists until close() actually returns.
+    private val tunCloseTracker = TunDescriptorCloseTracker<ParcelFileDescriptor>()
+    @Volatile private var tun2socksThread: Thread? = null
     private val isRunning = AtomicBoolean(false)
+    private val startGate = PsiphonStartGate()
+    private val routeGate = PsiphonRouteGate()
+    private val teardownStarted = AtomicBoolean(false)
+    // Do not retry TUN close from onDestroy while the first teardown is
+    // still signalling JNI or stopping the native tunnel.
+    private val stopCleanupFinished = AtomicBoolean(false)
+    private val startCommandAccepted = AtomicBoolean(false)
+    private val notificationStopTokenGate = NotificationStopTokenGate()
+    private val notificationStopToken = UUID.randomUUID().toString()
+    @Volatile private var activeStopPendingIntent: PendingIntent? = null
     private val psiphonSocksPort = AtomicInteger(0)
 
     private val psiphonHttpPort = AtomicInteger(0)
@@ -121,19 +155,70 @@ class PsiphonVpnService : VpnService(), PsiphonTunnel.HostService {
         getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     }
 
-    @delegate:RequiresApi(Build.VERSION_CODES.P)
-    private val defaultNetworkCallback by lazy {
-        object : ConnectivityManager.NetworkCallback() {
+    // The Psiphon service is isolated in its own Android process. Keep its
+    // network-owner epoch local to this service instance, just as Xray does.
+    private val underlyingNetworkOwner = UnderlyingNetworkOwner<Network>()
+    private val underlyingNetworkHandler = Handler(Looper.getMainLooper())
+    private var registeredUnderlyingNetworkCallback: ConnectivityManager.NetworkCallback? = null
+
+    /**
+     * Network callbacks may be delivered late, or queued while another
+     * underlying network replaces the old one. Never publish stale events.
+     */
+    private fun postUnderlyingNetworkUpdate(update: UnderlyingNetworkOwner.Update<Network>?) {
+        if (update == null) return
+        underlyingNetworkHandler.post {
+            underlyingNetworkOwner.publishIfCurrent(update) { network ->
+                runCatching {
+                    setUnderlyingNetworks(network?.let { arrayOf(it) })
+                }.onFailure {
+                    Log.w(TAG, "Unable to publish the current underlying network")
+                }
+            }
+        }
+    }
+
+    @Synchronized
+    private fun registerUnderlyingNetworkCallback() {
+        releaseUnderlyingNetworkCallback()
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) return
+
+        val epoch = underlyingNetworkOwner.begin()
+        val callback = object : ConnectivityManager.NetworkCallback() {
             override fun onAvailable(network: Network) {
-                setUnderlyingNetworks(arrayOf(network))
+                postUnderlyingNetworkUpdate(underlyingNetworkOwner.onAvailable(epoch, network))
             }
 
             override fun onCapabilitiesChanged(network: Network, networkCapabilities: NetworkCapabilities) {
-                setUnderlyingNetworks(arrayOf(network))
+                postUnderlyingNetworkUpdate(underlyingNetworkOwner.onCapabilitiesChanged(epoch, network))
             }
 
             override fun onLost(network: Network) {
-                setUnderlyingNetworks(null)
+                postUnderlyingNetworkUpdate(underlyingNetworkOwner.onLost(epoch, network))
+            }
+        }
+        registeredUnderlyingNetworkCallback = callback
+        try {
+            connectivity.requestNetwork(defaultNetworkRequest, callback)
+        } catch (_: Exception) {
+            registeredUnderlyingNetworkCallback = null
+            postUnderlyingNetworkUpdate(underlyingNetworkOwner.stop())
+            Log.w(TAG, "Unable to register Psiphon underlying network observer")
+        }
+    }
+
+    @Synchronized
+    private fun releaseUnderlyingNetworkCallback() {
+        val callback = registeredUnderlyingNetworkCallback
+        registeredUnderlyingNetworkCallback = null
+        // Invalidate queued callbacks on every API level, but only publish to
+        // the Android VPN underlay API where this observer is actually supported.
+        val stopUpdate = underlyingNetworkOwner.stop()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            postUnderlyingNetworkUpdate(stopUpdate)
+            if (callback != null) {
+                runCatching { connectivity.unregisterNetworkCallback(callback) }
+                    .onFailure { Log.w(TAG, "Unable to unregister Psiphon underlying network observer") }
             }
         }
     }
@@ -144,8 +229,14 @@ class PsiphonVpnService : VpnService(), PsiphonTunnel.HostService {
 
     override fun onCreate() {
         super.onCreate()
+        check(notificationStopTokenGate.arm(notificationStopToken)) { "Invalid notification stop identity" }
         val policy = StrictMode.ThreadPolicy.Builder().permitAll().build()
         StrictMode.setThreadPolicy(policy)
+        val filter = IntentFilter(AppConfig.BROADCAST_ACTION_SERVICE)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(stopReceiver, filter, Context.RECEIVER_NOT_EXPORTED)
+        } else registerReceiver(stopReceiver, filter)
+        stopReceiverRegistered = true
     }
 
     override fun onRevoke() {
@@ -153,22 +244,61 @@ class PsiphonVpnService : VpnService(), PsiphonTunnel.HostService {
     }
 
     override fun onDestroy() {
+        notificationStopTokenGate.invalidate()
+        if (stopReceiverRegistered) {
+            runCatching { unregisterReceiver(stopReceiver) }
+            stopReceiverRegistered = false
+        }
+        // VpnService may be destroyed without ACTION_STOP or onRevoke.
+        // A stale notification can create and destroy a service that has
+        // never started a tunnel; it must not stop another session's proxy.
+        val alreadyStopping = teardownStarted.get()
+        if (startCommandAccepted.get()) stopAll(isForced = false)
+        // A close exception during Stop must not erase the sole owned PFD.
+        // Retry only when the first native teardown has already finished,
+        // and do not reissue JNI termination or claim a new native receipt.
+        if (alreadyStopping && stopCleanupFinished.get() &&
+            !closeOwnedTunDescriptors()
+        ) Log.w(TAG, "Psiphon TUN closure still unverified during destroy")
         super.onDestroy()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        // MUST call startForeground immediately — Android kills the process if
-        // startForegroundService() was used and startForeground() isn't called quickly
-        startForegroundNotification()
-
         if (intent?.action == ACTION_STOP) {
+            // An old PendingIntent may be delivered after Android replaces the
+            // service instance. Only the current notification may stop it.
+            val stopData = intent.data
+            if (stopData?.scheme != NOTIFICATION_STOP_SCHEME ||
+                !notificationStopTokenGate.accepts(stopData?.lastPathSegment)
+            ) {
+                Log.w(TAG, "Ignoring stale Psiphon notification stop")
+                return if (startCommandAccepted.get() && !teardownStarted.get()) START_STICKY else START_NOT_STICKY
+            }
             stopAll()
             return START_NOT_STICKY
         }
-
-        // Start Psiphon tunnel (waits for V2Ray SOCKS port first)
-        startPsiphonTunnelAsync()
-
+        if (teardownStarted.get()) {
+            // Satisfy startForegroundService() before stopping a terminating instance.
+            runCatching { startForegroundNotification() }
+            runCatching { stopForeground(true) }
+            stopSelf()
+            return START_NOT_STICKY
+        }
+        startCommandAccepted.set(true)
+        if (VpnService.prepare(this) != null) {
+            Log.w(TAG, "VPN authorization unavailable; refusing to start")
+            runCatching { startForegroundNotification() }
+            stopAll()
+            return START_NOT_STICKY
+        }
+        // Start foreground promptly on API 26+ before asynchronous startup.
+        startForegroundNotification()
+        // Terminal teardown and start issuance share the exact same monitor.
+        // An onRevoke() racing this command cannot resurrect the service.
+        val attempt = synchronized(startGate) {
+            if (teardownStarted.get()) null else startGate.beginStart()
+        } ?: return if (teardownStarted.get()) START_NOT_STICKY else START_STICKY
+        startPsiphonTunnelAsync(attempt)
         return START_STICKY
     }
 
@@ -180,11 +310,11 @@ class PsiphonVpnService : VpnService(), PsiphonTunnel.HostService {
     // Psiphon tunnel management
     // =========================================================================
 
-    private fun startPsiphonTunnelAsync() {
+    private fun startPsiphonTunnelAsync(attempt: Long) {
         Thread {
             try {
 
-                if ( mystrg.get_value("sw_psiphon_after","")=="true") {
+                if ( usesUpstreamProxy) {
                     // Wait for V2Ray's SOCKS proxy to become reachable
                     val v2raySocksPort = Utils.parseInt(
                         settingsStorage?.decodeString(AppConfig.PREF_SOCKS_PORT),
@@ -192,12 +322,11 @@ class PsiphonVpnService : VpnService(), PsiphonTunnel.HostService {
                     )
                     Log.i(TAG, "Waiting for V2Ray SOCKS proxy on port $v2raySocksPort...")
 
-                    if (!waitForPort(v2raySocksPort)) {
-                        Log.e(
-                            TAG,
-                            "V2Ray SOCKS port $v2raySocksPort not reachable after timeout, aborting"
-                        )
-                        stopAll()
+                    if (!waitForPort(v2raySocksPort, attempt)) {
+                        if (startGate.isCurrent(attempt)) {
+                            Log.e(TAG, "V2Ray SOCKS port $v2raySocksPort unavailable; stopping")
+                            stopAll()
+                        }
                         return@Thread
                     }
                 }
@@ -210,18 +339,36 @@ class PsiphonVpnService : VpnService(), PsiphonTunnel.HostService {
                 //
                 // Without the VPN TUN, protect() calls in bindToDevice() may be
                 // no-ops because Android doesn't recognize us as an active VPN yet.
-                Log.i(TAG, "Establishing VPN TUN interface before starting Psiphon...")
-                establishVpnInterface()
+                // Stop/revoke cannot race a stale waiter into re-creating the VPN TUN.
+                synchronized(startGate) {
+                    if (!startGate.isCurrent(attempt)) return@Thread
+                    Log.i(TAG, "Establishing VPN TUN interface before starting Psiphon...")
+                    establishVpnInterface()
+                }
+                if (!startGate.isCurrent(attempt)) return@Thread
 
-                Log.i(TAG, "V2Ray SOCKS proxy is reachable, starting Psiphon tunnel...")
-                psiphonTunnel = PsiphonTunnel.newPsiphonTunnel(this)
-                psiphonTunnel?.setClientPlatformAffixes("", "")
-                psiphonTunnel?.setVpnMode(true)
-                psiphonTunnel?.startTunneling(getEmbeddedServerEntries())
-                Log.i(TAG, "Psiphon tunnel started successfully")
+                val tunnel = PsiphonTunnel.newPsiphonTunnel(this)
+                synchronized(startGate) {
+                    if (!startGate.isCurrent(attempt)) {
+                        runCatching { tunnel.stop() }
+                        return@Thread
+                    }
+                    psiphonTunnel = tunnel
+                }
+                if (!startGate.isCurrent(attempt)) return@Thread
+
+                Log.i(TAG, "Starting Psiphon tunnel...")
+                tunnel.setClientPlatformAffixes("", "")
+                tunnel.setVpnMode(true)
+                tunnel.startTunneling(getEmbeddedServerEntries())
+                // If stop occurred during native startup, do not leave a stale tunnel.
+                if (!startGate.isCurrent(attempt)) runCatching { tunnel.stop() }
+            } catch (e: LinkageError) {
+                Log.e(TAG, "Psiphon native runtime unavailable", e)
+                if (startGate.isCurrent(attempt)) stopAll()
             } catch (e: Exception) {
                 Log.e(TAG, "Failed to start Psiphon tunnel: ${e.message}", e)
-                stopAll()
+                if (startGate.isCurrent(attempt)) stopAll()
             }
         }.start()
     }
@@ -230,9 +377,9 @@ class PsiphonVpnService : VpnService(), PsiphonTunnel.HostService {
      * Wait for a TCP port on localhost to become reachable.
      * Returns true if connected within timeout, false otherwise.
      */
-    private fun waitForPort(port: Int): Boolean {
+    private fun waitForPort(port: Int, attempt: Long): Boolean {
         val deadline = System.currentTimeMillis() + V2RAY_SOCKS_PORT_CHECK_TIMEOUT_MS
-        while (System.currentTimeMillis() < deadline) {
+        while (System.currentTimeMillis() < deadline && startGate.isCurrent(attempt)) {
             try {
                 Socket().use { socket ->
                     socket.connect(InetSocketAddress("127.0.0.1", port), 500)
@@ -299,7 +446,7 @@ class PsiphonVpnService : VpnService(), PsiphonTunnel.HostService {
         builder.setSession("Psiphon Tunnel")
 
         // Exclude MahsaNG app to prevent VPN routing loops
-        if ( mystrg.get_value("sw_psiphon_after","")=="true") {
+        if ( usesUpstreamProxy) {
             if (settingsStorage?.decodeBool(AppConfig.PREF_PER_APP_PROXY) == true) {
                 val bypassApps = settingsStorage?.decodeBool(AppConfig.PREF_BYPASS_APPS) ?: false
                 if (bypassApps) {
@@ -326,31 +473,44 @@ class PsiphonVpnService : VpnService(), PsiphonTunnel.HostService {
             }
         }
 
-        // Close old interface
-        try {
-            mInterface?.close()
-        } catch (ignored: Exception) {
-        }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            try {
-                connectivity.requestNetwork(defaultNetworkRequest, defaultNetworkCallback)
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
+        // Never discard an earlier owner if its close failed. This setup runs
+        // under startGate's monitor; Stop cannot overtake TUN publication.
+        val oldInterface = mInterface
+        if (oldInterface != null && !closeTrackedTunDescriptor(oldInterface)) {
+            throw IllegalStateException("Previous Psiphon VPN TUN closure unverified")
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             builder.setMetered(false)
         }
 
-        mInterface = builder.establish()
-        if (mInterface == null) {
-            throw Exception("VpnService.Builder.establish() returned null — VPN permission not granted?")
+        if (!tunCloseTracker.beginEstablish()) {
+            throw IllegalStateException("Psiphon VPN TUN establishment blocked by Stop")
         }
+        var establishmentPending = true
+        try {
+            val established = builder.establish()
+                ?: throw IllegalStateException("Unable to establish Psiphon VPN TUN")
+            val accepted = synchronized(tunCloseTracker) {
+                val allowed = tunCloseTracker.registered(established)
+                establishmentPending = false
+                if (allowed) mInterface = established
+                allowed
+            }
+            if (!accepted) {
+                // Even a late rejected PFD remains owned until close returns.
+                closeTrackedTunDescriptor(established)
+                throw IllegalStateException("Psiphon Stop won TUN establishment")
+            }
+        } catch (failure: Exception) {
+            if (establishmentPending) tunCloseTracker.establishFailed()
+            throw failure
+        }
+        // Only start observing the underlay once Android has established our TUN.
+        registerUnderlyingNetworkCallback()
         isRunning.set(true)
-        isPsiphonRunning.set(true)
-        mystrg.put_value("is_psiphon_running","y")
+        // TUN creation is not a connected tunnel; publish running state only
+        // after Psiphon's SOCKS callback and tun2socks startup.
         Log.i(TAG, "VPN TUN interface established (tun2socks will start after Psiphon connects)")
 
     }
@@ -359,8 +519,9 @@ class PsiphonVpnService : VpnService(), PsiphonTunnel.HostService {
      * Start tun2socks to route VPN TUN traffic through Psiphon's local SOCKS proxy.
      * Called from onConnected() when the Psiphon SOCKS proxy port is known.
      */
-    private fun startTun2socksRouting() {
-        val port = psiphonSocksPort.get()
+    private fun startTun2socksRouting(port: Int) {
+        // Ignore late native callbacks after stop/revoke/destroy.
+        if (teardownStarted.get() || !startGate.isActive()) return
         if (port <= 0) {
             Log.e(TAG, "Psiphon SOCKS port not available yet, cannot start tun2socks")
             return
@@ -370,11 +531,23 @@ class PsiphonVpnService : VpnService(), PsiphonTunnel.HostService {
             return
         }
 
-        startTun2socks(port)
-        Log.i(TAG, "tun2socks routing to Psiphon SOCKS port $port")
-
-        // Notify the UI that we're connected
-        MessageUtil.sendMsg2UI(this, AppConfig.MSG_STATE_START_SUCCESS, "Psiphon Connected!")
+        try {
+            // Atomic with stopAll(): no detached TUN fd or new routing worker
+            // can be published after teardown has made this instance terminal.
+            synchronized(startGate) {
+                if (teardownStarted.get() || !startGate.isActive()) return
+                startTun2socks(port)
+            }
+        } catch (error: Exception) {
+            Log.e(TAG, "Unable to attach VPN TUN to Psiphon JNI routing", error)
+            Thread { stopAll() }.start()
+            return
+        }
+        if (teardownStarted.get() || !startGate.isActive()) return
+        // Worker creation is not proof of packet forwarding. Until the native
+        // bridge exposes a genuine ready/forwarding signal, never claim connected.
+        updateNotification("Psiphon routing starting; connectivity unverified")
+        Log.i(TAG, "Psiphon routing worker started, not yet connectivity-verified")
     }
 
     /**
@@ -386,41 +559,73 @@ class PsiphonVpnService : VpnService(), PsiphonTunnel.HostService {
      * and resolved by the Psiphon server's own DNS resolvers.
      */
     private fun startTun2socks(socksPort: Int) {
-        val iface = mInterface ?: return
+        // This monitor is shared with stopAll's terminal state transition.
+        synchronized(startGate) {
+            if (teardownStarted.get() || !startGate.isActive()) return
+            val iface = mInterface ?: throw IllegalStateException("Psiphon VPN TUN is closed")
 
-        val socksServerAddress = "127.0.0.1:$socksPort"
-        val ipv6Address = if (settingsStorage?.decodeBool(AppConfig.PREF_PREFER_IPV6) == true) {
-            PRIVATE_VLAN6_ROUTER
-        } else {
-            null
-        }
+            val socksServerAddress = "127.0.0.1:$socksPort"
+            val ipv6Address = if (settingsStorage?.decodeBool(AppConfig.PREF_PREFER_IPV6) == true) {
+                PRIVATE_VLAN6_ROUTER
+            } else null
 
-        // Dup the fd so we can restart tun2socks without losing the VPN interface
-        val tunFd = iface.dup().detachFd()
-
-        Log.i(TAG, "Starting Psiphon tun2socks (JNI): socks=$socksServerAddress, " +
-                "udpgw=$UDPGW_SERVER_ADDRESS, transparentDNS=1, fd=$tunFd")
-
-        tun2socksThread = Thread {
+            // The duplicate belongs to the worker/native bridge. Do not detach
+            // unless we can create and register the worker before teardown.
+            val tunFd = iface.dup().detachFd()
+            var nativeLease: PsiphonNativeWorkerGate.Lease? = null
+            var workerStarted = false
             try {
-                Tun2SocksJniLoader.runTun2Socks(
-                    tunFd,
-                    VPN_MTU,
-                    PRIVATE_VLAN4_ROUTER,        // netif ipaddr (gateway)
-                    "255.255.255.0",             // netmask
-                    ipv6Address,                 // null = IPv4 only
-                    socksServerAddress,          // Psiphon's local SOCKS proxy
-                    UDPGW_SERVER_ADDRESS,        // udpgw server (Psiphon tunnel-core runs this)
-                    1                            // enable udpgw transparent DNS
-                )
-                Log.i(TAG, "tun2socks (JNI) returned")
-            } catch (e: Exception) {
-                Log.e(TAG, "tun2socks (JNI) error: ${e.message}", e)
+                // Arm native termination before publishing the worker. The
+                // returned lease belongs only to this exact native attempt.
+                val acquiredLease = PsiphonNativeWorkerGate.acquire {
+                    Tun2SocksJniLoader.prepareTun2Socks()
+                } ?: throw IllegalStateException("Previous routing worker is still alive")
+                nativeLease = acquiredLease
+                val worker = Thread {
+                    try {
+                        if (teardownStarted.get() || !startGate.isActive()) {
+                            // Teardown won the race before native entry: this
+                            // descriptor was not handed to JNI and must be closed.
+                            ParcelFileDescriptor.adoptFd(tunFd).close()
+                            return@Thread
+                        }
+                        Tun2SocksJniLoader.runTun2Socks(
+                            tunFd,
+                            VPN_MTU,
+                            PRIVATE_VLAN4_ROUTER,
+                            "255.255.255.0",
+                            ipv6Address,
+                            socksServerAddress,
+                            UDPGW_SERVER_ADDRESS,
+                            1
+                        )
+                        Log.i(TAG, "Psiphon tun2socks native worker returned")
+                    } catch (error: LinkageError) {
+                        Log.e(TAG, "Psiphon JNI linkage unavailable", error)
+                    } catch (error: Exception) {
+                        Log.e(TAG, "Psiphon JNI routing failed", error)
+                    } finally {
+                        // A late completion cannot release a newer JNI lease.
+                        if (!PsiphonNativeWorkerGate.release(acquiredLease)) {
+                            Log.e(TAG, "Psiphon JNI worker returned with a stale lease")
+                        }
+                        if (!teardownStarted.get()) {
+                            // Never preserve a VPN with no packet-routing worker.
+                            Thread { stopAll() }.start()
+                        }
+                    }
+                }.apply { name = "PsiphonTun2Socks"; isDaemon = true }
+                tun2socksThread = worker
+                worker.start()
+                workerStarted = true
+            } catch (failure: Throwable) {
+                tun2socksThread = null
+                if (!workerStarted) {
+                    nativeLease?.let { PsiphonNativeWorkerGate.release(it) }
+                    runCatching { ParcelFileDescriptor.adoptFd(tunFd).close() }
+                }
+                throw failure
             }
-        }.apply {
-            name = "PsiphonTun2Socks"
-            isDaemon = true
-            start()
         }
     }
 
@@ -443,10 +648,14 @@ class PsiphonVpnService : VpnService(), PsiphonTunnel.HostService {
         val stopIntent = Intent(this, PsiphonVpnService::class.java).apply {
             action = ACTION_STOP
         }
+        // Intent.data participates in PendingIntent identity; extras alone
+        // would update an old token under FLAG_UPDATE_CURRENT.
+        stopIntent.data = Uri.parse("$NOTIFICATION_STOP_SCHEME://session/$notificationStopToken")
         val stopPendingIntent = PendingIntent.getService(
             this, 0, stopIntent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
+        activeStopPendingIntent = stopPendingIntent
 
         val notification = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_stat_name)
@@ -466,20 +675,28 @@ class PsiphonVpnService : VpnService(), PsiphonTunnel.HostService {
 
     private fun updateNotification(text: String) {
         try {
-            val notification = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_stat_name_m2)
+            val builder = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_stat_name)
                 .setContentTitle(getString(R.string.app_name))
                 .setContentText(text)
                 .setPriority(NotificationCompat.PRIORITY_LOW)
                 .setOngoing(true)
-                .build()
-
-            //val manager = getSystemService(NotificationManager::class.java)
-            //manager?.notify(NOTIFICATION_ID, notification)
+            // Always preserve the session-scoped Stop action across notification updates.
+            val stopPendingIntent = activeStopPendingIntent ?: PendingIntent.getService(
+                this,
+                0,
+                Intent(this, PsiphonVpnService::class.java).apply {
+                    action = ACTION_STOP
+                    data = Uri.parse("$NOTIFICATION_STOP_SCHEME://session/$notificationStopToken")
+                },
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
+            ).also { activeStopPendingIntent = it }
+            builder.addAction(R.drawable.ic_close_grey_800_24dp, "Stop", stopPendingIntent)
+            val notification = builder.build()
 
             val manager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
             manager.notify(NOTIFICATION_ID, notification)
-        }catch (e: Exception) {
+        } catch (e: Exception) {
             Log.d(TAG, "psiphon notification builder error: $e")
         }
     }
@@ -488,47 +705,119 @@ class PsiphonVpnService : VpnService(), PsiphonTunnel.HostService {
     // Shutdown
     // =========================================================================
 
+    /**
+     * Only the returned close() of this exact PFD can release its local owner.
+     * Native/duplicated FD aliases may remain live after this result.
+     */
+    private fun closeTrackedTunDescriptor(descriptor: ParcelFileDescriptor): Boolean =
+        synchronized(tunCloseTracker) {
+            if (!tunCloseTracker.isOutstanding(descriptor)) return@synchronized true
+            val closed = runCatching { descriptor.close() }
+                .onFailure { Log.w(TAG, "Psiphon VPN TUN close failed", it) }
+                .isSuccess
+            if (closed) {
+                tunCloseTracker.closeReturned(descriptor)
+                if (mInterface === descriptor) mInterface = null
+            }
+            closed
+        }
+
+    /** Nonblocking lifecycle cleanup; every failed close remains retriable. */
+    private fun closeOwnedTunDescriptors(): Boolean {
+        val owned = tunCloseTracker.requestStop()
+        var allReturned = true
+        owned.forEach { descriptor ->
+            if (!closeTrackedTunDescriptor(descriptor)) allReturned = false
+        }
+        return allReturned && tunCloseTracker.isStopComplete()
+    }
+
     private fun stopAll(isForced: Boolean = true) {
+        // Terminate start issuance and TUN-worker registration atomically.
+        synchronized(startGate) {
+            if (!teardownStarted.compareAndSet(false, true)) return
+            startGate.stop()
+            routeGate.stop()
+        }
+        notificationStopTokenGate.invalidate()
         isRunning.set(false)
         isPsiphonRunning.set(false)
-        mystrg.put_value("is_psiphon_running","n")
+        psiphonSocksPort.set(0)
+        psiphonHttpPort.set(0)
+        psiphon_http_port.set(0)
+        runCatching { mystrg.put_value("is_psiphon_running", "n") }
+            .onFailure { Log.w(TAG, "Could not persist tunnel stopped state") }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            try {
-                connectivity.unregisterNetworkCallback(defaultNetworkCallback)
-            } catch (ignored: Exception) {
+        releaseUnderlyingNetworkCallback()
+
+        // A missing JNI module throws LinkageError, not Exception: continue
+        // closing the TUN and upstream proxy even when native termination fails.
+        val jniTerminationSignalReturned = runCatching { Tun2SocksJniLoader.terminateTun2Socks() }
+            .onFailure { Log.w(TAG, "Psiphon JNI termination signal failed") }
+            .isSuccess
+        val worker = tun2socksThread
+        runCatching {
+            if (worker != null && worker !== Thread.currentThread()) worker.join(3000)
+        }.onFailure { failure ->
+            if (failure is InterruptedException) Thread.currentThread().interrupt()
+            Log.w(TAG, "Psiphon routing worker join failed")
+        }
+        // A bounded join is not a native completion acknowledgment.
+        // Keep ownership of any still-live worker; its finally block
+        // retains the process-wide native start gate until actual exit.
+        val workerExited = worker == null ||
+            (worker !== Thread.currentThread() && !worker.isAlive)
+        if (workerExited) tun2socksThread = null
+        else Log.w(TAG, "Psiphon routing worker still alive after stop request")
+
+        // Clear the handle before stopping so teardown is safe if the native
+        // callback concurrently calls onExiting().
+        val tunnel = psiphonTunnel
+        psiphonTunnel = null
+        val tunnelStopReturned = runCatching { tunnel?.stop() }
+            .onFailure { Log.e(TAG, "Native Psiphon tunnel stop failed", it) }
+            .isSuccess
+
+        // A close exception is NOT evidence of closure. Keep the exact PFD
+        // for a later destroy-time retry rather than discarding ownership.
+        val tunCloseReturned = closeOwnedTunDescriptors()
+        // Closing Psiphon must not leave a live unprotected upstream SOCKS process.
+        if (usesUpstreamProxy) {
+            runCatching { stopService(Intent(this, V2RayProxyOnlyService::class.java)) }
+                .onFailure { Log.w(TAG, "Unable to stop upstream proxy process") }
+        }
+        val evidence = PsiphonTeardownEvidence(
+            workerRegistered = worker != null,
+            workerExited = workerExited,
+            jniTerminationSignalReturned = jniTerminationSignalReturned,
+            psiphonTunnelStopReturned = tunnelStopReturned,
+            tunCloseReturned = tunCloseReturned,
+            dependsOnXray = usesUpstreamProxy,
+            // A returned PsiphonTunnel.stop() is not a native completion receipt.
+            psiphonNativeStopAcknowledged = false,
+            // stopService() is only a request; no Xray native receipt exists.
+            xrayNativeStopAcknowledged = false,
+        )
+        if (!evidence.wholeChainCompletionEligible && usesUpstreamProxy) {
+            Log.i(TAG, "Upstream Xray native stop remains unverified")
+        }
+        if (evidence.localStopReportable) {
+            // A legacy local-service status, NOT a full-chain session ack.
+            MessageUtil.sendMsg2UI(this, AppConfig.MSG_STATE_STOP_SUCCESS, "")
+        } else {
+            Log.w(TAG, "Psiphon local native cleanup incomplete; withholding Stop Success")
+            // A live worker may still own a duplicate TUN descriptor, even
+            // after mInterface.close(). Do not announce not-running until
+            // both worker exit and local TUN close were observed.
+            if (workerExited && tunCloseReturned) {
+                MessageUtil.sendMsg2UI(this, AppConfig.MSG_STATE_NOT_RUNNING, "")
             }
         }
-
-        // Stop tun2socks (JNI)
-        try {
-            Log.d(TAG, "tun2socks terminate")
-            Tun2SocksJniLoader.terminateTun2Socks()
-            tun2socksThread?.join(3000)
-            tun2socksThread = null
-        } catch (e: Exception) {
-            Log.d(TAG, "tun2socks terminate error: $e")
+        stopCleanupFinished.set(true)
+        if (evidence.localStopReportable) {
+            runCatching { stopForeground(true) }
         }
-
-        // Stop Psiphon tunnel
-        try {
-            psiphonTunnel?.stop()
-            psiphonTunnel = null
-            Log.i(TAG, "Psiphon tunnel stopped")
-        } catch (e: Exception) {
-            Log.e(TAG, "Error stopping Psiphon: ${e.message}", e)
-        }
-
-        // Notify the UI
-        MessageUtil.sendMsg2UI(this, AppConfig.MSG_STATE_STOP_SUCCESS, "")
-
-        if (isForced) {
-            stopSelf()
-            try {
-                mInterface?.close()
-            } catch (ignored: Exception) {
-            }
-        }
+        if (isForced) stopSelf()
     }
 
     // =========================================================================
@@ -563,7 +852,7 @@ class PsiphonVpnService : VpnService(), PsiphonTunnel.HostService {
 
 
 
-        if ( mystrg.get_value("sw_psiphon_after","")=="true") {
+        if ( usesUpstreamProxy) {
             // Set upstream proxy to V2Ray's SOCKS5 port
             val v2raySocksPort = Utils.parseInt(
                 settingsStorage?.decodeString(AppConfig.PREF_SOCKS_PORT),
@@ -625,13 +914,15 @@ class PsiphonVpnService : VpnService(), PsiphonTunnel.HostService {
         }
 
 
-        val Psocks_port_string = mystrg.get_value("psiphon_socks_port",AppConfig.PSIPHON_SOCKS)
-        val Psocks_port = Utils.parseInt(Psocks_port_string)
-        config.put("LocalSocksProxyPort",Psocks_port)
-
-        val Phttp_port_string = mystrg.get_value("psiphon_http_port",AppConfig.PSIPHON_HTTP)
-        val Phttp_port = Utils.parseInt(Phttp_port_string)
-        config.put("LocalHttpProxyPort",Phttp_port)
+        val ports = PsiphonProxyPortRules.parse(
+            mystrg.get_value("psiphon_socks_port", AppConfig.PSIPHON_SOCKS),
+            mystrg.get_value("psiphon_http_port", AppConfig.PSIPHON_HTTP)
+        ) ?: run {
+            Log.w(TAG, "Invalid saved Psiphon proxy ports; using automatic allocation")
+            PsiphonProxyPorts(0, 0)
+        }
+        config.put("LocalSocksProxyPort", ports.socks)
+        config.put("LocalHttpProxyPort", ports.http)
 
 
         // Ensure required fields
@@ -644,7 +935,7 @@ class PsiphonVpnService : VpnService(), PsiphonTunnel.HostService {
 
         // Enable diagnostic notices for debugging
         config.put("EmitDiagnosticNotices", true)
-        config.put("EmitDiagnosticNetworkParameters", true)
+        config.put("EmitDiagnosticNetworkParameters", false)
         config.put("EmitBytesTransferred", true)
         config.put("EmitServerAlerts", true)
 
@@ -695,18 +986,33 @@ class PsiphonVpnService : VpnService(), PsiphonTunnel.HostService {
      * through Psiphon's local SOCKS proxy.
      */
     override fun onConnected() {
-        Log.i(TAG, "Psiphon: Connected! Starting tun2socks routing...")
-        updateNotification("Psiphon tunnel connected")
-        startTun2socksRouting()
+        if (teardownStarted.get() || !startGate.isActive()) return
+        Log.i(TAG, "Psiphon connected; waiting for SOCKS listener before routing")
+        handleRouteAction(routeGate.onConnected())
+    }
+
+    private fun handleRouteAction(action: PsiphonRouteAction) {
+        when (action) {
+            PsiphonRouteAction.Wait -> Unit
+            is PsiphonRouteAction.Start -> startTun2socksRouting(action.port)
+            PsiphonRouteAction.RestartRequired -> {
+                Log.e(TAG, "Psiphon SOCKS endpoint changed while routing; stopping stale VPN")
+                Thread { stopAll() }.start()
+            }
+        }
     }
 
     override fun onExiting() {
-        Log.i(TAG, "Psiphon: Exiting")
+        if (teardownStarted.get()) return
+        Log.w(TAG, "Psiphon core exited; closing VPN routing")
+        Thread { stopAll() }.start()
     }
 
     override fun onListeningSocksProxyPort(port: Int) {
+        if (teardownStarted.get() || !startGate.isActive()) return
         Log.i(TAG, "Psiphon SOCKS proxy port: $port")
         psiphonSocksPort.set(port)
+        handleRouteAction(routeGate.onSocksPort(port))
     }
 
     override fun onListeningHttpProxyPort(port: Int) {
@@ -716,11 +1022,12 @@ class PsiphonVpnService : VpnService(), PsiphonTunnel.HostService {
     }
 
     override fun onUpstreamProxyError(message: String?) {
-        Log.e(TAG, "Psiphon upstream proxy error (V2Ray): $message")
+        Log.e(TAG, "Psiphon upstream proxy reported an error")
     }
 
     override fun onDiagnosticMessage(message: String?) {
-        Log.d(TAG, "Psiphon: $message")
+        // Do not write upstream diagnostic payloads (which may contain private
+        // network endpoints or credentials) to Android's system logcat.
     }
 
     override fun onStartedWaitingForNetworkConnectivity() {

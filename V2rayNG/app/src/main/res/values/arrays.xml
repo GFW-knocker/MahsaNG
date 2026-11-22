@@ -143,6 +143,7 @@
     <string-array name="mode_value" translatable="false">
         <item>VPN</item>
         <item>Proxy only</item>
+        <item>Psiphon via V2Ray</item>
     </string-array>
 
     <string-array name="flows" translatable="false">

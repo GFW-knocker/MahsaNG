@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- The original lists were not published in upstream MahsaNG.
+         These are only the exact fallback choices in GFW_psiphonSettings_Activity.
+         Do not add unverified protocol names or region IDs to a network client.
+         Restore the full lists only with an audited protocol implementation. -->
+    <string-array name="psiphon_country_list" translatable="false">
+        <item>Auto</item>
+    </string-array>
+    <string-array name="psiphon_protocol_list" translatable="false">
+        <item>auto</item>
+    </string-array>
+    <string-array name="psiphon_aggressive_list" translatable="false">
+        <item>OFF</item>
+    </string-array>
+</resources>
