@@ -2,11 +2,9 @@ package com.v2ray.ang.util
 
 import android.content.Context
 import android.text.TextUtils
-import android.util.Log
 import com.google.gson.*
 import com.tencent.mmkv.MMKV
 import com.v2ray.ang.AppConfig
-import com.v2ray.ang.AppConfig.ANG_PACKAGE
 import com.v2ray.ang.dto.V2rayConfig
 import com.v2ray.ang.dto.EConfigType
 import com.v2ray.ang.dto.ERoutingMode
@@ -32,12 +30,10 @@ object V2rayConfigUtil {
                 } else {
                     raw
                 }
-                Log.d(ANG_PACKAGE, customConfig)
                 return Result(true, customConfig)
             }
             val outbound = config.getProxyOutbound() ?: return Result(false, "")
             val result = getV2rayNonCustomConfig(context, outbound)
-            Log.d(ANG_PACKAGE, result.content)
             return result
         } catch (e: Exception) {
             e.printStackTrace()
@@ -65,6 +61,15 @@ object V2rayConfigUtil {
         inbounds(v2rayConfig)
 
         httpRequestObject(outbound)
+
+        // Apply the current opt-in even to profiles imported by older releases.
+        val userAllowsInsecure = settingsStorage?.decodeBool(AppConfig.PREF_ALLOW_INSECURE) == true
+        outbound.streamSettings?.tlsSettings?.let { tls ->
+            tls.allowInsecure = TlsCertificatePolicy.forConnection(userAllowsInsecure, tls.allowInsecure)
+        }
+        outbound.streamSettings?.realitySettings?.let { reality ->
+            reality.allowInsecure = TlsCertificatePolicy.forConnection(userAllowsInsecure, reality.allowInsecure)
+        }
 
         v2rayConfig.outbounds[0] = outbound
 
