@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="https_evidence_title">جزئیات TLS و پاسخ HTTPS</string>
+    <string name="https_evidence_route_warning">این بررسی فقط خواندنی و با یک درخواست در هر بار اجرا است. اتصال مستقیم HTTPS یعنی استفاده نکردن از پراکسی HTTP محلی، نه دور زدن VPN. درخواست HTTPS از طریق پراکسی به یک نشانی ثابت و از درگاه HTTP محلی مهسا ارسال می‌شود، اگر سرویس فعال باشد. هیچ‌کدام به‌تنهایی پایداری کلی پراکسی را ثابت نمی‌کند. اعتبارسنجی گواهی و نام میزبان TLS سیستم فعال می‌ماند.</string>
+    <string name="https_evidence_host">نام میزبان HTTPS مستقیم (بدون پیشوند و مسیر URL)</string>
+    <string name="https_evidence_tls_port">درگاه HTTPS مستقیم (۱ تا ۶۵۵۳۵)</string>
+    <string name="https_evidence_proxy_port">درگاه پراکسی HTTP محلی (تنظیم ذخیره‌شدهٔ فعلی، قابل ویرایش)</string>
+    <string name="https_evidence_timeout">مهلت هر اتصال و خواندن، میلی‌ثانیه (۳۰۰ تا ۱۰۰۰۰)</string>
+    <string name="https_evidence_direct">بررسی HTTPS در مسیر شبکه برنامه</string>
+    <string name="https_evidence_via_proxy">بررسی HTTPS از طریق پراکسی HTTP محلی</string>
+    <string name="https_evidence_stop">توقف بررسی</string>
+    <string name="https_evidence_ready">روش را انتخاب کنید؛ هنوز درخواستی ارسال نشده است.</string>
+    <string name="https_evidence_running">در حال اتصال؛ وضعیت پاسخ و جزئیات TLS تأییدشده نمایش داده می‌شود.</string>
+    <string name="https_evidence_stopped">متوقف شد؛ نتایج دیررس پذیرفته نمی‌شوند. سوکت‌ها ممکن است تا پایان مهلت مسدود بمانند.</string>
+    <string name="https_evidence_invalid">نام میزبان، پورت یا مهلت نامعتبر است یا شروع درخواست ممکن نشد.</string>
+    <string name="https_evidence_route">مسیر درخواست</string>
+    <string name="https_evidence_route_proxy">پراکسی HTTP محلی تا مقصد HTTPS ثابت</string>
+    <string name="https_evidence_route_app">مسیر شبکه برنامه بدون پراکسی HTTP محلی (ممکن است از VPN عبور کند)</string>
+    <string name="https_evidence_result">نتیجه</string>
+    <string name="https_evidence_elapsed">زمان کل درخواست</string>
+    <string name="https_evidence_http_code">کد وضعیت HTTP</string>
+    <string name="https_evidence_cipher">رمزنگاری TLS</string>
+    <string name="https_evidence_cert">موضوع گواهی TLS</string>
+    <string name="https_evidence_fingerprint">اثر انگشت SHA-256 گواهی</string>
+    <string name="https_evidence_expiry">تاریخ انقضای گواهی</string>
+    <string name="https_evidence_server">سرآیند Server</string>
+    <string name="https_evidence_alt_svc">سرآیند Alt-Svc</string>
+    <string name="https_evidence_type">نوع محتوا</string>
+    <string name="https_evidence_length">طول محتوا</string>
+    <string name="https_evidence_connectivity">پاسخ مورد انتظار ۲۰۴ یا ۲۰۰ خالی</string>
+    <string name="https_evidence_tls_only">بررسی دست‌دهی تأییدشدهٔ TLS (شبکه برنامه)</string>
+    <string name="https_evidence_tls_only_route">دست‌دهی TLS از شبکه برنامه (بدون پراکسی HTTP محلی؛ ممکن است از VPN عبور کند)</string>
+    <string name="https_evidence_tls_only_info">زمان دست‌دهی فقط TLS را پس از اتصال TCP می‌سنجد. هیچ درخواست HTTP یا خروجی Xray آزمایش نمی‌شود. ALPN فقط در صورت دسترسی نمایش داده می‌شود.</string>
+    <string name="https_evidence_tcp_connect">زمان اتصال TCP</string>
+    <string name="https_evidence_handshake">زمان دست‌دهی TLS</string>
+    <string name="https_evidence_protocol">نسخهٔ توافق‌شدهٔ TLS</string>
+    <string name="https_evidence_alpn">پروتکل ALPN</string>
+    <string name="https_evidence_tls_unsupported">بررسی مستقل دست‌دهی TLS برای اعتبارسنجی امن نام میزبان به اندروید ۷ یا بالاتر نیاز دارد. درخواستی ارسال نشد.</string>
+</resources>

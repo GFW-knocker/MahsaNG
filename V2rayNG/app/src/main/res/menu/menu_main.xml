@@ -65,6 +65,10 @@
         android:title="@string/title_filter_config"
         app:showAsAction="ifRoom" />
     <item
+        android:id="@+id/https_evidence"
+        android:title="@string/https_evidence_title"
+        app:showAsAction="never" />
+    <item
         android:id="@+id/service_restart"
         android:title="@string/title_service_restart"
         app:showAsAction="never" />

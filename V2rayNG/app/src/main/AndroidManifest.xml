@@ -86,6 +86,9 @@
             android:name=".ui.SubSettingActivity" />
         <activity
             android:exported="false"
+            android:name=".ui.HttpsEvidenceActivity" />
+        <activity
+            android:exported="false"
             android:name=".ui.UserAssetActivity" />
 
         <activity
