@@ -882,6 +882,9 @@ class ServerActivity : BaseActivity() {
             echServerKeys = echServerKeys,
             echForceQuery = echForceQuery
         )
+        if (allowInsecure && settingsStorage?.decodeBool(PREF_ALLOW_INSECURE) != true) {
+            toast(R.string.summary_pref_allow_insecure)
+        }
 
     }
 
