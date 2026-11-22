@@ -63,5 +63,8 @@ public class Tun2SocksJniLoader {
      * Signal tun2socks to terminate. Can be called from any thread.
      * After calling this, runTun2Socks() will return on its thread.
      */
+    /** Arm the next one-shot worker before it can race with stop. */
+    public native static void prepareTun2Socks();
+
     public native static void terminateTun2Socks();
 }
