@@ -293,6 +293,10 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             true
         }
 
+        R.id.https_evidence -> {
+            startActivity(Intent(this, HttpsEvidenceActivity::class.java))
+            true
+        }
         R.id.service_restart -> {
             restartV2Ray()
             true

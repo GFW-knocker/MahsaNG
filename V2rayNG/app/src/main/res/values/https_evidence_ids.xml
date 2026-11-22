@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="https_evidence_host_field" type="id"/>
+    <item name="https_evidence_tls_port_field" type="id"/>
+    <item name="https_evidence_proxy_port_field" type="id"/>
+    <item name="https_evidence_timeout_field" type="id"/>
+</resources>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="https_evidence_title">TLS and HTTPS response details</string>
+    <string name="https_evidence_route_warning">Read-only, one request per action. Direct HTTPS means no local HTTP proxy, not a VPN bypass. Proxy HTTPS sends a fixed generate_204 request through the MahsaNG local HTTP proxy port if it is active. Neither result alone proves general proxy reliability. Platform TLS certificate and hostname verification remain enabled.</string>
+    <string name="https_evidence_host">Direct HTTPS hostname (no scheme or URL path)</string>
+    <string name="https_evidence_tls_port">Direct HTTPS port (1–65535)</string>
+    <string name="https_evidence_proxy_port">Local HTTP proxy port (current saved setting; editable)</string>
+    <string name="https_evidence_timeout">Per-connection/read timeout, milliseconds (300–10000)</string>
+    <string name="https_evidence_direct">Inspect HTTPS on app network route</string>
+    <string name="https_evidence_via_proxy">Inspect HTTPS through local HTTP proxy</string>
+    <string name="https_evidence_stop">Stop observation</string>
+    <string name="https_evidence_ready">Choose a method; no request has been sent.</string>
+    <string name="https_evidence_running">Connecting; request status and verified TLS metadata will appear here.</string>
+    <string name="https_evidence_stopped">Stopped. Late results are ignored. Sockets can remain blocked until timeout.</string>
+    <string name="https_evidence_invalid">Invalid hostname, port or timeout, or the request could not start.</string>
+    <string name="https_evidence_route">Request route</string>
+    <string name="https_evidence_route_proxy">Local HTTP proxy to fixed HTTPS endpoint</string>
+    <string name="https_evidence_route_app">App network without local HTTP proxy (VPN may still route)</string>
+    <string name="https_evidence_result">Outcome</string>
+    <string name="https_evidence_elapsed">Total request time</string>
+    <string name="https_evidence_http_code">HTTP response status</string>
+    <string name="https_evidence_cipher">TLS cipher suite</string>
+    <string name="https_evidence_cert">TLS certificate subject</string>
+    <string name="https_evidence_fingerprint">Leaf certificate SHA-256</string>
+    <string name="https_evidence_expiry">Certificate expires</string>
+    <string name="https_evidence_server">HTTP Server header</string>
+    <string name="https_evidence_alt_svc">Alt-Svc header</string>
+    <string name="https_evidence_type">Content-Type</string>
+    <string name="https_evidence_length">Content length</string>
+    <string name="https_evidence_connectivity">Expected 204 / empty 200 response</string>
+    <string name="https_evidence_tls_only">Inspect verified TLS handshake (app network)</string>
+    <string name="https_evidence_tls_only_route">App network TLS handshake (no local HTTP proxy; VPN may still route)</string>
+    <string name="https_evidence_tls_only_info">Handshake time measures TLS only, after TCP connect. No HTTP request or Xray outbound is tested. ALPN is shown only when available.</string>
+    <string name="https_evidence_tcp_connect">TCP connect time</string>
+    <string name="https_evidence_handshake">TLS handshake time</string>
+    <string name="https_evidence_protocol">TLS negotiated version</string>
+    <string name="https_evidence_alpn">ALPN protocol</string>
+    <string name="https_evidence_tls_unsupported">Standalone TLS handshake inspection requires Android 7.0 or later for secure hostname verification. No request was sent.</string>
+</resources>
