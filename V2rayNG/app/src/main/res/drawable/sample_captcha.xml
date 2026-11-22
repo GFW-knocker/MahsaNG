@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Neutral image-placeholder artwork; never render a fabricated CAPTCHA answer. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="110dp" android:height="48dp"
+    android:viewportWidth="110" android:viewportHeight="48">
+    <path android:fillColor="#FFE7E8EA"
+        android:pathData="M0,0 L110,0 L110,48 L0,48 Z" />
+    <path android:fillColor="#FFB4B8BD"
+        android:pathData="M20,34 L41,13 L51,23 L63,11 L88,36 L20,36 Z" />
+</vector>

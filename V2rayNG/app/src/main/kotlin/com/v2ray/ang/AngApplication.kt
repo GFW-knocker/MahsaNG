@@ -7,6 +7,12 @@ import com.tencent.mmkv.MMKV
 class AngApplication : MultiDexApplication() {
     companion object {
         const val PREF_LAST_VERSION = "pref_last_version"
+
+        // PluginManager's process application context. A process-owned Application
+        // is valid for the whole process lifetime and must be set before callbacks.
+        @Volatile
+        lateinit var application: AngApplication
+            private set
     }
 
     var firstRun = false
@@ -14,6 +20,7 @@ class AngApplication : MultiDexApplication() {
 
     override fun onCreate() {
         super.onCreate()
+        application = this
 
 //        LeakCanary.install(this)
 

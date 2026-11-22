@@ -143,7 +143,7 @@
         <include layout="@layout/tls_layout"  />
         <include layout="@layout/gfw_fragment_layout"  />
         <include layout="@layout/gfw_mux_layout"  />
-        <include layout="@layout/gfw_permit_layout"  />
+        <!-- Removed nonfunctional DNSTT permit selector (no ServerActivity handling). -->
 
         <LinearLayout
             android:layout_width="match_parent"

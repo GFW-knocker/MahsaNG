@@ -1,15 +1,12 @@
 package com.v2ray.ang.ui
 
-import android.Manifest
 import android.app.Activity
 import android.os.Bundle
 import android.content.Intent
 import android.graphics.BitmapFactory
-import android.os.Build
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.result.contract.ActivityResultContracts
-import com.tbruyelle.rxpermissions.RxPermissions
 import com.tencent.mmkv.MMKV
 import com.v2ray.ang.AppConfig
 import com.v2ray.ang.R
@@ -79,23 +76,9 @@ class ScannerActivity : BaseActivity(){
             true
         }
         R.id.select_photo -> {
-            val permission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                Manifest.permission.READ_MEDIA_IMAGES
-            } else {
-                Manifest.permission.READ_EXTERNAL_STORAGE
-            }
-            RxPermissions(this)
-                .request(permission)
-                .subscribe {
-                    if (it) {
-                        try {
-                            showFileChooser()
-                        } catch (e: Exception) {
-                            e.printStackTrace()
-                        }
-                    } else
-                        toast(R.string.toast_permission_denied)
-                }
+            // ACTION_GET_CONTENT grants temporary read access to the chosen URI.
+            // No gallery or filesystem runtime permission is required.
+            showFileChooser()
             true
         }
         else -> super.onOptionsItemSelected(item)

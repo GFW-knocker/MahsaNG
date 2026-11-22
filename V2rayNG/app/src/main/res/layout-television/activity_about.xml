@@ -201,7 +201,7 @@
             android:layout_weight="1"
             android:contentDescription="@null"
             android:scaleType="fitCenter"
-            android:src="@drawable/mahsa_banner"
+            android:src="@mipmap/ic_banner"
             tools:ignore="NestedWeights" />
 
         <TextView

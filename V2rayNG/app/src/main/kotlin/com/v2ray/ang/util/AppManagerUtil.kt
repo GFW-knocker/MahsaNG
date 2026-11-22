@@ -18,7 +18,7 @@ object AppManagerUtil {
         for (pkg in packages) {
             if (!pkg.hasInternetPermission && pkg.packageName != "android") continue
 
-            val applicationInfo = pkg.applicationInfo
+            val applicationInfo = pkg.applicationInfo ?: continue
 
             val appName = applicationInfo.loadLabel(packageManager).toString()
             val appIcon = applicationInfo.loadIcon(packageManager)

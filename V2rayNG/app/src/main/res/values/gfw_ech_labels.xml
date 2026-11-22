@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="server_lab_ech_config_list">TLS ECH config list</string>
+    <string name="server_lab_ech_server_keys">TLS ECH server keys</string>
+    <string name="server_lab_ech_force_query">TLS ECH force query mode</string>
+</resources>

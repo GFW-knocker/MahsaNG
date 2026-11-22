@@ -26,6 +26,7 @@ import android.content.pm.ResolveInfo
 import android.graphics.drawable.Drawable
 import android.os.Build
 import com.v2ray.ang.AngApplication
+import com.v2ray.ang.extension.getPackageInfo
 import com.v2ray.ang.plugin.PluginManager.loadString
 
 abstract class ResolvedPlugin(protected val resolveInfo: ResolveInfo) : Plugin() {

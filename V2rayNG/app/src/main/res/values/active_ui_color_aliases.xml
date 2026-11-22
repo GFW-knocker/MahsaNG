@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Older screens referenced these names; reuse existing theme colors. -->
+    <color name="fab_orange_dark">@color/color_fab_active</color>
+    <color name="white">@color/colorBg</color>
+</resources>

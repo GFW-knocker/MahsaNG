@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- High-contrast neutral snackbar surface, consistent with light and dark UI. -->
+    <color name="snackbar_surface">#24272D</color>
+    <color name="snackbar_success">#80DEA5</color>
+    <color name="snackbar_title_text">#FFFFFF</color>
+    <color name="snackbar_subtitle_text">#D3D9E1</color>
+</resources>

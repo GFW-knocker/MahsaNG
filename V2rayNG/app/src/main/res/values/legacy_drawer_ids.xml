@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Kept for existing MainActivity handlers; intentionally not shown in the drawer. -->
+    <item type="id" name="feedback" />
+    <item type="id" name="promotion" />
+</resources>
