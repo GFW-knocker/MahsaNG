@@ -232,4 +232,26 @@
         <item>reply</item>
         <item>reply_all</item>
     </string-array>
+    <string-array name="tcp_probe_preset_entries">
+        <item>@string/tcp_probe_quick</item>
+        <item>@string/tcp_probe_balanced</item>
+        <item>@string/tcp_probe_diagnostic</item>
+    </string-array>
+    <string-array name="tcp_probe_preset_values" translatable="false">
+        <item>quick</item>
+        <item>balanced</item>
+        <item>diagnostic</item>
+    </string-array>
+    <string-array name="tcp_probe_concurrency_entries">
+        <item>@string/tcp_probe_concurrency_4</item>
+        <item>@string/tcp_probe_concurrency_8</item>
+        <item>@string/tcp_probe_concurrency_12</item>
+        <item>@string/tcp_probe_concurrency_16</item>
+    </string-array>
+    <string-array name="tcp_probe_concurrency_values" translatable="false">
+        <item>4</item>
+        <item>8</item>
+        <item>12</item>
+        <item>16</item>
+    </string-array>
 </resources>

@@ -65,7 +65,15 @@ class MainRecyclerAdapter(val activity: MainActivity) : RecyclerView.Adapter<Mai
 
             holder.itemMainBinding.tvName.text = config.remarks
             holder.itemView.setBackgroundColor(Color.TRANSPARENT)
-            holder.itemMainBinding.tvTestResult.text = aff?.getTestDelayString() ?: ""
+            val tcpEvidence = mActivity.mainViewModel.getTcpEvidence(guid)
+            holder.itemMainBinding.tvTestResult.text = (aff?.getTestDelayString() ?: "") +
+                if (tcpEvidence != null) " ⓘ" else ""
+            holder.itemMainBinding.tvTestResult.contentDescription =
+                (aff?.getTestDelayString() ?: "") +
+                if (tcpEvidence != null) " " + mActivity.getString(R.string.tcp_evidence_hint) else ""
+            holder.itemMainBinding.tvTestResult.setOnClickListener {
+                if (tcpEvidence != null) showTcpEvidence(tcpEvidence)
+            }
             if ((aff?.testDelayMillis ?: 0L) < 0L) {
                 holder.itemMainBinding.tvTestResult.setTextColor(ContextCompat.getColor(mActivity, R.color.colorPingRed))
             } else {
@@ -183,6 +191,33 @@ class MainRecyclerAdapter(val activity: MainActivity) : RecyclerView.Adapter<Mai
         }
     }
 
+    /** Explanation is transient, method-specific, and never contains raw exceptions. */
+    private fun showTcpEvidence(observation: com.v2ray.ang.util.TcpProbeEvidence) {
+        val rows = observation.attempts.mapIndexed { index, attempt ->
+            val reason = if (attempt.succeeded) {
+                mActivity.getString(R.string.tcp_evidence_connected)
+            } else {
+                val label = when (attempt.failure) {
+                    com.v2ray.ang.util.SafeProbeFailure.Kind.DNS -> R.string.probe_failure_dns
+                    com.v2ray.ang.util.SafeProbeFailure.Kind.REFUSED -> R.string.probe_failure_refused
+                    com.v2ray.ang.util.SafeProbeFailure.Kind.TIMEOUT -> R.string.probe_failure_timeout
+                    com.v2ray.ang.util.SafeProbeFailure.Kind.TLS_CERT -> R.string.probe_failure_tls
+                    com.v2ray.ang.util.SafeProbeFailure.Kind.NETWORK -> R.string.probe_failure_network
+                    com.v2ray.ang.util.SafeProbeFailure.Kind.OTHER, null -> R.string.probe_failure_other
+                }
+                mActivity.getString(label)
+            }
+            mActivity.getString(R.string.tcp_evidence_attempt, index + 1, attempt.elapsedMs, reason)
+        }.joinToString("\n")
+        val summary = mActivity.getString(R.string.tcp_evidence_summary,
+            observation.totalElapsedMs, observation.attempts.size)
+        AlertDialog.Builder(mActivity)
+            .setTitle(R.string.tcp_evidence_title)
+            .setMessage(summary + "\n\n" + rows)
+            .setPositiveButton(android.R.string.ok, null)
+            .show()
+    }
+
     private fun shareFullContent(guid: String) {
         if (AngConfigManager.shareFullContent2Clipboard(mActivity, guid) == 0) {
             mActivity.toast(R.string.toast_success)
@@ -191,10 +226,11 @@ class MainRecyclerAdapter(val activity: MainActivity) : RecyclerView.Adapter<Mai
         }
     }
 
-    private  fun removeServer(guid: String,position:Int) {
-        mActivity.mainViewModel.removeServer(guid)
-        notifyItemRemoved(position)
-        notifyItemRangeChanged(position, mActivity.mainViewModel.serversCache.size)
+    private fun removeServer(guid: String, position: Int) {
+        if (mActivity.mainViewModel.removeServer(guid)) {
+            notifyItemRemoved(position)
+            notifyItemRangeChanged(position, mActivity.mainViewModel.serversCache.size)
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder {
@@ -235,8 +271,9 @@ class MainRecyclerAdapter(val activity: MainActivity) : RecyclerView.Adapter<Mai
         if (guid != mainStorage?.decodeString(MmkvManager.KEY_SELECTED_SERVER)) {
 //            mActivity.alert(R.string.del_config_comfirm) {
 //                positiveButton(android.R.string.ok) {
-            mActivity.mainViewModel.removeServer(guid)
-            notifyItemRemoved(position)
+            if (mActivity.mainViewModel.removeServer(guid)) {
+                notifyItemRemoved(position)
+            }
 //                }
 //                show()
 //            }

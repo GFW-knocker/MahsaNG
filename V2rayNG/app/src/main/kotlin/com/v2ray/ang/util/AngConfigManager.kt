@@ -199,7 +199,7 @@ object AngConfigManager {
             }
             val key = MmkvManager.encodeServerConfig(vmessBean.guid, config)
             if (index == angConfig.index) {
-                mainStorage?.encode(KEY_SELECTED_SERVER, key)
+                MmkvManager.selectExistingServer(key)
             }
         }
     }
@@ -220,7 +220,8 @@ object AngConfigManager {
     private fun importConfig(
         str: String?,
         subid: String,
-        removedSelectedServer: ServerConfig?
+        removedSelectedServer: ServerConfig?,
+        stagedConfigs: MutableMap<String, ServerConfig>? = null,
     ): Int {
         try {
             if (str == null || TextUtils.isEmpty(str)) {
@@ -480,7 +481,12 @@ object AngConfigManager {
                 return R.string.toast_incorrect_protocol
             }
             config.subscriptionId = subid
+            if (stagedConfigs != null) {
+                stagedConfigs[Utils.getUuid()] = config
+                return 0
+            }
             val guid = MmkvManager.encodeServerConfig("", config)
+            if (guid.isBlank()) return -1
             if (removedSelectedServer != null &&
                 config.getProxyOutbound()
                     ?.getServerAddress() == removedSelectedServer.getProxyOutbound()
@@ -489,7 +495,7 @@ object AngConfigManager {
                     ?.getServerPort() == removedSelectedServer.getProxyOutbound()
                     ?.getServerPort()
             ) {
-                mainStorage?.encode(KEY_SELECTED_SERVER, guid)
+                MmkvManager.selectExistingServer(guid)
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -976,45 +982,19 @@ object AngConfigManager {
     }
 
     fun importBatchConfig(servers: String?, subid: String, append: Boolean): Int {
-        try {
-            if (servers == null) {
-                return 0
-            }
-            val removedSelectedServer =
-                if (!TextUtils.isEmpty(subid) && !append) {
-                    MmkvManager.decodeServerConfig(
-                        mainStorage?.decodeString(KEY_SELECTED_SERVER) ?: ""
-                    )?.let {
-                        if (it.subscriptionId == subid) {
-                            return@let it
-                        }
-                        return@let null
-                    }
-                } else {
-                    null
-                }
-            if (!append) {
-                MmkvManager.removeServerViaSubid(subid)
-            }
-//            var servers = server
-//            if (server.indexOf("vmess") >= 0 && server.indexOf("vmess") == server.lastIndexOf("vmess")) {
-//                servers = server.replace("\n", "")
-//            }
-
-            var count = 0
-            servers.lines()
-                .reversed()
-                .forEach {
-                    val resId = importConfig(it, subid, removedSelectedServer)
-                    if (resId == 0) {
-                        count++
-                    }
-                }
-            return count
-        } catch (e: Exception) {
-            e.printStackTrace()
+        if (servers.isNullOrBlank()) return 0
+        if (!append && subid.isNotBlank()) {
+            val staged = linkedMapOf<String, ServerConfig>()
+            val parsed = SubscriptionReplacementPlan.stage(servers) { line ->
+                if (importConfig(line, subid, null, staged) == 0) true else null
+            } ?: return 0
+            return if (MmkvManager.replaceSubscriptionServers(subid, staged)) parsed.size else 0
         }
-        return 0
+        var count = 0
+        servers.lines().reversed().forEach { line ->
+            if (importConfig(line, subid, null) == 0) count++
+        }
+        return count
     }
 
     fun importSubscription(remark: String, url: String, enabled: Boolean = true): Boolean {
@@ -1366,7 +1346,7 @@ object AngConfigManager {
                     ?.getServerPort() == removedSelectedServer.getProxyOutbound()
                     ?.getServerPort()
             ) {
-                mainStorage?.encode(KEY_SELECTED_SERVER, guid)
+                MmkvManager.selectExistingServer(guid)
             }
             return guid
         } catch (e: Exception) {
@@ -1617,7 +1597,7 @@ object AngConfigManager {
                 config.getProxyOutbound()
                     ?.getServerPort() == removedSelectedServer.getProxyOutbound()?.getServerPort()
             ) {
-                mainStorage?.encode(KEY_SELECTED_SERVER, guid)
+                MmkvManager.selectExistingServer(guid)
             }
             return guid
         } catch (e: Exception) {

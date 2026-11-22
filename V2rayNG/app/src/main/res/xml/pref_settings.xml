@@ -69,6 +69,22 @@
 
     <PreferenceCategory android:title="@string/title_advanced">
 
+        <!-- TCP socket reachability only, not native proxy verification. -->
+        <ListPreference
+            android:key="pref_tcp_probe_preset"
+            android:defaultValue="balanced"
+            android:entries="@array/tcp_probe_preset_entries"
+            android:entryValues="@array/tcp_probe_preset_values"
+            android:summary="%s"
+            android:title="@string/title_tcp_probe_preset" />
+        <ListPreference
+            android:key="pref_tcp_probe_concurrency"
+            android:defaultValue="8"
+            android:entries="@array/tcp_probe_concurrency_entries"
+            android:entryValues="@array/tcp_probe_concurrency_values"
+            android:summary="%s"
+            android:title="@string/title_tcp_probe_concurrency" />
+
         <CheckBoxPreference
             android:key="pref_prefer_ipv6"
             android:summary="@string/summary_pref_prefer_ipv6"

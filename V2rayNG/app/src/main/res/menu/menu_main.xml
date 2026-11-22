@@ -97,6 +97,10 @@
         android:title="@string/title_real_ping_all_server"
         app:showAsAction="never" />
     <item
+        android:id="@+id/recommend_tested_server"
+        android:title="@string/title_recommend_tested_server"
+        app:showAsAction="never" />
+    <item
         android:id="@+id/sort_by_test_results"
         android:title="@string/title_sort_by_test_results"
         app:showAsAction="never" />

@@ -27,7 +27,7 @@ class TaskerReceiver : BroadcastReceiver() {
                 if (guid == AppConfig.TASKER_DEFAULT_GUID) {
                     Utils.startVServiceFromToggle(context)
                 } else {
-                    mainStorage?.encode(MmkvManager.KEY_SELECTED_SERVER, guid)
+                    if (!MmkvManager.selectExistingServer(guid)) return
                     V2RayServiceManager.startV2Ray(context)
                 }
             } else {
