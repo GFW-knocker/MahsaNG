@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="advanced_retry_title">تکرار پیشرفته تست TCP (تشخیصی)</string>
+    <string name="advanced_retry_explanation">این تست فقط اتصال سوکت TCP است، نه درخواست تأییدشده از طریق پراکسی انتخاب‌شده. کانفیگ‌های UDP و QUIC کنار گذاشته می‌شوند. هیچ کانفیگی حذف و هیچ نتیجه تأخیر ذخیره‌شده‌ای تغییر نمی‌کند. خروج از این صفحه تست را متوقف می‌کند. مهلت سوکت الزاماً مهلت DNS نیست.</string>
+    <string name="advanced_retry_attempts">حداکثر تلاش برای هر کانفیگ در هر دور (۱ تا ۵)</string>
+    <string name="advanced_retry_passes">تعداد دورهای کل فهرست (۱ تا ۱۰)</string>
+    <string name="advanced_retry_concurrency">سوکت‌های هم‌زمان TCP (۱ تا ۱۶)</string>
+    <string name="advanced_retry_timeout">مهلت اتصال سوکت بر حسب میلی‌ثانیه (۵۰۰ تا ۱۰۰۰۰)</string>
+    <string name="advanced_retry_mode">روش تکرار دورها</string>
+    <string name="advanced_retry_all">همه کانفیگ‌های واجد شرایط در هر دور</string>
+    <string name="advanced_retry_unresolved">فقط کانفیگ‌های بدون موفقیت پذیرفته‌شده قبلی</string>
+    <string name="advanced_retry_prepare">بررسی محدوده و هزینه تست</string>
+    <string name="advanced_retry_start">شروع تست تشخیصی</string>
+    <string name="advanced_retry_stop">توقف</string>
+    <string name="advanced_retry_pause">توقف موقت تلاش‌های تازه</string>
+    <string name="advanced_retry_continue">ادامه</string>
+    <string name="advanced_retry_budget_title">تأیید تعداد و هزینه احتمالی تست</string>
+    <string name="advanced_retry_budget">حداکثر %1$d تلاش سوکت TCP برای %2$d کانفیگ واجد شرایط نمایان. برخی پروتکل‌ها برای TCP مناسب نیستند. تغییر شبکه یا کانفیگ نتیجه را نامعلوم می‌کند، نه ناموفق. اجرای تست داده و باتری مصرف می‌کند و هیچ کانفیگی حذف نمی‌شود.</string>
+    <string name="advanced_retry_invalid">مقادیر معتبر: ۱ تا ۵ تلاش، ۱ تا ۱۰ دور، ۱ تا ۱۶ سوکت، و مهلت ۵۰۰ تا ۱۰۰۰۰ میلی‌ثانیه.</string>
+    <string name="advanced_retry_ready">محدودیت‌ها را انتخاب کنید و پیش از شروع، محدوده را بررسی کنید.</string>
+    <string name="advanced_retry_preparing">در حال بررسی کانفیگ‌های واجد شرایط و نسخه‌های ذخیره‌شده…</string>
+    <string name="advanced_retry_error">شروع تست ممکن نشد. کانفیگ‌های انتخاب‌شده و شبکه فعال را بررسی کنید (برای بررسی هویت شبکه اندروید ۷ یا بالاتر لازم است). چیزی تست یا حذف نشده است.</string>
+    <string name="advanced_retry_stopped">متوقف شد. نتایج دیررس پذیرفته نمی‌شوند. چیزی حذف نشده است.</string>
+    <string name="advanced_retry_progress">وضعیت: %1$s\nدور: %2$d از %3$d\nکانفیگ‌های واجد شرایط: %4$d\nتلاش‌های تکمیل‌شده: %5$d\nموفقیت TCP: %6$d\nتلاش‌های ناموفق TCP: %7$d\nتلاش‌های نامعلوم: %8$d\nسوکت‌های فعال: %9$d\nنتایج تأخیر ذخیره‌شده تغییر نکرده و حذف خودکار غیرفعال است.</string>
+    <string name="advanced_retry_preview">پیش‌نمایش فقط برای بررسی:\nآخرین ۳ دور کامل ناموفق: %1$d\nحداقل ۳ شکست از ۵ دور قابل مقایسه: %2$d\nآخرین ۳ تلاش قابل مقایسه ناموفق: %3$d\nاین تعدادها خرابی واقعی مسیر پراکسی را ثابت نمی‌کنند و باعث حذف نمی‌شوند.</string>
+    <string name="advanced_retry_phase_running">در حال اجرا</string>
+    <string name="advanced_retry_phase_paused">مکث</string>
+    <string name="advanced_retry_phase_stopped">متوقف</string>
+    <string name="advanced_retry_phase_finished">پایان‌یافته</string>
+</resources>

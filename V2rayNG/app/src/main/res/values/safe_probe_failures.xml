@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="probe_failure_dns">DNS lookup failed</string>
+    <string name="probe_failure_refused">Connection refused</string>
+    <string name="probe_failure_timeout">Connection timed out</string>
+    <string name="probe_failure_tls">TLS handshake failed</string>
+    <string name="probe_failure_network">Network request failed</string>
+    <string name="probe_failure_other">Unexpected connection error</string>
+</resources>
